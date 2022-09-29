@@ -20,7 +20,6 @@ class _HomePage extends State<HomePage>{
   GoogleMapController? _controller;
   Location _location = Location();
   Set<Marker> markers = Set();
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void _onMapCreated(GoogleMapController _cntlr)
   {

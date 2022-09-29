@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final storage = new FlutterSecureStorage();
+FirebaseFirestore firestore = FirebaseFirestore.instance;
 String? key;
 
 void storeToken({required String token}) async{

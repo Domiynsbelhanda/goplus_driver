@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
-import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
 import '../widget/app_button.dart';

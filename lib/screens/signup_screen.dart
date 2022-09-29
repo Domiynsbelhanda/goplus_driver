@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/pages/homePage.dart';
 import '../utils/app_colors.dart';
+import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import 'enter_phone_number_screen.dart';
@@ -94,32 +96,61 @@ class _SignupScreenState extends State<SignupScreen> {
                 Form(
                   key: formkey,
                   child: Column(
-                    children: input.map((e){
-                      return TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '${e['label']} incorect';
-                          }
-                          return null;
-                        },
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.name,
-                        controller: e['controller'],
-                        decoration: InputDecoration(
-                            hintText: '${e['label']}',
-                            contentPadding: EdgeInsets.all(15.0)),
-                      );
-                    }).toList()
+                    children: [
+                      Column(
+                        children: input.map((e){
+                          return TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return '${e['label']} incorect';
+                              }
+                              return null;
+                            },
+                            cursorColor: AppColors.primaryColor,
+                            keyboardType: TextInputType.name,
+                            controller: e['controller'],
+                            decoration: InputDecoration(
+                                hintText: '${e['label']}',
+                                contentPadding: EdgeInsets.all(15.0)),
+                          );
+                        }).toList()
+                      ),
+
+                      SizedBox(height: size.height * 0.07),
+                      AppButton(
+                          name: 'S\'INSRIRE',
+                          onTap: (){
+                            if(formkey.currentState!.validate()){
+                              var data = {
+                                "key": "hailing",
+                                "action": "create_user",
+                                "lastn": nameController.text.toString(),
+                                "midn": postNomController.text.toString(),
+                                "firstn": prenomController.text.toString(),
+                                "address": adresseController.text.toString(),
+                                "password": "OdK98@RAM",
+                                "city": villeController.text.toString(),
+                                "phone": widget.phone,
+                                "gender": genreController.text.toString(),
+                                "profpic": "970015005_pic.png",
+                                "cartype": typeController.text.toString(),
+                                "carpic": "970015005_car.png",
+                                "level": "4"
+                              };
+                              firestore.collection('drivers').doc(widget.phone).set(data);
+                              storeToken(token: widget.phone);
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => HomePage(),
+                                ),
+                              );
+                            }
+                          }),
+                    ],
                   ),
                 ),
-                SizedBox(height: size.height * 0.07),
-                AppButton(
-                    name: 'S\'INSRIRE',
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PhoneNumberScreen(),
-                        ))),
                 SizedBox(height: 15),
               ],
             ),
