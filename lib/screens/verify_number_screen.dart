@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
 import '../widget/app_button.dart';
@@ -41,15 +43,6 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                Container(
-                  width: size.width,
-                  child: Text(
-                    '_localeText.verifyPhoneBody',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
                 SizedBox(
                   height: size.height * 0.05,
                 ),
@@ -85,12 +78,13 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                 AppButton(
                   name: 'VERIFIEZ',
                   onTap: (){
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => Dashboard(),
-                    //   ),
-                    // )
+                    storeToken(token: '12345');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => HomePage(),
+                      ),
+                    );
                   },
                 ),
                 SizedBox(height: size.height * 0.2),
