@@ -1,9 +1,9 @@
-import 'package:taxigo_driver/brand_colors.dart';
+import 'package:goplus_driver/brand_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
 
-  final  String status;
+  final String? status;
   ProgressDialog({this.status});
 
   @override
@@ -28,7 +28,7 @@ class ProgressDialog extends StatelessWidget {
 
               CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(BrandColors.colorAccent),),
               SizedBox(width: 25.0,),
-              Text(status, style: TextStyle(fontSize: 15),),
+              Text(status!, style: TextStyle(fontSize: 15),),
             ],
           ),
         ),

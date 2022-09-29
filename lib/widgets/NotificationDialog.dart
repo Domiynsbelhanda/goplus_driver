@@ -1,19 +1,19 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:taxigo_driver/brand_colors.dart';
-import 'package:taxigo_driver/datamodels/tripdetails.dart';
-import 'package:taxigo_driver/globalvariabels.dart';
-import 'package:taxigo_driver/helpers/helpermethods.dart';
-import 'package:taxigo_driver/screens/newtripspage.dart';
-import 'package:taxigo_driver/widgets/BrandDivier.dart';
-import 'package:taxigo_driver/widgets/ProgressDialog.dart';
-import 'package:taxigo_driver/widgets/TaxiButton.dart';
-import 'package:taxigo_driver/widgets/TaxiOutlineButton.dart';
+import 'package:goplus_driver/brand_colors.dart';
+import 'package:goplus_driver/datamodels/tripdetails.dart';
+import 'package:goplus_driver/globalvariabels.dart';
+import 'package:goplus_driver/helpers/helpermethods.dart';
+import 'package:goplus_driver/screens/newtripspage.dart';
+import 'package:goplus_driver/widgets/BrandDivier.dart';
+import 'package:goplus_driver/widgets/ProgressDialog.dart';
+import 'package:goplus_driver/widgets/TaxiButton.dart';
+import 'package:goplus_driver/widgets/TaxiOutlineButton.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class NotificationDialog extends StatelessWidget {
 
-  final TripDetails tripDetails;
+  final TripDetails? tripDetails;
 
   NotificationDialog({this.tripDetails});
 
@@ -58,7 +58,7 @@ class NotificationDialog extends StatelessWidget {
                       Image.asset('images/pickicon.png', height: 16, width: 16,),
                       SizedBox(width: 18,),
 
-                      Expanded(child: Container(child: Text(tripDetails.pickupAddress, style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),)))
+                      Expanded(child: Container(child: Text(tripDetails!.pickupAddress, style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),)))
 
 
                     ],
@@ -72,7 +72,7 @@ class NotificationDialog extends StatelessWidget {
                       Image.asset('images/desticon.png', height: 16, width: 16,),
                       SizedBox(width: 18,),
 
-                      Expanded(child: Container(child: Text(tripDetails.destinationAddress, style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),)))
+                      Expanded(child: Container(child: Text(tripDetails!.destinationAddress, style: TextStyle(fontSize: MediaQuery.of(context).size.width / 25),)))
 
 
                     ],
@@ -143,21 +143,22 @@ class NotificationDialog extends StatelessWidget {
       builder: (BuildContext context) => ProgressDialog(status: 'Accepting request',),
     );
 
-    DatabaseReference newRideRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser.uid}/newtrip');
-    newRideRef.once().then((DataSnapshot snapshot) {
+    DatabaseReference newRideRef = FirebaseDatabase.instance.ref().child('drivers/${currentFirebaseUser!.uid}/newtrip');
+    newRideRef.once().then((value) => null);
+    newRideRef.once().then((DatabaseEvent snapshot) {
 
       Navigator.pop(context);
       Navigator.pop(context);
 
       String thisRideID = "";
-      if(snapshot.value != null){
-        thisRideID = snapshot.value.toString();
+      if(snapshot.snapshot.value != null){
+        thisRideID = snapshot.snapshot.value.toString();
       }
       else{
         Fluttertoast.showToast(msg: "Ride not found");
       }
 
-      if(thisRideID == tripDetails.rideID){
+      if(thisRideID == tripDetails!.rideID){
         newRideRef.set('accepted');
         HelperMethods.disableHomTabLocationUpdates();
         Navigator.push(
