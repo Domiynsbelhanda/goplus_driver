@@ -8,6 +8,9 @@ import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
+  String phone;
+  VerifyNumberScreen({required this.phone});
+
   @override
   _VerifyNumberState createState() => _VerifyNumberState();
 }
@@ -83,7 +86,9 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => SignupScreen(),
+                        builder: (_) => SignupScreen(
+                          phone: widget.phone,
+                        ),
                       ),
                     );
                   },

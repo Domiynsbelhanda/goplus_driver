@@ -10,8 +10,10 @@ class PhoneNumberScreen extends StatefulWidget {
 }
 
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
+
   late Size size;
   final formkey = GlobalKey<FormState>();
+  TextEditingController phoneController = TextEditingController();
 
   @override
   void initState() {
@@ -84,6 +86,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                         },
                         keyboardType: TextInputType.number,
                         cursorColor: AppColors.primaryColor,
+                        controller: phoneController,
                         decoration: InputDecoration(
                           hintText: "812345678",
                           contentPadding: EdgeInsets.all(10.0),
@@ -100,7 +103,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => VerifyNumberScreen(),
+                            builder: (_) => VerifyNumberScreen(
+                              phone: phoneController.text.trim(),
+                            ),
                           ));
                   },
                 ),

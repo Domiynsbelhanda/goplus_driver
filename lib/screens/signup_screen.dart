@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../utils/app_colors.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import 'enter_phone_number_screen.dart';
 
 class SignupScreen extends StatefulWidget {
+  String phone;
+  SignupScreen({required this.phone});
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -13,6 +14,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   late Size size;
   final formkey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController();
 
   @override
   void initState() {
@@ -37,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: size.height * 0.03,
                 ),
                 Container(
-                  width: size.width * 0.3,
+                  width: size.width,
                   child: Text(
                     'Inscription',
                     style: TextStyle(
@@ -50,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                   width: size.width * 0.6,
                   child: Text(
-                    '_localeText.signUpBody',
+                    'Créer votre compte pour chauffeur.',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -69,58 +72,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         cursorColor: AppColors.primaryColor,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
-                            hintText: '_localeText.fullName',
-                            prefixIcon: Icon(Icons.person),
+                            hintText: 'Nom',
                             contentPadding: EdgeInsets.all(15.0)),
                       ),
                       SizedBox(
                         height: 10.0,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '_localeText.emailError';
-                          }
-                          return null;
-                        },
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                            hintText: '_localeText.email',
-                            prefixIcon: Icon(Icons.mail),
-                            contentPadding: EdgeInsets.all(15.0)),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '_localeText.passwordError';
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        cursorColor: AppColors.primaryColor,
-                        decoration: InputDecoration(
-                            hintText: '_localeText.password',
-                            prefixIcon: Icon(Icons.lock),
-                            contentPadding: EdgeInsets.all(15.0)),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '_localeText.confirmPassError';
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        cursorColor: AppColors.primaryColor,
-                        decoration: InputDecoration(
-                            hintText: '_localeText.confirmPass',
-                            prefixIcon: Icon(Icons.lock),
-                            contentPadding: EdgeInsets.all(15.0)),
                       ),
                     ],
                   ),
