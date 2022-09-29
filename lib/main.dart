@@ -1,23 +1,14 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:goplus_driver/dataprovider.dart';
-import 'package:goplus_driver/globalvariabels.dart';
-import 'package:goplus_driver/screens/login.dart';
-import 'package:goplus_driver/screens/mainpage.dart';
-import 'package:goplus_driver/screens/registration.dart';
-import 'package:goplus_driver/screens/vehicleinfo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/widget/theme_data.dart';
 
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  currentFirebaseUser = (await FirebaseAuth.instance.currentUser)!;
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp());
 }
@@ -42,24 +33,15 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppData(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-
-          fontFamily: 'Brand-Regular',
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-
-        initialRoute: (currentFirebaseUser == null) ? LoginPage.id : MainPage.id,
-        routes: {
-          MainPage.id: (context) => MainPage(),
-          RegistrationPage.id: (context) => RegistrationPage(),
-          VehicleInfoPage.id: (context) => VehicleInfoPage(),
-          LoginPage.id: (context) => LoginPage(),
-        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
+      title: "Go Plus Driver",
+      home: AnimatedSplashScreen(
+        nextScreen: HomePage(),
+        duration: 2500,
+        splash: "assets/icon/white-text.png",
+        backgroundColor : Color(0xFFFFD80E),
       ),
     );
   }
