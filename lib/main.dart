@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/screens/IntroScreen.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
 
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _MyApp extends State<MyApp> {
   @override
   void initState(){
     super.initState();
+    getToken();
   }
 
   @override

@@ -77,7 +77,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           if (value!.isEmpty) {
                             return 'Numéro de téléphone incorrect';
                           }
-                          if(value!.length != 9){
+                          if(value.length != 9){
                             return 'Numéro de téléphone incorrect, vérifiez.';
                           }
                           return null;
