@@ -84,6 +84,25 @@ class _HomePage extends State<HomePage>{
                   color: Colors.green,
                   onTap: (){},
                 )
+            ),
+            
+            Positioned(
+              top: 16.0,
+              left: 16.0,
+              child: Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(48.0)
+                ),
+                child: IconButton(
+                  onPressed: (){},
+                  icon: Icon(
+                    Icons.logout,
+                  ),
+                ),
+              ),
             )
           ],
         ),
