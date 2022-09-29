@@ -6,6 +6,8 @@ import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
 
+import '../utils/app_colors.dart';
+
 class HomePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -20,11 +22,15 @@ class _HomePage extends State<HomePage>{
   GoogleMapController? _controller;
   Location _location = Location();
   Set<Marker> markers = Set();
+  bool isOnline = false;
 
 
   @override
   void initState() {
     getToken();
+    firestore.collection('drivers').doc(key).update({
+      'online': isOnline,
+    });
   }
 
   void _onMapCreated(GoogleMapController _cntlr)
@@ -85,9 +91,22 @@ class _HomePage extends State<HomePage>{
                 left: 0,
                 right: 0,
                 child: AppButton(
-                  name: 'ACTIVER VOTRE POSITION',
-                  color: Colors.green,
-                  onTap: (){},
+                  name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
+                  color: isOnline ? AppColors.primaryColor : Colors.green,
+                  onTap: (){
+                    setState(() {
+                      isOnline = !isOnline;
+                    });
+                    if(isOnline){
+                      firestore.collection('drivers').doc(key).update({
+                        'online': isOnline,
+                      });
+                    } else {
+                      firestore.collection('drivers').doc(key).update({
+                        'online': isOnline,
+                      });
+                    }
+                  },
                 )
             ),
             
