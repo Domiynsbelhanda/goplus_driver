@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_select/smart_select.dart';
-import 'package:taxigo_driver/screens/login.dart';
-import 'package:taxigo_driver/globalvariabels.dart';
+import 'package:goplus_driver/screens/login.dart';
+import 'package:goplus_driver/globalvariabels.dart';
 
 import '../application.dart';
 
 class ProfileTab extends StatelessWidget {
 
-  String value = langue;
+  String value = langue!;
   List<S2Choice<String>> options = [
     S2Choice<String>(value: 'en', title: 'Anglais'),
     S2Choice<String>(value: 'fr', title: 'Français'),
@@ -25,28 +25,28 @@ class ProfileTab extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage(
-                currentDriverInfo.image),
+                currentDriverInfo!.image),
               radius: 80.0,
             ),
 
             SizedBox(height: 5.0),
 
             Text(
-                  currentDriverInfo.fullName,
+                  currentDriverInfo!.fullName,
                   style: TextStyle(fontSize: 32.0),
                 ),
                 Text(
-                  currentDriverInfo.email,
+                  currentDriverInfo!.email,
                   style: TextStyle(fontSize: 16.0),
                 ),
 
                 Text(
-                  currentDriverInfo.phone,
+                  currentDriverInfo!.phone,
                   style: TextStyle(fontSize: 12.0),
                 ),
 
                 Text(
-                  '${currentDriverInfo.carModel} / ${currentDriverInfo.vehicleNumber} / ${currentDriverInfo.carColor}',
+                  '${currentDriverInfo!.carModel} / ${currentDriverInfo!.vehicleNumber} / ${currentDriverInfo!.carColor}',
                   style: TextStyle(fontSize: 12.0),
                 ),
 
@@ -61,7 +61,7 @@ class ProfileTab extends StatelessWidget {
                 value = state.value;
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setString('langue', value);
-                applic.onLocaleChanged(new Locale(value,''));
+                applic.onLocaleChanged!(new Locale(value,''));
                 (context as Element).markNeedsBuild();
               }
             ),
