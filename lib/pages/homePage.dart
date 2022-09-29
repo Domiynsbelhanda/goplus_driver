@@ -116,15 +116,25 @@ class _HomePage extends State<HomePage>{
 
                   Positioned(
                     top: 16.0,
-                    left: 0,
+                    left:36,
                     right: 0,
-                    child: BlinkText(
-                        'Blink Animation',
-                        style: TextStyle(fontSize: 48.0, color: Colors.redAccent),
-                        beginColor: Colors.black,
-                        endColor: Colors.orange,
-                        times: 10,
-                        duration: Duration(seconds: 1)
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: BlinkText(
+                            'UNE COURSE',
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.red),
+                            beginColor: Colors.redAccent,
+                            endColor: Colors.yellow,
+                            times: 1000,
+                            duration: Duration(seconds: 1)
+                        ),
+                      ),
                     ),
                   ),
 
@@ -154,7 +164,7 @@ class _HomePage extends State<HomePage>{
 
                   Positioned(
                     top: 16.0,
-                    left: 16.0,
+                    right: 16.0,
                     child: Container(
                       height: 48,
                       width: 48,
