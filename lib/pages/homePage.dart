@@ -5,7 +5,7 @@ import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
-
+import 'package:blinking_text/blinking_text.dart';
 import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
@@ -82,76 +82,108 @@ class _HomePage extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(target: _initialcameraposition),
-              mapType: MapType.normal,
-              onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              markers: markers,
-            ),
 
-            Positioned(
-              bottom: 10.0,
-                left: 0,
-                right: 0,
-                child: AppButton(
-                  name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
-                  color: isOnline ? AppColors.primaryColor : Colors.green,
-                  onTap: (){
-                    setState(() {
-                      isOnline = !isOnline;
-                    });
-                    if(isOnline){
-                      firestore.collection('drivers').doc(key).update({
-                        'online': isOnline,
-                      });
-                    } else {
-                      firestore.collection('drivers').doc(key).update({
-                        'online': isOnline,
-                      });
-                    }
-                  },
-                )
-            ),
-            
-            Positioned(
-              top: 16.0,
-              left: 16.0,
-              child: Container(
-                height: 48,
-                width: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(48.0)
-                ),
-                child: IconButton(
-                  onPressed: (){
-                    deleteToken('token');
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MyApp()
-                      ),
-                      (Route<dynamic> route) => false
-                    );
-                  },
-                  icon: Icon(
-                    Icons.logout,
+    CollectionReference users = FirebaseFirestore.instance.collection('drivers');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: users.doc(key).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          return Scaffold(
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(target: _initialcameraposition),
+                    mapType: MapType.normal,
+                    onMapCreated: _onMapCreated,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    markers: markers,
                   ),
-                ),
+
+                  Positioned(
+                    top: 16.0,
+                    left: 0,
+                    right: 0,
+                    child: BlinkText(
+                        'Blink Animation',
+                        style: TextStyle(fontSize: 48.0, color: Colors.redAccent),
+                        beginColor: Colors.black,
+                        endColor: Colors.orange,
+                        times: 10,
+                        duration: Duration(seconds: 1)
+                    ),
+                  ),
+
+                  Positioned(
+                      bottom: 16.0,
+                      left: 0,
+                      right: 0,
+                      child: AppButton(
+                        name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
+                        color: isOnline ? AppColors.primaryColor : Colors.green,
+                        onTap: (){
+                          setState(() {
+                            isOnline = !isOnline;
+                          });
+                          if(isOnline){
+                            firestore.collection('drivers').doc(key).update({
+                              'online': isOnline,
+                            });
+                          } else {
+                            firestore.collection('drivers').doc(key).update({
+                              'online': isOnline,
+                            });
+                          }
+                        },
+                      )
+                  ),
+
+                  Positioned(
+                    top: 16.0,
+                    left: 16.0,
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(48.0)
+                      ),
+                      child: IconButton(
+                        onPressed: (){
+                          deleteToken('token');
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => MyApp()
+                              ),
+                                  (Route<dynamic> route) => false
+                          );
+                        },
+                        icon: Icon(
+                          Icons.logout,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
+          );
+      },
     );
   }
 }

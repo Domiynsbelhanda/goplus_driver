@@ -59,6 +59,7 @@ dependencies:
   firebase_core:
   cloud_firestore:
   flutter_secure_storage: ^5.1.0
+  blinking_text: ^1.0.2
 
 dev_dependencies:
   flutter_test:
