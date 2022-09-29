@@ -16,6 +16,14 @@ class _SignupScreenState extends State<SignupScreen> {
   final formkey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController postNomController = TextEditingController();
+  TextEditingController prenomController = TextEditingController();
+  TextEditingController adresseController = TextEditingController();
+  TextEditingController villeController = TextEditingController();
+  TextEditingController genreController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+
+  late List input;
 
   @override
   void initState() {
@@ -25,6 +33,31 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    input = [
+      {
+        'label': 'Nom', 'controller' : nameController
+      },
+      {
+        'label': 'PostNom', 'controller' : postNomController
+      },
+      {
+        'label': 'Prénom', 'controller' : prenomController
+      },
+      {
+        'label': 'Adresse', 'controller' : adresseController
+      },
+      {
+        'label': 'Ville', 'controller' : villeController
+      },
+      {
+        'label': 'Genre',
+        'controller' : genreController
+      },
+      {
+        'label': 'Type de voiture',
+        'controller' : typeController
+      }
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -61,29 +94,27 @@ class _SignupScreenState extends State<SignupScreen> {
                 Form(
                   key: formkey,
                   child: Column(
-                    children: [
-                      TextFormField(
+                    children: input.map((e){
+                      return TextFormField(
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Nom incorect';
+                            return '${e['label']} incorect';
                           }
                           return null;
                         },
                         cursorColor: AppColors.primaryColor,
                         keyboardType: TextInputType.name,
+                        controller: e['controller'],
                         decoration: InputDecoration(
-                            hintText: 'Nom',
+                            hintText: '${e['label']}',
                             contentPadding: EdgeInsets.all(15.0)),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                    ],
+                      );
+                    }).toList()
                   ),
                 ),
                 SizedBox(height: size.height * 0.07),
                 AppButton(
-                    name: '_localeText.signUpBtn',
+                    name: 'S\'INSRIRE',
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
