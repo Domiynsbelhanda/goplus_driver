@@ -2,13 +2,13 @@
 import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:taxigo_driver/datamodels/driver.dart';
+import 'package:goplus_driver/datamodels/driver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-User currentFirebaseUser;
+User? currentFirebaseUser;
 
 final CameraPosition googlePlex = CameraPosition(
   target: LatLng(37.42796133580664, -122.085749655962),
@@ -18,17 +18,17 @@ final CameraPosition googlePlex = CameraPosition(
 String mapKey = 'AIzaSyDMU4bZSvasDrSFyf5WNrLsxU1vqJ5pMsI';
 
 
-StreamSubscription<Position> homeTabPositionStream;
+StreamSubscription<Position>? homeTabPositionStream;
 
-StreamSubscription<Position> ridePositionStream;
+StreamSubscription<Position>? ridePositionStream;
 
 final assetsAudioPlayer = AssetsAudioPlayer();
 
-Position currentPosition;
+Position? currentPosition;
 
-DatabaseReference rideRef;
+DatabaseReference? rideRef;
 
-Driver currentDriverInfo;
+Driver? currentDriverInfo;
 
-String langue;
+String? langue;
 
