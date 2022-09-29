@@ -57,6 +57,7 @@ dependencies:
   smart_select: ^4.3.2
   sticky_headers: ^0.3.0+2
   shared_preferences: ^2.0.15
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:
