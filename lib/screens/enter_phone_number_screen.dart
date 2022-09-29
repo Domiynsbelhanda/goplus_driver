@@ -41,13 +41,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                Text(
-                  '_localeText.enterPhoneBody',
-                  style: TextStyle(color: Colors.grey, height: 1.5),
-                ),
                 SizedBox(height: size.height * 0.05),
                 Text(
-                  '_localeText.enterPhoneNumTwo',
+                  'Respectez comme indiqué dans l\'exemple.',
                   style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.w500,
@@ -59,7 +55,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                     Container(
                       alignment: Alignment.center,
                       height: size.height * 0.06,
-                      width: size.height * 0.07,
+                      width: size.height * 0.08,
                       margin: EdgeInsets.only(right: 15),
                       decoration: BoxDecoration(
                           border: Border.all(
@@ -86,7 +82,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                         keyboardType: TextInputType.number,
                         cursorColor: AppColors.primaryColor,
                         decoration: InputDecoration(
-                          hintText: "00011 10001",
+                          hintText: "812345678",
                           contentPadding: EdgeInsets.all(10.0),
                         ),
                       ),
