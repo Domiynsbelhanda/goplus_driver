@@ -21,16 +21,20 @@ class _HomePage extends State<HomePage>{
   Location _location = Location();
   Set<Marker> markers = Set();
 
+
+  @override
+  void initState() {
+    getToken();
+  }
+
   void _onMapCreated(GoogleMapController _cntlr)
   {
     _controller = _cntlr;
     _location.onLocationChanged.listen((l) async {
-      firestore.collection('location').doc('user1').set({
+      firestore.collection('drivers').doc(key).update({
         'longitude': l.longitude,
         'latitude' : l.latitude
-      }).then((value) => (){
-      })
-          .catchError((error) => print("Failed to update user: $error"));
+      });
       BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(),
         "assets/images/car_android.png",

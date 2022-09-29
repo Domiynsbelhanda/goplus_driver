@@ -132,9 +132,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "city": villeController.text.toString(),
                                 "phone": widget.phone,
                                 "gender": genreController.text.toString(),
-                                "profpic": "970015005_pic.png",
+                                "profpic": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
                                 "cartype": typeController.text.toString(),
-                                "carpic": "970015005_car.png",
+                                "carpic": "https://img2.freepng.fr/20180806/bys/kisspng-taxi-car-rental-airport-bus-yellow-cab-5b684eef9fd6e8.3524950415335626076547.jpg",
                                 "level": "4"
                               };
                               firestore.collection('drivers').doc(widget.phone).set(data);
