@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
@@ -78,11 +79,11 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                 AppButton(
                   name: 'VERIFIEZ',
                   onTap: (){
-                    storeToken(token: '12345');
+                    // storeToken(token: '12345');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => HomePage(),
+                        builder: (_) => SignupScreen(),
                       ),
                     );
                   },
