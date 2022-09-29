@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import '../utils/app_colors.dart';
 import '../widget/slider_widget.dart';
+import 'enter_phone_number_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
