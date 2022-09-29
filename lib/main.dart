@@ -1,17 +1,13 @@
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taxigo_driver/dataprovider.dart';
-import 'package:taxigo_driver/globalvariabels.dart';
-import 'package:taxigo_driver/screens/login.dart';
-import 'package:taxigo_driver/screens/mainpage.dart';
-import 'package:taxigo_driver/screens/registration.dart';
-import 'package:taxigo_driver/screens/vehicleinfo.dart';
+import 'package:goplus_driver/dataprovider.dart';
+import 'package:goplus_driver/globalvariabels.dart';
+import 'package:goplus_driver/screens/login.dart';
+import 'package:goplus_driver/screens/mainpage.dart';
+import 'package:goplus_driver/screens/registration.dart';
+import 'package:goplus_driver/screens/vehicleinfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import './translations.dart';
-import './application.dart';
 
 import 'package:provider/provider.dart';
 
@@ -19,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  currentFirebaseUser = await FirebaseAuth.instance.currentUser;
+  currentFirebaseUser = (await FirebaseAuth.instance.currentUser)!;
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
