@@ -2,6 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/IntroScreen.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
 
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class _MyApp extends State<MyApp> {
       theme: AppTheme.themeData,
       title: "Go Plus Driver",
       home: AnimatedSplashScreen(
-        nextScreen: HomePage(),
+        nextScreen: IntroScreen(),
         duration: 2500,
         splash: "assets/icon/white-text.png",
         backgroundColor : Color(0xFFFFD80E),

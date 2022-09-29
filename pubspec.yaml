@@ -58,6 +58,7 @@ dependencies:
   location: ^4.4.0
   firebase_core:
   cloud_firestore:
+  flutter_secure_storage: ^5.1.0
 
 dev_dependencies:
   flutter_test:
