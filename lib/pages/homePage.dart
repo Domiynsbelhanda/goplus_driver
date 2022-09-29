@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
@@ -17,11 +18,16 @@ class _HomePage extends State<HomePage>{
   GoogleMapController? _controller;
   Location _location = Location();
   Set<Marker> markers = Set();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void _onMapCreated(GoogleMapController _cntlr)
   {
     _controller = _cntlr;
     _location.onLocationChanged.listen((l) async {
+      firestore.collection('location').doc('user1').set({
+        'longitude': l.longitude,
+        'latitude' : l.latitude
+      });
       // notification_dialog(
       //     context,
       //     'Long : ${l.longitude}, Lat : ${l.latitude}',
