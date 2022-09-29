@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/main.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
 
@@ -97,7 +99,16 @@ class _HomePage extends State<HomePage>{
                   borderRadius: BorderRadius.circular(48.0)
                 ),
                 child: IconButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    deleteToken('token');
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => MyApp()
+                      ),
+                      (Route<dynamic> route) => false
+                    );
+                  },
                   icon: Icon(
                     Icons.logout,
                   ),

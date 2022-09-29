@@ -10,3 +10,7 @@ void storeToken({required String token}) async{
 void getToken() async{
   key = await storage.read(key: 'token');
 }
+
+void deleteToken(String key) async{
+  await storage.delete(key: key);
+}
