@@ -1,20 +1,16 @@
 
 import 'dart:math';
 
-import 'package:taxigo_driver/datamodels/directiondetails.dart';
-import 'package:taxigo_driver/datamodels/history.dart';
-import 'package:taxigo_driver/dataprovider.dart';
-import 'package:taxigo_driver/globalvariabels.dart';
-import 'package:taxigo_driver/helpers/requesthelper.dart';
-import 'package:taxigo_driver/widgets/ProgressDialog.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:goplus_driver/datamodels/directiondetails.dart';
+import 'package:goplus_driver/datamodels/history.dart';
+import 'package:goplus_driver/dataprovider.dart';
+import 'package:goplus_driver/globalvariabels.dart';
+import 'package:goplus_driver/helpers/requesthelper.dart';
+import 'package:goplus_driver/widgets/ProgressDialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +18,7 @@ import 'package:provider/provider.dart';
 class HelperMethods{
 
 
-  static Future<DirectionDetails> getDirectionDetails(LatLng startPosition, LatLng endPosition) async {
+  static Future<DirectionDetails?> getDirectionDetails(LatLng startPosition, LatLng endPosition) async {
 
    String url = 'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$mapKey';
 
@@ -51,7 +47,7 @@ class HelperMethods{
     // base fare = $3,
 
     double baseFare = 3;
-    double distanceFare = (details.distanceValue/1000) * 0.3;
+    double distanceFare = (details.distanceValue! / 1000) * 0.3;
     double timeFare = (durationValue / 60) * 0.2;
 
     double totalFare = baseFare + distanceFare + timeFare;
@@ -68,13 +64,13 @@ class HelperMethods{
   }
 
   static void disableHomTabLocationUpdates(){
-    homeTabPositionStream.pause();
-    Geofire.removeLocation(currentFirebaseUser.uid);
+    homeTabPositionStream!.pause();
+    Geofire.removeLocation(currentFirebaseUser!.uid);
   }
 
   static void enableHomTabLocationUpdates(){
-    homeTabPositionStream.resume();
-    Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
+    homeTabPositionStream!.resume();
+    Geofire.setLocation(currentFirebaseUser!.uid, currentPosition!.latitude, currentPosition!.longitude);
   }
 
   static void showProgressDialog(context){
@@ -89,22 +85,22 @@ class HelperMethods{
 
   static void getHistoryInfo (context){
 
-    DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser.uid}/earnings');
+    DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser!.uid}/earnings');
 
-    earningRef.once().then((DataSnapshot snapshot){
-      if(snapshot.value != null){
-        String earnings = snapshot.value.toString();
+    earningRef.once().then((DatabaseEvent snapshot){
+      if(snapshot.snapshot.value != null){
+        String earnings = snapshot.snapshot.value.toString();
         Provider.of<AppData>(context, listen: false).updateEarnings(earnings);
       }
 
     });
 
-    DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser.uid}/history');
-    historyRef.once().then((DataSnapshot snapshot) {
+    DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser!.uid}/history');
+    historyRef.once().then((DatabaseEvent snapshot) {
 
-      if(snapshot.value != null){
+      if(snapshot.snapshot.value != null){
 
-        Map<dynamic, dynamic> values = snapshot.value;
+        Map<dynamic, dynamic> values = snapshot.snapshot.value as Map<dynamic, dynamic>;
         int tripCount = values.length;
 
         // update trip count to data provider
@@ -131,10 +127,10 @@ class HelperMethods{
     for(String key in keys){
       DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('rideRequest/$key');
 
-      historyRef.once().then((DataSnapshot snapshot) {
-        if(snapshot.value != null){
+      historyRef.once().then((DatabaseEvent snapshot) {
+        if(snapshot.snapshot.value != null){
 
-          var history = History.fromSnapshot(snapshot);
+          var history = History.fromSnapshot(snapshot.snapshot);
           Provider.of<AppData>(context, listen: false).updateTripHistory(history);
 
           print(history.destination);
