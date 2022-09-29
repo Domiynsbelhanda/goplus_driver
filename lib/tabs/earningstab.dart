@@ -1,7 +1,7 @@
-import 'package:taxigo_driver/brand_colors.dart';
-import 'package:taxigo_driver/dataprovider.dart';
-import 'package:taxigo_driver/screens/historypage.dart';
-import 'package:taxigo_driver/widgets/BrandDivier.dart';
+import 'package:goplus_driver/brand_colors.dart';
+import 'package:goplus_driver/dataprovider.dart';
+import 'package:goplus_driver/screens/historypage.dart';
+import 'package:goplus_driver/widgets/BrandDivier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

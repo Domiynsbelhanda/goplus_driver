@@ -1,15 +1,13 @@
 import 'dart:async';
 
-import 'package:taxigo_driver/brand_colors.dart';
-import 'package:taxigo_driver/datamodels/driver.dart';
-import 'package:taxigo_driver/globalvariabels.dart';
-import 'package:taxigo_driver/helpers/helpermethods.dart';
-import 'package:taxigo_driver/helpers/pushnotificationservice.dart';
-import 'package:taxigo_driver/translations.dart';
-import 'package:taxigo_driver/widgets/AvailabilityButton.dart';
-import 'package:taxigo_driver/widgets/ConfirmSheet.dart';
-import 'package:taxigo_driver/widgets/NotificationDialog.dart';
-import 'package:taxigo_driver/widgets/TaxiButton.dart';
+import 'package:goplus_driver/brand_colors.dart';
+import 'package:goplus_driver/datamodels/driver.dart';
+import 'package:goplus_driver/globalvariabels.dart';
+import 'package:goplus_driver/helpers/helpermethods.dart';
+import 'package:goplus_driver/helpers/pushnotificationservice.dart';
+import 'package:goplus_driver/translations.dart';
+import 'package:goplus_driver/widgets/AvailabilityButton.dart';
+import 'package:goplus_driver/widgets/ConfirmSheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +22,13 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
 
-  GoogleMapController mapController;
+  GoogleMapController? mapController;
   Completer<GoogleMapController> _controller = Completer();
 
-  DatabaseReference tripRequestRef;
+  DatabaseReference? tripRequestRef;
 
   var geoLocator = Geolocator();
-  var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 4);
+  var locationOptions = LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 4);
 
   String availabilityTitle = 'GO ONLINE';
   Color availabilityColor = BrandColors.colorOrange;
@@ -43,19 +41,19 @@ class _HomeTabState extends State<HomeTab> {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
     LatLng pos = LatLng(position.latitude, position.longitude);
-    mapController.animateCamera(CameraUpdate.newLatLng(pos));
+    mapController!.animateCamera(CameraUpdate.newLatLng(pos));
 
   }
 
   void getCurrentDriverInfo () async {
 
     currentFirebaseUser = await FirebaseAuth.instance.currentUser;
-    DatabaseReference driverRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser.uid}');
-    driverRef.once().then((DataSnapshot snapshot){
+    DatabaseReference driverRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser!.uid}');
+    driverRef.once().then((DatabaseEvent snapshot){
 
-      if(snapshot.value != null){
-        currentDriverInfo = Driver.fromSnapshot(snapshot);
-        print(currentDriverInfo.fullName);
+      if(snapshot.snapshot.value != null){
+        currentDriverInfo = Driver.fromSnapshot(snapshot.snapshot);
+        print(currentDriverInfo!.fullName);
       }
 
     });
@@ -110,8 +108,10 @@ class _HomeTabState extends State<HomeTab> {
                   isDismissible: false,
                     context: context,
                     builder: (BuildContext context) => ConfirmSheet(
-                      title: (!isAvailable) ? Translations.of(context).text('go_online') : Translations.of(context).text('go_offline'),
-                      subtitle: (!isAvailable) ? Translations.of(context).text('online_request') : Translations.of(context).text('offline_request'),
+                      title: (!isAvailable) ?
+                        Translations.of(context)!.text('go_online') : Translations.of(context)!.text('go_offline'),
+                      subtitle: (!isAvailable) ?
+                        Translations.of(context)!.text('online_request') : Translations.of(context)!.text('offline_request'),
 
                       onPressed: (){
 
@@ -154,12 +154,12 @@ class _HomeTabState extends State<HomeTab> {
 
   void GoOnline(){
     Geofire.initialize('driversAvailable');
-    Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
+    Geofire.setLocation(currentFirebaseUser!.uid, currentPosition!.latitude, currentPosition!.longitude);
 
-    tripRequestRef = FirebaseDatabase.instance.reference().child('drivers/${currentFirebaseUser.uid}/newtrip');
-    tripRequestRef.set('waiting');
+    tripRequestRef = FirebaseDatabase.instance.ref().child('drivers/${currentFirebaseUser!.uid}/newtrip');
+    tripRequestRef!.set('waiting');
 
-    tripRequestRef.onValue.listen((event) {
+    tripRequestRef!.onValue.listen((event) {
 
     });
 
@@ -167,9 +167,9 @@ class _HomeTabState extends State<HomeTab> {
 
   void GoOffline (){
 
-    Geofire.removeLocation(currentFirebaseUser.uid);
-    tripRequestRef.onDisconnect();
-    tripRequestRef.remove();
+    Geofire.removeLocation(currentFirebaseUser!.uid);
+    tripRequestRef!.onDisconnect();
+    tripRequestRef!.remove();
     tripRequestRef = null;
 
   }
@@ -177,16 +177,18 @@ class _HomeTabState extends State<HomeTab> {
   void getLocationUpdates(){
 
     homeTabPositionStream = Geolocator.getPositionStream(
-    desiredAccuracy: LocationAccuracy.bestForNavigation,
-    distanceFilter: 4).listen((Position position) {
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.bestForNavigation,
+        distanceFilter: 4
+      )).listen((Position position) {
       currentPosition = position;
 
       if(isAvailable){
-        Geofire.setLocation(currentFirebaseUser.uid, position.latitude, position.longitude);
+        Geofire.setLocation(currentFirebaseUser!.uid, position.latitude, position.longitude);
       }
 
       LatLng pos = LatLng(position.latitude, position.longitude);
-      mapController.animateCamera(CameraUpdate.newLatLng(pos));
+      mapController!.animateCamera(CameraUpdate.newLatLng(pos));
 
     });
 
