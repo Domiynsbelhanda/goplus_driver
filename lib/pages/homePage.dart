@@ -33,6 +33,18 @@ class _HomePage extends State<HomePage>{
     });
   }
 
+  void isOnlineCheck(){
+    var dataOffline = {
+      'state': 'offline',
+      'timestamp': FieldValue.serverTimestamp()
+    };
+
+    var dataOnline = {
+      'state': 'online',
+      'timestamp': FieldValue.serverTimestamp()
+    };
+  }
+
   void _onMapCreated(GoogleMapController _cntlr)
   {
     _controller = _cntlr;
