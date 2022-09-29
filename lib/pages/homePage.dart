@@ -27,16 +27,9 @@ class _HomePage extends State<HomePage>{
       firestore.collection('location').doc('user1').set({
         'longitude': l.longitude,
         'latitude' : l.latitude
-      });
-      // notification_dialog(
-      //     context,
-      //     'Long : ${l.longitude}, Lat : ${l.latitude}',
-      //     Icons.confirmation_num_sharp,
-      //     Colors.red,
-      //     {'label': 'OK', 'onTap': (){}},
-      //     20,
-      //     true
-      // );
+      }).then((value) => (){
+      })
+          .catchError((error) => print("Failed to update user: $error"));
       BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(),
         "assets/images/car_android.png",
