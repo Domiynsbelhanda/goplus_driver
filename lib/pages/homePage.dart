@@ -49,6 +49,7 @@ class _HomePage extends State<HomePage>{
   {
     _controller = _cntlr;
     _location.onLocationChanged.listen((l) async {
+      _initialcameraposition = LatLng(l.latitude!, l.longitude!);
       firestore.collection('drivers').doc(key).update({
         'longitude': l.longitude,
         'latitude' : l.latitude
@@ -99,7 +100,8 @@ class _HomePage extends State<HomePage>{
         }
 
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return Scaffold(
+
+        return Scaffold(
             body: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -114,29 +116,66 @@ class _HomePage extends State<HomePage>{
                     markers: markers,
                   ),
 
-                  Positioned(
+                  data['ride'] ? Positioned(
                     top: 16.0,
                     left:36,
                     right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: BlinkText(
-                            'UNE COURSE',
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                color: Colors.red),
-                            beginColor: Colors.redAccent,
-                            endColor: Colors.yellow,
-                            times: 1000,
-                            duration: Duration(seconds: 1)
+                    child: GestureDetector(
+                      onTap: (){
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              child: Column(
+                                children: [
+                                  Text(
+                                      'A ${calculateDistance(
+                                          _initialcameraposition,
+                                          LatLng(
+                                            data['depart_latitude'],
+                                            data['depart_longitude']
+                                          )
+                                      ).toStringAsFixed(2)} mètre(s)'
+                                  ),
+
+                                  SizedBox(height: 16.0,),
+
+                                  AppButton(
+                                    name: 'ACCEPTER',
+                                    onTap: (){
+                                      Navigator.pop(context);
+                                      FirebaseFirestore.instance.collection('drivers').doc(key).update({
+                                        'ride': false,
+                                        'validate': true
+                                      });
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: BlinkText(
+                              'UNE COURSE',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.red),
+                              beginColor: Colors.redAccent,
+                              endColor: Colors.yellow,
+                              times: 1000,
+                              duration: Duration(seconds: 1)
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ) : SizedBox(),
 
                   Positioned(
                       bottom: 16.0,
