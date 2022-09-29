@@ -4,8 +4,8 @@ import 'package:goplus_driver/utils/app_colors.dart';
 class AppButton extends StatefulWidget {
   var onTap;
   final String? name;
-  final Color color;
-  AppButton({this.onTap, this.name, this.color = AppColors.primaryColor});
+  final Color? color;
+  AppButton({this.onTap, this.name, this.color});
 
   @override
   _AppButtonState createState() => _AppButtonState();
@@ -33,9 +33,9 @@ class _AppButtonState extends State<AppButton> {
           child: MaterialButton(
             highlightColor: Colors.yellow[600],
             onPressed: () => widget.onTap(),
-            height: size.height * 0.07,
+            height: size.height * 0.09,
             minWidth: size.width * 0.9,
-            color: AppColors.primaryColor,
+            color: widget.color == null ? AppColors.primaryColor : widget.color,
             child: Text(
               widget.name!,
               style: TextStyle(

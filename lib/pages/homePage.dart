@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
 
 class HomePage extends StatefulWidget{
@@ -73,6 +74,17 @@ class _HomePage extends State<HomePage>{
               myLocationButtonEnabled: true,
               markers: markers,
             ),
+
+            Positioned(
+              bottom: 10.0,
+                left: 0,
+                right: 0,
+                child: AppButton(
+                  name: 'ACTIVER VOTRE POSITION',
+                  color: Colors.green,
+                  onTap: (){},
+                )
+            )
           ],
         ),
       ),
