@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -95,11 +96,11 @@ class _IntroScreenState extends State<IntroScreen> {
                           Spacer(),
                           GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (_) => PhoneNumberScreen(),
-                              //     ));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PhoneNumberScreen(),
+                                  ));
                             },
                             child: Container(
                               height: size.width * 0.21,
@@ -130,11 +131,11 @@ class _IntroScreenState extends State<IntroScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (_) => PhoneNumberScreen(),
-                              //     ));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PhoneNumberScreen(),
+                                  ));
                             },
                             child: Text(
                               "Ignorer",
