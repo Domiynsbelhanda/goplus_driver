@@ -1,13 +1,13 @@
-import 'package:taxigo_driver/brand_colors.dart';
-import 'package:taxigo_driver/helpers/helpermethods.dart';
-import 'package:taxigo_driver/widgets/BrandDivier.dart';
-import 'package:taxigo_driver/widgets/TaxiButton.dart';
+import 'package:goplus_driver/brand_colors.dart';
+import 'package:goplus_driver/helpers/helpermethods.dart';
+import 'package:goplus_driver/widgets/BrandDivier.dart';
+import 'package:goplus_driver/widgets/TaxiButton.dart';
 import 'package:flutter/material.dart';
 
 class CollectPayment extends StatelessWidget {
 
-  final String paymentMethod;
-  final int fares;
+  final String? paymentMethod;
+  final int? fares;
 
   CollectPayment({this.paymentMethod, this.fares});
   
@@ -32,7 +32,7 @@ class CollectPayment extends StatelessWidget {
 
             SizedBox(height: 20,),
 
-            Text('${paymentMethod.toUpperCase()} PAYMENT'),
+            Text('${paymentMethod!.toUpperCase()} PAYMENT'),
 
             SizedBox(height: 20,),
 

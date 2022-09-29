@@ -1,13 +1,13 @@
-import 'package:taxigo_driver/brand_colors.dart';
-import 'package:taxigo_driver/widgets/TaxiButton.dart';
-import 'package:taxigo_driver/widgets/TaxiOutlineButton.dart';
+import 'package:goplus_driver/brand_colors.dart';
+import 'package:goplus_driver/widgets/TaxiButton.dart';
+import 'package:goplus_driver/widgets/TaxiOutlineButton.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmSheet extends StatelessWidget {
 
-  final String title;
-  final String subtitle;
-  final Function onPressed;
+  final String? title;
+  final String? subtitle;
+  final Function? onPressed;
 
   ConfirmSheet({this.title, this.subtitle, this.onPressed});
 
@@ -38,7 +38,7 @@ class ConfirmSheet extends StatelessWidget {
             SizedBox(height:  10,),
 
            Text(
-             title,
+             title!,
              textAlign: TextAlign.center,
              style: TextStyle(fontSize: 22, fontFamily: 'Brand-Bold', color: BrandColors.colorText),
            ),
@@ -46,7 +46,7 @@ class ConfirmSheet extends StatelessWidget {
             SizedBox(height: 20,),
 
             Text(
-              subtitle,
+              subtitle!,
               textAlign: TextAlign.center,
               style: TextStyle(color: BrandColors.colorTextLight),
             ),
@@ -79,8 +79,6 @@ class ConfirmSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-
-
 
               ],
             )
