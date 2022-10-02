@@ -6,14 +6,16 @@ import '../utils/app_colors.dart';
 
 progresso_dialog(
     BuildContext contexts,
-    String text,) {
+    String text,) async {
+
+  await Future.delayed(Duration(microseconds: 1));
 
   double width = MediaQuery.of(contexts).size.width;
 
   // show the dialog
   showDialog(
     context: contexts,
-    barrierDismissible: false,
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
@@ -21,7 +23,7 @@ progresso_dialog(
             BorderRadius.circular(20.0)),
         child: SizedBox(
           width: width / 1,
-          height: width /1.5,
+          height: width /1.3,
           child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -44,13 +46,14 @@ progresso_dialog(
                       format: CountDownTimerFormat.secondsOnly,
                       endTime: DateTime.now().add(
                         Duration(
-                          seconds: 35,
+                          seconds: 40,
                         ),
                       ),
                       onEnd: () {
                         FirebaseFirestore.instance.collection('drivers').doc(text).update({
                           'online': true,
-                          'ride': false
+                          'ride': false,
+                          'ride_view': false
                         });
                         FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                             .doc('courses').delete();
@@ -104,7 +107,8 @@ progresso_dialog(
                           onPressed: (){
                             FirebaseFirestore.instance.collection('drivers').doc(text).update({
                               'online': true,
-                              'ride': false
+                              'ride': false,
+                              'ride_view': false
                             });
                             FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                                 .doc('courses').delete();
