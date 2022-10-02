@@ -28,6 +28,7 @@ class _HomePage extends State<HomePage>{
   Set<Marker> markers = Set();
   bool isOnline = false;
   Map<String, dynamic>? datas;
+  LatLng? position;
 
 
   @override
@@ -64,7 +65,10 @@ class _HomePage extends State<HomePage>{
               icon: markerbitmap, //Icon for Marker
             )
         );
+
+        position = LatLng(l.latitude!, l.longitude!);
       });
+
 
       _controller!.animateCamera(
         CameraUpdate.newCameraPosition(
@@ -113,7 +117,7 @@ class _HomePage extends State<HomePage>{
                 'ride_view': false
               });
               nb++;
-              progresso_dialog(context, key!);
+              progresso_dialog(context, key!, position!);
             }
           }
 
