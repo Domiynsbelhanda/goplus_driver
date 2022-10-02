@@ -91,8 +91,8 @@ class _HomePage extends State<HomePage>{
       ),
     )
         : Scaffold(
-          body: FutureBuilder<DocumentSnapshot>(
-      future: users.doc(key).get(),
+          body: StreamBuilder<DocumentSnapshot>(
+      stream: users.doc(key).snapshots(),
       builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 

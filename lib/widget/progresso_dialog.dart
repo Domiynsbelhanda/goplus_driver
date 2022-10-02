@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:goplus_driver/pages/google_maps_popylines.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
 
 import '../utils/app_colors.dart';
@@ -87,7 +88,7 @@ progresso_dialog(
             } else {
               return SizedBox(
                 width: width / 1,
-                height: width /1.3,
+                height: data['status'] == 'see' ? MediaQuery.of(context).size.height - 64 : width /1.3,
                 child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -130,7 +131,71 @@ progresso_dialog(
                             },
                           ),
 
+                          data['status'] == 'see' ?
+                              SizedBox(
+                                child: GoogleMapsPolylines(),
+                              )
+                          : SizedBox(),
+
+                          data['status'] == 'see' ?
                           Row(
+                            children: [
+                              TextButton(
+                                child: Container(
+                                    padding: const EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primaryColor,
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                    child: Text(
+                                      'ACCEPTER',
+                                      style: TextStyle(
+                                          color: Colors.black
+                                      ),
+                                    )
+                                ),
+                                onPressed: (){
+                                  FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
+                                      .doc('courses')
+                                      .update({
+                                    'status': 'accept',
+                                  });
+                                },
+                              ),
+
+                              const SizedBox(width: 4.0),
+
+                              TextButton(
+                                child: Container(
+                                    padding: const EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primaryColor,
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                    child: Text(
+                                      'REFUSER',
+                                      style: TextStyle(
+                                          color: Colors.black
+                                      ),
+                                    )
+                                ),
+                                onPressed: (){
+                                  FirebaseFirestore.instance.collection('drivers').doc(text).update({
+                                    'online': true,
+                                    'ride': false,
+                                    'ride_view': false
+                                  });
+                                  FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
+                                      .doc('courses')
+                                      .update({
+                                    'status': 'cancel',
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          )
+                          : Row(
                             children: [
                               TextButton(
                                 child: Container(
@@ -147,13 +212,11 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  FirebaseFirestore.instance.collection('drivers').doc(text).update({
-                                    'online': true,
-                                    'ride': false
-                                  });
                                   FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
-                                      .doc('courses').delete();
-                                  Navigator.pop(context);
+                                      .doc('courses')
+                                      .update({
+                                    'status': 'see',
+                                  });
                                 },
                               ),
 
