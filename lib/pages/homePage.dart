@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
+import 'package:goplus_driver/widget/progresso_dialog.dart';
 import 'package:location/location.dart';
 import '../utils/app_colors.dart';
 
@@ -88,7 +89,11 @@ class _HomePage extends State<HomePage>{
           return Text("Document does not exist");
         }
 
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+        if(data['ride']){
+          progresso_dialog(context, key!);
+        }
 
         return Scaffold(
             body: Container(
@@ -104,58 +109,6 @@ class _HomePage extends State<HomePage>{
                     myLocationButtonEnabled: true,
                     markers: markers,
                   ),
-
-                  data['ride'] ? Positioned(
-                    top: 16.0,
-                    left:36,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: (){
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              child: Column(
-                                children: [
-                                  Text(
-                                      'A ${calculateDistance(
-                                          _initialcameraposition,
-                                          LatLng(
-                                            data['depart_latitude'],
-                                            data['depart_longitude']
-                                          )
-                                      ).toStringAsFixed(2)} mètre(s)'
-                                  ),
-
-                                  SizedBox(height: 16.0,),
-
-                                  AppButton(
-                                    name: 'ACCEPTER',
-                                    onTap: (){
-                                      Navigator.pop(context);
-                                      FirebaseFirestore.instance.collection('drivers').doc(key).update({
-                                        'ride': false,
-                                        'validate': true
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('')
-                        ),
-                      ),
-                    ),
-                  ) : SizedBox(),
 
                   Positioned(
                       bottom: 16.0,
