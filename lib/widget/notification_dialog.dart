@@ -3,6 +3,7 @@ import 'package:goplus_driver/utils/app_colors.dart';
 
 notification_dialog(
     BuildContext context,
+    var onTap,
     String text,
     IconData? icons,
     Color? color,
@@ -62,9 +63,7 @@ notification_dialog(
                             ),
                           )
                       ),
-                      onPressed: (){
-                        Navigator.pop(contexts);
-                      },
+                      onPressed: ()=>onTap,
                     )
                   ]
               )
