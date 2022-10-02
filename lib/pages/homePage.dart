@@ -117,6 +117,10 @@ class _HomePage extends State<HomePage>{
             }
           }
 
+          if(!data['ride']){
+            nb = 0;
+          }
+
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
