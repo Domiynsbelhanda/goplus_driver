@@ -5,10 +5,11 @@ import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
-import 'package:blinking_text/blinking_text.dart';
 import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -31,18 +32,6 @@ class _HomePage extends State<HomePage>{
     firestore.collection('drivers').doc(key).update({
       'online': isOnline,
     });
-  }
-
-  void isOnlineCheck(){
-    var dataOffline = {
-      'state': 'offline',
-      'timestamp': FieldValue.serverTimestamp()
-    };
-
-    var dataOnline = {
-      'state': 'online',
-      'timestamp': FieldValue.serverTimestamp()
-    };
   }
 
   void _onMapCreated(GoogleMapController _cntlr)
@@ -157,21 +146,12 @@ class _HomePage extends State<HomePage>{
                         );
                       },
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: BlinkText(
-                              'UNE COURSE',
-                              style: TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.red),
-                              beginColor: Colors.redAccent,
-                              endColor: Colors.yellow,
-                              times: 1000,
-                              duration: Duration(seconds: 1)
-                          ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('')
                         ),
                       ),
                     ),
