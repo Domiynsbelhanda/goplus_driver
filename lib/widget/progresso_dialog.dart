@@ -164,11 +164,6 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
-                                      .doc('courses')
-                                      .update({
-                                    'status': 'accept',
-                                  });
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -176,7 +171,8 @@ progresso_dialog(
                                               GoogleMapsPolylines(
                                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-                                                  position: location
+                                                  position: location,
+                                                  id: text,
                                               )
                                       )
                                   );

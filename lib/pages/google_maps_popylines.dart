@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:label_marker/label_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,8 +9,9 @@ class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
   LatLng destination;
   LatLng position;
+  String? id;
 
-  GoogleMapsPolylines({Key? key, required this.origine, required this.destination, required this.position}) : super(key: key);
+  GoogleMapsPolylines({Key? key, this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -35,6 +37,14 @@ class _Poly extends State<GoogleMapsPolylines> {
     // TODO: implement initState
     super.initState();
 
+    if(widget.id != null){
+      FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
+          .doc('courses')
+          .update({
+        'status': 'accept',
+      });
+    }
+
     latLen = [
       widget.position,
       widget.origine,
@@ -48,21 +58,15 @@ class _Poly extends State<GoogleMapsPolylines> {
 
     // declared for loop for various locations
     for(int i=0; i<latLen.length; i++){
-      _markers.addLabelMarker(
+      _markers.add(
         // added markers
-          LabelMarker(
-            label: '${i + 1} ${i == 0 ? 'Votre Position' : i == 1 ? 'Lieu de ramassage' : i == 2 ? 'Destination du client' : ''}',
-            textStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 50.0
-            ),
+          Marker(
             markerId: MarkerId(i.toString()),
             position: latLen[i],
             infoWindow: InfoWindow(
-              title: 'TRAJET',
+              title: '${i + 1} ${i == 0 ? 'Votre Position' : i == 1 ? 'Lieu de ramassage' : i == 2 ? 'Destination du client' : ''}',
               snippet: '',
-            ),
-            icon: BitmapDescriptor.defaultMarker,
+            )
           )
       );
       setState(() {
