@@ -164,7 +164,7 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  Navigator.push(
+                                  Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
@@ -174,7 +174,8 @@ progresso_dialog(
                                                   position: location,
                                                   id: text,
                                               )
-                                      )
+                                      ),
+                                          (Route<dynamic> route) => false
                                   );
                                 },
                               ),

@@ -135,9 +135,7 @@ class _Poly extends State<GoogleMapsPolylines> {
             myLocationButtonEnabled: true,
             compassEnabled: true,
             polylines: _polyline,
-            onMapCreated: (GoogleMapController controller){
-              _controller = controller;
-            },
+            onMapCreated: _onMapCreated,
           ),
         ),
       ),
