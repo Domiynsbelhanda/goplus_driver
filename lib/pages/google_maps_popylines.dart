@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import '../widget/backButton.dart';
+
 class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
   LatLng destination;
@@ -48,6 +50,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       );
 
       setState(() {
+        _markers.clear();
         _markers.add(
             Marker( //add start location marker
               markerId: MarkerId('Ma Position'),
@@ -109,9 +112,6 @@ class _Poly extends State<GoogleMapsPolylines> {
             )
           )
       );
-      setState(() {
-
-      });
       _polyline.add(
           Polyline(
             polylineId: PolylineId('1'),
@@ -126,17 +126,27 @@ class _Poly extends State<GoogleMapsPolylines> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: SafeArea(
-          child: GoogleMap(
-            initialCameraPosition: _kGoogle,
-            mapType: MapType.normal,
-            markers: _markers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            compassEnabled: true,
-            polylines: _polyline,
-            onMapCreated: _onMapCreated,
-          ),
+        child: Stack(
+          children: [
+            SafeArea(
+              child: GoogleMap(
+                initialCameraPosition: _kGoogle,
+                mapType: MapType.normal,
+                markers: _markers,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                compassEnabled: true,
+                polylines: _polyline,
+                onMapCreated: _onMapCreated,
+              ),
+            ),
+
+            Positioned(
+              right: 16,
+              top: 16,
+              child: CloseButtons(context),
+            ),
+          ],
         ),
       ),
     );
