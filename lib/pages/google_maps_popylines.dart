@@ -126,28 +126,63 @@ class _Poly extends State<GoogleMapsPolylines> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Stack(
-          children: [
-            SafeArea(
-              child: GoogleMap(
-                initialCameraPosition: _kGoogle,
-                mapType: MapType.normal,
-                markers: _markers,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                compassEnabled: true,
-                polylines: _polyline,
-                onMapCreated: _onMapCreated,
-              ),
-            ),
+        child : StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("drivers").doc(widget.id)
+            .collection('courses').doc('courses').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-            Positioned(
-              right: 16,
-              top: 16,
-              child: CloseButtons(context),
-            ),
-          ],
-        ),
+          var data = snapshot.data!.data() as Map<String, dynamic>;
+
+          return Stack(
+            children: [
+              SafeArea(
+                child: GoogleMap(
+                  initialCameraPosition: _kGoogle,
+                  mapType: MapType.normal,
+                  markers: _markers,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  compassEnabled: true,
+                  polylines: _polyline,
+                  onMapCreated: _onMapCreated,
+                ),
+              ),
+
+              Positioned(
+                right: 16,
+                top: 16,
+                child: CloseButtons(context),
+              ),
+
+              Positioned(
+                bottom: 32,
+                left: 16,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  decoration: const BoxDecoration(
+                    color: Colors.white
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.call
+                        ),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        Text(
+                            '+243${data['user_id']}'
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ),
+            ],
+          );
+        })
       ),
     );
   }
