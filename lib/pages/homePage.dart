@@ -104,10 +104,6 @@ class _HomePage extends State<HomePage>{
             return Text("Something went wrong");
           }
 
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return Text("Document does not exist");
-          }
-
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
           if(data['ride']){
