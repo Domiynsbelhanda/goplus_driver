@@ -85,8 +85,8 @@ class _HomePage extends State<HomePage>{
     CollectionReference users = FirebaseFirestore.instance.collection('drivers');
 
     return Scaffold(
-          body: FutureBuilder<DocumentSnapshot>(
-          future: users.doc(key).get(),
+          body: StreamBuilder<DocumentSnapshot>(
+          stream: users.doc(key).snapshots(),
           builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
