@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/screens/signup_screen.dart';
+import '../pages/homePage.dart';
 import '../utils/app_colors.dart';
+import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import 'verify_number_screen.dart';
@@ -98,15 +102,29 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 SizedBox(height: size.height * 0.08),
                 AppButton(
                   name: 'ENVOYEZ LE CODE',
-                  onTap: () {
-                    if (formkey.currentState!.validate())
+                  onTap: () async {
+                    if (formkey.currentState!.validate()){
+                      var ref = FirebaseFirestore.instance.collection('drivers');
+                      var doc = await ref.doc(phoneController.text.trim()).get();
+                      if(doc.exists){
+                        storeToken(token: phoneController.text.trim());
+                      }
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => VerifyNumberScreen(
-                              phone: phoneController.text.trim(),
-                            ),
-                          ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => doc.exists ? HomePage() : SignupScreen(
+                            phone: phoneController.text.trim(),
+                          ),
+                        ),
+                      );
+                    }
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (_) => VerifyNumberScreen(
+                      //         phone: phoneController.text.trim(),
+                      //       ),
+                      //     ));
                   },
                 ),
                 SizedBox(height: size.height * 0.1),

@@ -84,110 +84,101 @@ class _HomePage extends State<HomePage>{
 
     CollectionReference users = FirebaseFirestore.instance.collection('drivers');
 
-    return _location == null ? Scaffold(
-      body: Center(
-        child: LoadingAnimationWidget.twistingDots(
-          leftDotColor: AppColors.primaryColor,
-          rightDotColor: AppColors.primaryColor,
-          size: 30,
-        ),
-      ),
-    )
-        : Scaffold(
+    return Scaffold(
           body: FutureBuilder<DocumentSnapshot>(
-      future: users.doc(key).get(),
-      builder:
+          future: users.doc(key).get(),
+          builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-          if (snapshot.hasError) {
-            return Text("Something went wrong");
-          }
-
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-          if(data['ride']){
-            if(!data['ride_view'] && nb == 0){
-              FirebaseFirestore.instance.collection('drivers').doc(key).update({
-                'ride': false,
-                'ride_view': false
-              });
-              nb++;
-              progresso_dialog(context, key!, position!);
+            if (snapshot.hasError) {
+              return Text("Something went wrong");
             }
-          }
 
-          if(!data['ride']){
-            nb = 0;
-          }
+            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Stack(
-              children: [
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(target: _initialcameraposition),
-                  mapType: MapType.normal,
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  markers: markers,
-                ),
+            if(data['ride']){
+              if(!data['ride_view'] && nb == 0){
+                FirebaseFirestore.instance.collection('drivers').doc(key).update({
+                  'ride': false,
+                  'ride_view': false
+                });
+                nb++;
+                progresso_dialog(context, key!, position!);
+              }
+            }
 
-                Positioned(
-                    bottom: 16.0,
-                    left: 0,
-                    right: 0,
-                    child: AppButton(
-                      name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
-                      color: isOnline ? AppColors.primaryColor : Colors.green,
-                      onTap: (){
-                        setState(() {
-                          isOnline = !isOnline;
-                        });
-                        if(isOnline){
-                          firestore.collection('drivers').doc(key).update({
-                            'online': isOnline,
+            if(!data['ride']){
+              nb = 0;
+            }
+
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(target: _initialcameraposition),
+                    mapType: MapType.normal,
+                    onMapCreated: _onMapCreated,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    markers: markers,
+                  ),
+
+                  Positioned(
+                      bottom: 16.0,
+                      left: 0,
+                      right: 0,
+                      child: AppButton(
+                        name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
+                        color: isOnline ? AppColors.primaryColor : Colors.green,
+                        onTap: (){
+                          setState(() {
+                            isOnline = !isOnline;
                           });
-                        } else {
-                          firestore.collection('drivers').doc(key).update({
-                            'online': isOnline,
-                          });
-                        }
-                      },
-                    )
-                ),
+                          if(isOnline){
+                            firestore.collection('drivers').doc(key).update({
+                              'online': isOnline,
+                            });
+                          } else {
+                            firestore.collection('drivers').doc(key).update({
+                              'online': isOnline,
+                            });
+                          }
+                        },
+                      )
+                  ),
 
-                Positioned(
-                  top: 16.0,
-                  right: 16.0,
-                  child: Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(48.0)
-                    ),
-                    child: IconButton(
-                      onPressed: (){
-                        deleteToken('token');
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => MyApp()
-                            ),
-                                (Route<dynamic> route) => false
-                        );
-                      },
-                      icon: Icon(
-                        Icons.logout,
+                  Positioned(
+                    top: 16.0,
+                    right: 16.0,
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(48.0)
+                      ),
+                      child: IconButton(
+                        onPressed: (){
+                          deleteToken('token');
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => MyApp()
+                              ),
+                                  (Route<dynamic> route) => false
+                          );
+                        },
+                        icon: Icon(
+                          Icons.logout,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          );
+                  )
+                ],
+              ),
+            );
       },
     ),
         );
