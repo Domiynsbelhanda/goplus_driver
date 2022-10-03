@@ -12,9 +12,9 @@ class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
   LatLng destination;
   LatLng position;
-  String? id;
+  String id;
 
-  GoogleMapsPolylines({Key? key, this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
+  GoogleMapsPolylines({Key? key, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -40,7 +40,7 @@ class _Poly extends State<GoogleMapsPolylines> {
     _controller = _cntlr;
     _location.onLocationChanged.listen((l) async {
       position = LatLng(l.latitude!, l.longitude!);
-      FirebaseFirestore.instance.collection('drivers').doc(widget.id!).update({
+      FirebaseFirestore.instance.collection('drivers').doc(widget.id).update({
         'longitude': l.longitude,
         'latitude' : l.latitude
       });
@@ -80,13 +80,13 @@ class _Poly extends State<GoogleMapsPolylines> {
     // TODO: implement initState
     super.initState();
 
-    if(widget.id != null){
-      FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
-          .doc('courses')
-          .update({
-        'status': 'accept',
-      });
-    }
+    // if(widget.id != null){
+    //   FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
+    //       .doc('courses')
+    //       .update({
+    //     'status': 'accept',
+    //   });
+    // }
 
     latLen = [
       widget.position,
@@ -126,12 +126,20 @@ class _Poly extends State<GoogleMapsPolylines> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child : StreamBuilder(
+        child : StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("drivers").doc(widget.id)
-            .collection('courses').doc('courses').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            .collection('courses').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
 
-          var data = snapshot.data!.data() as Map<String, dynamic>;
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Loading");
+          }
+
+          var data = snapshot.data!.docs[0].data() as Map<String, dynamic>;
 
           return Stack(
             children: [

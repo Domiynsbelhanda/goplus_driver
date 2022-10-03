@@ -111,7 +111,7 @@ class _HomePage extends State<HomePage>{
               nb = 0;
             }
 
-            return Container(
+            return SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Stack(
