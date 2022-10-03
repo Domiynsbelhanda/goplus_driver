@@ -10,7 +10,8 @@ import 'package:location/location.dart';
 import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
-  const HomePage({Key? key}) : super(key: key);
+  String? phone;
+  HomePage({Key? key, this.phone}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,6 +34,9 @@ class _HomePage extends State<HomePage>{
   @override
   void initState() {
     getToken();
+    if(widget.phone != null){
+      key = widget.phone;
+    }
     firestore.collection('drivers').doc(key).update({
       'online': isOnline,
     });

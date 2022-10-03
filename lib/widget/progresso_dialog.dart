@@ -137,7 +137,7 @@ progresso_dialog(
 
                           data['status'] == 'see' ?
                               SizedBox(
-                                height: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width / 2,
                                 child: GoogleMapsPolylines(
                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),

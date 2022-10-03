@@ -101,7 +101,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 ),
                 SizedBox(height: size.height * 0.08),
                 AppButton(
-                  name: 'ENVOYEZ LE CODE',
+                  color: AppColors.primaryColor,
+                  name: 'CONNEXION',
                   onTap: () async {
                     if (formkey.currentState!.validate()){
                       var ref = FirebaseFirestore.instance.collection('drivers');
@@ -112,7 +113,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => doc.exists ? HomePage() : SignupScreen(
+                          builder: (_) => doc.exists ? HomePage(
+                            phone: phoneController.text.trim(),
+                          ) : SignupScreen(
                             phone: phoneController.text.trim(),
                           ),
                         ),
