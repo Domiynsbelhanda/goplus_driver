@@ -19,7 +19,7 @@ class _Poly extends State<GoogleMapsPolylines> {
   // created controller to display Google Maps
   Completer<GoogleMapController> _controller = Completer();
   //on below line we have set the camera position
-  static final CameraPosition _kGoogle = const CameraPosition(
+  CameraPosition _kGoogle = const CameraPosition(
     target: LatLng(19.0759837, 72.8776559),
     zoom: 14,
   );
@@ -40,6 +40,11 @@ class _Poly extends State<GoogleMapsPolylines> {
     widget.destination,
       widget.position
     ];
+
+    _kGoogle = CameraPosition(
+      target: widget.position,
+      zoom: 14,
+    );
 
     // declared for loop for various locations
     for(int i=0; i<latLen.length; i++){

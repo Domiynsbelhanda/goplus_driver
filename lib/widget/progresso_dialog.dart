@@ -76,9 +76,13 @@ progresso_dialog(
                                 )
                             ),
                             onPressed: (){
-                              FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
-                                  .doc('courses')
-                                  .delete();
+                              try{
+                                FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
+                                    .doc('courses')
+                                    .delete();
+                              } catch(e){
+
+                              }
                               Navigator.pop(context);
                             },
                           )
