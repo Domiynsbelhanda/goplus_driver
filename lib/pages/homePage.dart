@@ -70,14 +70,14 @@ class _HomePage extends State<HomePage>{
         );
 
         position = LatLng(l.latitude!, l.longitude!);
+
+        _controller!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+          ),
+        );
       });
 
-
-      _controller!.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-        ),
-      );
     });
   }
 
@@ -111,6 +111,8 @@ class _HomePage extends State<HomePage>{
               }
             }
 
+            _initialcameraposition = LatLng(data['latitude'], data['longitude']);
+
             if(!data['ride']){
               nb = 0;
             }
@@ -121,7 +123,10 @@ class _HomePage extends State<HomePage>{
               child: Stack(
                 children: [
                   GoogleMap(
-                    initialCameraPosition: CameraPosition(target: _initialcameraposition),
+                    initialCameraPosition: CameraPosition(
+                        target: _initialcameraposition,
+                      zoom: 15
+                    ),
                     mapType: MapType.normal,
                     onMapCreated: _onMapCreated,
                     myLocationEnabled: true,
