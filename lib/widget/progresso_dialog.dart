@@ -28,6 +28,10 @@ progresso_dialog(
               .doc(text).collection('courses').doc('courses').snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+            if(!snapshot.hasData){
+              return const Text('Wait');
+            }
             
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
@@ -98,7 +102,7 @@ progresso_dialog(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children : [
-                          Text(
+                          const Text(
                             'En attente de la réponse',
                             style: TextStyle(
                                 fontSize: 25,

@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
 
 import '../widget/backButton.dart';
@@ -138,11 +139,51 @@ class _Poly extends State<GoogleMapsPolylines> {
           ),
         ),
 
-        Positioned(
+        widget.phone != null ? Positioned(
           right: 16,
           top: 16,
           child: CloseButtons(context),
-        ),
+        ) : SizedBox(),
+
+        widget.phone != null ? Positioned(
+            top: 32,
+            left: 16,
+            child: Container(
+              width: MediaQuery.of(context).size.width / 1.5,
+              decoration: const BoxDecoration(
+                  color: Colors.white
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    const Icon(
+                        Icons.call
+                    ),
+                    const SizedBox(
+                      width: 8.0,
+                    ),
+                    Text(
+                        '+243${widget.phone}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+        ) : SizedBox(),
+
+        widget.phone != null ? Positioned(
+            bottom: 32,
+            child: AppButton(
+              onTap: (){},
+              name: 'DEMARRER LA COURSE',
+              color: Colors.yellow,
+            )
+        ) : SizedBox(),
       ],
     );
   }
