@@ -14,7 +14,7 @@ class GoogleMapsPolylines extends StatefulWidget {
   String id;
   String? phone;
 
-  GoogleMapsPolylines({Key? key, this.phone, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
+  GoogleMapsPolylines({required Key key, this.phone, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -51,6 +51,28 @@ class _Poly extends State<GoogleMapsPolylines> {
 
       setState(() {
         _markers.clear();
+        _markers.add(
+          // added markers
+            Marker(
+                markerId: MarkerId('${latLen[1].longitude}'),
+                position: latLen[1],
+                infoWindow: InfoWindow(
+                  title: '${1 + 1} ${1 == 0 ? 'Votre Position' : 1 == 1 ? 'Lieu de ramassage' : 1 == 2 ? 'Destination du client' : ''}',
+                  snippet: '',
+                ),
+            )
+        );
+        _markers.add(
+          // added markers
+            Marker(
+                markerId: MarkerId('${latLen[2].longitude}'),
+                position: latLen[2],
+                infoWindow: InfoWindow(
+                  title: '${2 + 1} ${2 == 0 ? 'Votre Position' : 2 == 1 ? 'Lieu de ramassage' : 2 == 2 ? 'Destination du client' : ''}',
+                  snippet: '',
+                )
+            )
+        );
         _markers.add(
             Marker( //add start location marker
               markerId: MarkerId('Ma Position'),
@@ -101,17 +123,6 @@ class _Poly extends State<GoogleMapsPolylines> {
 
     // declared for loop for various locations
     for(int i=0; i<latLen.length; i++){
-      _markers.add(
-        // added markers
-          Marker(
-            markerId: MarkerId(i.toString()),
-            position: latLen[i],
-            infoWindow: InfoWindow(
-              title: '${i + 1} ${i == 0 ? 'Votre Position' : i == 1 ? 'Lieu de ramassage' : i == 2 ? 'Destination du client' : ''}',
-              snippet: '',
-            )
-          )
-      );
       _polyline.add(
           Polyline(
             polylineId: PolylineId('1'),

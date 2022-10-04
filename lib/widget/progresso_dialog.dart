@@ -14,6 +14,8 @@ progresso_dialog(
 
   double width = MediaQuery.of(contexts).size.width;
 
+  final Key _mapKey = UniqueKey();
+
   // show the dialog
   showDialog(
     context: contexts,
@@ -147,6 +149,7 @@ progresso_dialog(
                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
                                   position: location,
                                   id: text,
+                                  key: _mapKey,
                                 ),
                               )
                           : SizedBox(),
@@ -183,7 +186,8 @@ progresso_dialog(
                                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
                                                   position: location,
                                                   id: text,
-                                                  phone: data['user_id']
+                                                  phone: data['user_id'],
+                                                key: _mapKey,
                                               )
                                       ),
                                           (Route<dynamic> route) => false

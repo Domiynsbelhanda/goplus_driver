@@ -98,6 +98,10 @@ class _HomePage extends State<HomePage>{
               return Text("Something went wrong");
             }
 
+            if(!snapshot.hasData){
+              return const Text('');
+            }
+
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
             if(data['ride']){
