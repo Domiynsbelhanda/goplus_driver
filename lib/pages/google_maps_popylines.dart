@@ -1,7 +1,5 @@
 
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:label_marker/label_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -13,8 +11,9 @@ class GoogleMapsPolylines extends StatefulWidget {
   LatLng destination;
   LatLng position;
   String id;
+  String? phone;
 
-  GoogleMapsPolylines({Key? key, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
+  GoogleMapsPolylines({Key? key, this.phone, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -124,74 +123,27 @@ class _Poly extends State<GoogleMapsPolylines> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child : StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("drivers").doc(widget.id)
-            .collection('courses').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return Stack(
+      children: [
+        SafeArea(
+          child: GoogleMap(
+            initialCameraPosition: _kGoogle,
+            mapType: MapType.normal,
+            markers: _markers,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            compassEnabled: true,
+            polylines: _polyline,
+            onMapCreated: _onMapCreated,
+          ),
+        ),
 
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading");
-          }
-
-          var data = snapshot.data!.docs[0].data() as Map<String, dynamic>;
-
-          return Stack(
-            children: [
-              SafeArea(
-                child: GoogleMap(
-                  initialCameraPosition: _kGoogle,
-                  mapType: MapType.normal,
-                  markers: _markers,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  compassEnabled: true,
-                  polylines: _polyline,
-                  onMapCreated: _onMapCreated,
-                ),
-              ),
-
-              Positioned(
-                right: 16,
-                top: 16,
-                child: CloseButtons(context),
-              ),
-
-              Positioned(
-                bottom: 32,
-                left: 16,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  decoration: const BoxDecoration(
-                    color: Colors.white
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.call
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        Text(
-                            '+243${data['user_id']}'
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ),
-            ],
-          );
-        })
-      ),
+        Positioned(
+          right: 16,
+          top: 16,
+          child: CloseButtons(context),
+        ),
+      ],
     );
   }
 }

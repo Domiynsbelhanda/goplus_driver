@@ -137,7 +137,7 @@ progresso_dialog(
 
                           data['status'] == 'see' ?
                               SizedBox(
-                                height: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.width,
                                 child: GoogleMapsPolylines(
                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
@@ -165,6 +165,11 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
+                                  FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
+                                      .doc('courses')
+                                      .update({
+                                    'status': 'accept',
+                                  });
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
@@ -174,6 +179,7 @@ progresso_dialog(
                                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
                                                   position: location,
                                                   id: text,
+                                                  phone: data['user_id']
                                               )
                                       ),
                                           (Route<dynamic> route) => false
