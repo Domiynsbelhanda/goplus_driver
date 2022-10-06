@@ -1,17 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:goplus_driver/utils/global_variables.dart';
+import 'package:goplus_driver/screens/IntroScreen.dart';
 
-import 'enter_phone_number_screen.dart';
+import '../utils/global_variables.dart';
 
 class CheckPage extends StatelessWidget{
+
+  String? cle;
+
   @override
   Widget build(BuildContext context) {
+
+    cle = keyss!;
     // TODO: implement build
-    return keys == null ? PhoneNumberScreen() :
+    return cle == null ? IntroScreen() :
     StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('drivers')
-        .doc(keys).collection('courses').doc('courses').snapshots(),
+        .doc(cle!).collection('courses').doc('courses').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
         if(!snapshot.hasData){

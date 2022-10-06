@@ -104,7 +104,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_)
-                                    => keys != null ? HomePage() : PhoneNumberScreen(),
+                                    => keyss != null ? HomePage() : PhoneNumberScreen(),
                                   ));
                             },
                             child: Container(
@@ -140,7 +140,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
-                                    keys != null ? HomePage() : PhoneNumberScreen(),
+                                    keyss != null ? HomePage() : PhoneNumberScreen(),
                                   ));
                             },
                             child: Text(
