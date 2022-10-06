@@ -32,6 +32,7 @@ class CheckPage extends StatelessWidget{
           return GoogleMapsPolylines(
             destination: LatLng(data['destination_latitude'], data['destination_longitude']),
             origine: LatLng(data['depart_latitude'], data['depart_longitude']),
+            position: LatLng(data['depart_latitude'], data['depart_longitude']),
             id: cle!,
             phone: data['user_id'],
             key: _mapKey,
