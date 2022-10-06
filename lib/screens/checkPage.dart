@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/screens/IntroScreen.dart';
 
+import '../pages/google_maps_popylines.dart';
 import '../utils/global_variables.dart';
 
 class CheckPage extends StatelessWidget{
 
   String? cle;
+  final Key _mapKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +23,22 @@ class CheckPage extends StatelessWidget{
         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
         if(!snapshot.hasData){
-        return const Text('Wait');
+          return IntroScreen();
         }
 
         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-        return Text('');
+        if(data['status'] == 'accept'){
+          return GoogleMapsPolylines(
+            destination: LatLng(data['destination_latitude'], data['destination_longitude']),
+            origine: LatLng(data['depart_latitude'], data['depart_longitude']),
+            id: cle!,
+            phone: data['user_id'],
+            key: _mapKey,
+          );
+        }
+
+        return IntroScreen();
         }
     );
   }

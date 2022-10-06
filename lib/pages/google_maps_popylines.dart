@@ -10,11 +10,11 @@ import '../widget/backButton.dart';
 class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
   LatLng destination;
-  LatLng position;
+  LatLng? position;
   String id;
   String? phone;
 
-  GoogleMapsPolylines({required Key key, this.phone, required this.id, required this.origine, required this.destination, required this.position}) : super(key: key);
+  GoogleMapsPolylines({required Key key, this.phone, required this.id, required this.origine, required this.destination, this.position}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -123,13 +123,13 @@ class _Poly extends State<GoogleMapsPolylines> {
     // }
 
     latLen = [
-      widget.position,
+      widget.position!,
       widget.origine,
       widget.destination,
     ];
 
     _kGoogle = CameraPosition(
-      target: widget.position,
+      target: widget.position!,
       zoom: 14,
     );
 
