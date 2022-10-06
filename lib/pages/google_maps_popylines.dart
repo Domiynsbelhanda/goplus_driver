@@ -201,18 +201,34 @@ class _Poly extends State<GoogleMapsPolylines> {
 
         widget.phone != null ? Positioned(
             bottom: 32,
-            child: AppButton(
-              onTap: (){
-                FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
-                      .doc('courses')
-                      .update({
-                    'status': 'start',
-                    'start_time': FieldValue.serverTimestamp()
-                  });
-              },
-              name: 'DEMARRER LA COURSE',
-              color: Colors.yellow,
-            )
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection('drivers')
+              .doc(widget.id!).collection('courses').doc('courses').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+              if(!snapshot.hasData){
+                return Text('Vérifiez votre connexion');
+              }
+
+              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+              return AppButton(
+                onTap: (){
+                  if(data['status'] == 'start'){
+
+                  } else {
+                    FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
+                        .doc('courses')
+                        .update({
+                      'status': 'start',
+                      'start_time': FieldValue.serverTimestamp()
+                    });
+                  }
+                },
+                name: data['status'] == 'start' ? 'TERMINER LA COURSE' : 'DEMARRER LA COURSE',
+                color: Colors.yellow,
+              );
+            })
         ) : SizedBox(),
       ],
     );

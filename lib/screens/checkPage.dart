@@ -28,7 +28,7 @@ class CheckPage extends StatelessWidget{
 
         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-        if(data['status'] == 'accept'){
+        if(data['status'] == 'accept' || data['status'] == 'start'){
           return GoogleMapsPolylines(
             destination: LatLng(data['destination_latitude'], data['destination_longitude']),
             origine: LatLng(data['depart_latitude'], data['depart_longitude']),
