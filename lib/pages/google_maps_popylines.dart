@@ -49,6 +49,16 @@ class _Poly extends State<GoogleMapsPolylines> {
         "assets/images/car_android.png",
       );
 
+      BitmapDescriptor departBitmap = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(),
+        "assets/images/drapeau-a-damier.png",
+      );
+
+      BitmapDescriptor arriveBitmap = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(),
+        "assets/images/drapeau.png",
+      );
+
       setState(() {
         _markers.clear();
         _markers.add(
@@ -60,6 +70,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                   title: '${1 + 1} ${1 == 0 ? 'Votre Position' : 1 == 1 ? 'Lieu de ramassage' : 1 == 2 ? 'Destination du client' : ''}',
                   snippet: '',
                 ),
+              icon: departBitmap
             )
         );
         _markers.add(
@@ -70,18 +81,19 @@ class _Poly extends State<GoogleMapsPolylines> {
                 infoWindow: InfoWindow(
                   title: '${2 + 1} ${2 == 0 ? 'Votre Position' : 2 == 1 ? 'Lieu de ramassage' : 2 == 2 ? 'Destination du client' : ''}',
                   snippet: '',
-                )
+                ),
+              icon: arriveBitmap
             )
         );
         _markers.add(
             Marker( //add start location marker
               markerId: MarkerId('Ma Position'),
-              position: LatLng(l.latitude!, l.longitude!), //position of marker
-              infoWindow: InfoWindow( //popup info
+              position: LatLng(l.latitude!, l.longitude!),
+              infoWindow: InfoWindow(
                 title: 'Ma Position',
                 snippet: 'Moi',
               ),
-              icon: markerbitmap, //Icon for Marker
+              icon: markerbitmap,
             )
         );
 
