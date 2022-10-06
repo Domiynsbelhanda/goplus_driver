@@ -63,7 +63,10 @@ notification_dialog(
                             ),
                           )
                       ),
-                      onPressed: ()=>onTap,
+                      onPressed: (){
+                        Navigator.pop(context);
+                        onTap();
+                      },
                     )
                   ]
               )

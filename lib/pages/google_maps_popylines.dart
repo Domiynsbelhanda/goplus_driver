@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/widget/app_button.dart';
+import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../widget/backButton.dart';
 
@@ -212,23 +214,44 @@ class _Poly extends State<GoogleMapsPolylines> {
 
               Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-              return AppButton(
-                onTap: (){
-                  if(data['status'] == 'start'){
-                    DateTime start = DateTime.parse(data['start_time'].toDate().toString());
-                    DateTime end = DateTime.parse(DateTime.now().toString());
-                    print('Différence : ${end.difference(start).inHours}');
-                  } else {
-                    FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
-                        .doc('courses')
-                        .update({
-                      'status': 'start',
-                      'start_time': FieldValue.serverTimestamp()
-                    });
-                  }
-                },
-                name: data['status'] == 'start' ? 'TERMINER LA COURSE' : 'DEMARRER LA COURSE',
-                color: Colors.yellow,
+              return Column(
+                children: [
+                  AppButton(
+                    onTap: (){
+                      if(data['status'] == 'start'){
+                        DateTime start = DateTime.parse(data['start_time'].toDate().toString());
+                        DateTime end = DateTime.parse(DateTime.now().toString());
+                        notification_dialog(
+                            context,
+                            (){
+                              FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                                  .doc('courses')
+                                  .update({
+                                'status': 'end',
+                                'end_time': FieldValue.serverTimestamp(),
+                                'duree': end.difference(start).inHours + 1,
+                                'prix': (end.difference(start).inHours +1) * 5
+                              });
+                            },
+                            'Course Terminée :\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                            Icons.drive_eta,
+                            Colors.green,
+                            15,
+                            false
+                        );
+                      } else {
+                        FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                            .doc('courses')
+                            .update({
+                          'status': 'start',
+                          'start_time': FieldValue.serverTimestamp()
+                        });
+                      }
+                    },
+                    name: data['status'] == 'start' ? 'TERMINER LA COURSE' : 'DEMARRER LA COURSE',
+                    color: Colors.yellow,
+                  ),
+                ],
               );
             })
         ) : SizedBox(),
