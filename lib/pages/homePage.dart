@@ -35,9 +35,9 @@ class _HomePage extends State<HomePage>{
   void initState() {
     getToken();
     if(widget.phone != null){
-      key = widget.phone;
+      keys = widget.phone;
     }
-    firestore.collection('drivers').doc(key).update({
+    firestore.collection('drivers').doc(keys).update({
       'online': isOnline,
     });
   }
@@ -47,7 +47,7 @@ class _HomePage extends State<HomePage>{
     _controller = _cntlr;
     _location.onLocationChanged.listen((l) async {
       _initialcameraposition = LatLng(l.latitude!, l.longitude!);
-      firestore.collection('drivers').doc(key).update({
+      firestore.collection('drivers').doc(keys).update({
         'longitude': l.longitude,
         'latitude' : l.latitude
       });
@@ -90,7 +90,7 @@ class _HomePage extends State<HomePage>{
 
     return Scaffold(
           body: StreamBuilder<DocumentSnapshot>(
-          stream: users.doc(key).snapshots(),
+          stream: users.doc(keys).snapshots(),
           builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
@@ -106,12 +106,12 @@ class _HomePage extends State<HomePage>{
 
             if(data['ride']){
               if(!data['ride_view'] && nb == 0){
-                FirebaseFirestore.instance.collection('drivers').doc(key).update({
+                FirebaseFirestore.instance.collection('drivers').doc(keys).update({
                   'ride': false,
                   'ride_view': false
                 });
                 nb++;
-                progresso_dialog(context, key!, position!);
+                progresso_dialog(context, keys!, position!);
               }
             }
 
@@ -150,11 +150,11 @@ class _HomePage extends State<HomePage>{
                             isOnline = !isOnline;
                           });
                           if(isOnline){
-                            firestore.collection('drivers').doc(key).update({
+                            firestore.collection('drivers').doc(keys).update({
                               'online': isOnline,
                             });
                           } else {
-                            firestore.collection('drivers').doc(key).update({
+                            firestore.collection('drivers').doc(keys).update({
                               'online': isOnline,
                             });
                           }
