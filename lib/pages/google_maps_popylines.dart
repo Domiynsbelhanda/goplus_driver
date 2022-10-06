@@ -203,7 +203,7 @@ class _Poly extends State<GoogleMapsPolylines> {
             bottom: 32,
             child: StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance.collection('drivers')
-              .doc(widget.id!).collection('courses').doc('courses').snapshots(),
+              .doc(widget.id).collection('courses').doc('courses').snapshots(),
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
               if(!snapshot.hasData){
@@ -215,9 +215,11 @@ class _Poly extends State<GoogleMapsPolylines> {
               return AppButton(
                 onTap: (){
                   if(data['status'] == 'start'){
-
+                    DateTime start = DateTime.parse(data['start_time'].toDate().toString());
+                    DateTime end = DateTime.parse(DateTime.now().toString());
+                    print('Différence : ${end.difference(start).inHours}');
                   } else {
-                    FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
+                    FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
                         .doc('courses')
                         .update({
                       'status': 'start',
