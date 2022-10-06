@@ -202,7 +202,14 @@ class _Poly extends State<GoogleMapsPolylines> {
         widget.phone != null ? Positioned(
             bottom: 32,
             child: AppButton(
-              onTap: (){},
+              onTap: (){
+                FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
+                      .doc('courses')
+                      .update({
+                    'status': 'start',
+                    'start_time': FieldValue.serverTimestamp()
+                  });
+              },
               name: 'DEMARRER LA COURSE',
               color: Colors.yellow,
             )
