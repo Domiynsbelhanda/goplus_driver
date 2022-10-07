@@ -1,9 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:goplus_driver/pages/homePage.dart';
-import 'package:goplus_driver/screens/IntroScreen.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
+import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
 
@@ -13,7 +12,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context)=> Auth())
+        ],
+        child: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatefulWidget {

@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
-import '../widget/notification_dialog.dart';
 import 'dio.dart';
 
-class Datas extends ChangeNotifier{
+class Auth extends ChangeNotifier{
 
   void sendOtp(BuildContext context, String data) async {
     try{
