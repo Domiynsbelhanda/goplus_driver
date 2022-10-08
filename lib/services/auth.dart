@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../screens/signup_screen.dart';
 import '../screens/verify_number_screen.dart';
+import '../widget/notification_dialog_auth.dart';
 import '../widget/notification_loader.dart';
 import 'dio.dart';
 
@@ -26,7 +28,7 @@ class Auth extends ChangeNotifier{
               MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
           );
         } else if(res['NOK']){
-          notification_dialog(
+          notification_dialog_auth(
               context,
               'Vérifiez votre mot de passe',
               Icons.error,
@@ -38,10 +40,10 @@ class Auth extends ChangeNotifier{
               false);
         } else if (res['KO']){
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const UserSignupScreen())
+              MaterialPageRoute(builder: (context) => SignupScreen())
           );
         } else {
-          notification_dialog(
+          notification_dialog_auth(
               context,
               'Une erreur c\'est produite.',
               Icons.error,
@@ -55,7 +57,7 @@ class Auth extends ChangeNotifier{
         }
       }
     } catch (e){
-      notification_dialog(
+      notification_dialog_auth(
           context,
           'Une erreur c\'est produite.',
           Icons.error,
@@ -82,7 +84,7 @@ class Auth extends ChangeNotifier{
               MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
           );
         } else if(res['NOK']){
-          notification_dialog(
+          notification_dialog_auth(
               context,
               'Vérifiez votre mot de passe',
               Icons.error,
@@ -94,10 +96,10 @@ class Auth extends ChangeNotifier{
               false);
         } else if (res['KO']){
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const UserSignupScreen())
+              MaterialPageRoute(builder: (context) => SignupScreen())
           );
         } else {
-          notification_dialog(
+          notification_dialog_auth(
               context,
               'Une erreur c\'est produite.',
               Icons.error,
@@ -115,7 +117,7 @@ class Auth extends ChangeNotifier{
       // Navigator.of(context).push(
       //     MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
       // );
-      notification_dialog(
+      notification_dialog_auth(
           context,
           'Une erreur c\'est produite.',
           Icons.error,
