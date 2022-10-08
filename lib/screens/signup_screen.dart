@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:goplus_driver/pages/homePage.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_select/smart_select.dart';
+import '../services/auth.dart';
 import '../utils/app_colors.dart';
-import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
-import 'enter_phone_number_screen.dart';
 
 class SignupScreen extends StatefulWidget {
-  String phone;
-  SignupScreen({required this.phone});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -22,10 +21,24 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController prenomController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
   TextEditingController villeController = TextEditingController();
-  TextEditingController genreController = TextEditingController();
-  TextEditingController typeController = TextEditingController();
+  TextEditingController carPlaqueController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   late List input;
+
+  String value = 'H';
+  List<S2Choice<String>> options = [
+    S2Choice<String>(value: 'h', title: 'Homme'),
+    S2Choice<String>(value: 'f', title: 'Femme'),
+  ];
+
+  String carType = '1';
+  List<S2Choice<String>> carTypeoptions = [
+    S2Choice<String>(value: '1', title: 'Mini'),
+    S2Choice<String>(value: '2', title: 'Berline'),
+    S2Choice<String>(value: '3', title: 'Mini Vanne'),
+  ];
 
   @override
   void initState() {
@@ -37,6 +50,12 @@ class _SignupScreenState extends State<SignupScreen> {
     size = MediaQuery.of(context).size;
     input = [
       {
+        'label': 'Numéro téléphone', 'controller' : phoneController, 'input': TextInputType.phone
+      },
+      {
+        'label': 'Mot de passe', 'controller' : passwordController, 'input': TextInputType.visiblePassword
+      },
+      {
         'label': 'Nom', 'controller' : nameController
       },
       {
@@ -46,19 +65,14 @@ class _SignupScreenState extends State<SignupScreen> {
         'label': 'Prénom', 'controller' : prenomController
       },
       {
-        'label': 'Adresse', 'controller' : adresseController
+        'label': 'Adresse', 'controller' : adresseController, 'input': TextInputType.streetAddress
       },
       {
         'label': 'Ville', 'controller' : villeController
       },
       {
-        'label': 'Genre',
-        'controller' : genreController
+        'label': 'Plaque', 'controller' : carPlaqueController
       },
-      {
-        'label': 'Type de voiture',
-        'controller' : typeController
-      }
     ];
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,9 +88,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                Container(
+                SizedBox(
                   width: size.width,
-                  child: Text(
+                  child: const Text(
                     'Inscription',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -84,10 +98,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.0),
-                Container(
+                const SizedBox(height: 20.0),
+                SizedBox(
                   width: size.width * 0.6,
-                  child: Text(
+                  child: const Text(
                     'Créer votre compte pour chauffeur.',
                     style: TextStyle(color: Colors.grey),
                   ),
@@ -98,60 +112,61 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Column(
                     children: [
                       Column(
-                        children: input.map((e){
-                          return TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return '${e['label']} incorect';
-                              }
-                              return null;
-                            },
-                            cursorColor: AppColors.primaryColor,
-                            keyboardType: TextInputType.name,
-                            controller: e['controller'],
-                            decoration: InputDecoration(
-                                hintText: '${e['label']}',
-                                contentPadding: EdgeInsets.all(15.0)),
-                          );
-                        }).toList()
+                          children: input.map((e){
+                            return TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return '${e['label']} incorect';
+                                }
+                                return null;
+                              },
+                              cursorColor: AppColors.primaryColor,
+                              keyboardType: e['input'] == null ? TextInputType.name : e['input'],
+                              controller: e['controller'],
+                              decoration: InputDecoration(
+                                  hintText: '${e['label']}',
+                                  contentPadding: EdgeInsets.all(15.0)),
+                            );
+                          }).toList()
+                      ),
+
+                      SmartSelect<String>.single(
+                          title: 'Genre',
+                          value: value,
+                          choiceItems: options,
+                          onChange: (state) => setState(() => value = state.value)
                       ),
 
                       SizedBox(height: size.height * 0.07),
                       AppButton(
                           name: 'S\'INSRIRE',
                           onTap: (){
+                            Provider.of<Auth>(context, listen: false).register(context: context, cred: {"phone":"996852377"});
                             if(formkey.currentState!.validate()){
                               var data = {
-                                "key": "hailing",
-                                "action": "create_user",
-                                "lastn": nameController.text.toString(),
+                                "key": "create_user",
+                                "action": "driver",
+                                "lastn": prenomController.text.toString(),
                                 "midn": postNomController.text.toString(),
-                                "firstn": prenomController.text.toString(),
+                                "firstn": nameController.text.toString(),
                                 "address": adresseController.text.toString(),
-                                "password": "OdK98@RAM",
+                                "password": passwordController.text.trim(),
                                 "city": villeController.text.toString(),
-                                "phone": widget.phone,
-                                "gender": genreController.text.toString(),
+                                "phone": phoneController.text.toString(),
+                                "gender": value,
+                                "cartype": carType,
+                                'carplate': carPlaqueController.text.toString(),
                                 "profpic": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-                                "cartype": typeController.text.toString(),
-                                "carpic": "https://img2.freepng.fr/20180806/bys/kisspng-taxi-car-rental-airport-bus-yellow-cab-5b684eef9fd6e8.3524950415335626076547.jpg",
                                 "level": "4"
                               };
-                              firestore.collection('drivers').doc(widget.phone).set(data);
-                              storeToken(token: widget.phone);
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => HomePage(),
-                                ),
-                              );
+                              Provider.of<Auth>(context, listen: false).register(context: context, cred: data);
                             }
                           }),
                     ],
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -110,21 +111,21 @@ class Auth extends ChangeNotifier{
         }
       }
     } catch (e){
-      Navigator.pop(context);
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
-      );
-      // notification_dialog(
-      //     context,
-      //     'Une erreur c\'est produite.',
-      //     Icons.error,
-      //     Colors.red,
-      //     {'label': 'FERMER', "onTap": (){
-      //       Navigator.pop(context);
-      //       Navigator.pop(context);
-      //     }},
-      //     20,
-      //     false);
+      // Navigator.pop(context);
+      // Navigator.of(context).push(
+      //     MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
+      // );
+      notification_dialog(
+          context,
+          'Une erreur c\'est produite.',
+          Icons.error,
+          Colors.red,
+          {'label': 'FERMER', "onTap": (){
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }},
+          20,
+          false);
     }
   }
 
@@ -149,6 +150,8 @@ class Auth extends ChangeNotifier{
       Dio.Response response = await dio()!.post('', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
       storeToken(token: data['phone']);
+
+      FirebaseFirestore.instance.collection('drivers').doc(data['phone']).set(data);
       notifyListeners();
       Navigator.pop(context);
       return datas['code'];
