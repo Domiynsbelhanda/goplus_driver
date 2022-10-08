@@ -20,7 +20,7 @@ class Auth extends ChangeNotifier{
     notification_loader(context, (){});
 
     try {
-      Dio.Response response = await dio()!.post('', data: creds);
+      Dio.Response response = await dio()!.post('/v1/', data: creds);
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
@@ -76,7 +76,7 @@ class Auth extends ChangeNotifier{
     notification_loader(context, (){});
 
     try {
-      Dio.Response response = await dio()!.post('', data: cred);
+      Dio.Response response = await dio()!.post('/v1/', data: cred);
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
@@ -113,10 +113,6 @@ class Auth extends ChangeNotifier{
         }
       }
     } catch (e){
-      // Navigator.pop(context);
-      // Navigator.of(context).push(
-      //     MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
-      // );
       notification_dialog_auth(
           context,
           'Une erreur c\'est produite.',
@@ -137,7 +133,7 @@ class Auth extends ChangeNotifier{
         "key": "otp",
         "phone": phone
       };
-      Dio.Response response = await dio()!.post('', data: jsonEncode(data));
+      Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
       notifyListeners();
       Navigator.pop(context);
@@ -149,7 +145,7 @@ class Auth extends ChangeNotifier{
 
   Future<String> checkOtp(BuildContext context, var data) async {
     try{
-      Dio.Response response = await dio()!.post('', data: jsonEncode(data));
+      Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
       storeToken(token: data['phone']);
 

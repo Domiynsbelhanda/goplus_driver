@@ -137,11 +137,19 @@ class _SignupScreenState extends State<SignupScreen> {
                           onChange: (state) => setState(() => value = state.value)
                       ),
 
+                      SmartSelect<String>.single(
+                          title: 'Type de voiture',
+                          value: carType,
+                          choiceItems: carTypeoptions,
+                          onChange: (state) => setState(() => carType = state.value)
+                      ),
+
                       SizedBox(height: size.height * 0.07),
                       AppButton(
                           name: 'S\'INSRIRE',
+                          color: AppColors.primaryColor,
                           onTap: (){
-                            Provider.of<Auth>(context, listen: false).register(context: context, cred: {"phone":"996852377"});
+
                             if(formkey.currentState!.validate()){
                               var data = {
                                 "key": "create_user",
@@ -156,8 +164,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "gender": value,
                                 "cartype": carType,
                                 'carplate': carPlaqueController.text.toString(),
-                                "profpic": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-                                "level": "4"
                               };
 
                               Provider.of<Auth>(context, listen: false).register(context: context, cred: data);
