@@ -4,7 +4,7 @@ Dio? dio(){
   Dio dio = new Dio();
 
   // dio.options.baseUrl = "http://10.0.2.2:8000/api";
-  dio.options.baseUrl = "https://go-plus.info/api/rest/v1/";
+  dio.options.baseUrl = "https://go-plus.info/api/rest";
   dio.options.responseType = ResponseType.plain;
   dio.options.contentType = 'application/json';
   dio.options.headers['accept'] = 'Application/Json';

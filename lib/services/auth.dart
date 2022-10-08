@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/checkPage.dart';
 import '../screens/signup_screen.dart';
 import '../screens/verify_number_screen.dart';
 import '../widget/notification_dialog_auth.dart';
@@ -80,24 +82,21 @@ class Auth extends ChangeNotifier{
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
+          sendOtp(context, cred['phone']).then((value){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
+            );
+          });
+        } else if(res['code'] == "NOK"){
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
+              MaterialPageRoute(builder: (context) => CheckPage())
           );
-        } else if(res['NOK']){
-          notification_dialog_auth(
-              context,
-              'Vérifiez votre mot de passe',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.pop(context);
-              }},
-              20,
-              false);
-        } else if (res['KO']){
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => SignupScreen())
-          );
+        } else if (res['code'] == "KO"){
+          sendOtp(context, cred['phone']).then((value){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
+            );
+          });
         } else {
           notification_dialog_auth(
               context,
