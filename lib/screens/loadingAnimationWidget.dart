@@ -7,6 +7,8 @@ class LoadingWidget extends StatelessWidget{
 
   late Size size;
 
+  LoadingWidget({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
