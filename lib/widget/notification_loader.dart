@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/loadingAnimationWidget.dart';
+
 notification_loader(
     BuildContext context,
     var function) {
