@@ -14,12 +14,11 @@ class CheckPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    cle = keyss!;
     // TODO: implement build
-    return cle == null ? IntroScreen() :
+    return keyss == null ? IntroScreen() :
     StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('drivers')
-        .doc(cle!).collection('courses').doc('courses').snapshots(),
+        .doc(keyss!).collection('courses').doc('courses').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
         if(!snapshot.hasData){

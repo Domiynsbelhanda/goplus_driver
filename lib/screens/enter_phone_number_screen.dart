@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
+import 'package:goplus_driver/services/auth.dart';
+import 'package:provider/provider.dart';
 import '../pages/homePage.dart';
 import '../utils/app_colors.dart';
 import '../utils/global_variables.dart';
@@ -105,29 +107,27 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   name: 'CONNEXION',
                   onTap: () async {
                     if (formkey.currentState!.validate()){
-                      var ref = FirebaseFirestore.instance.collection('drivers');
-                      var doc = await ref.doc(phoneController.text.trim()).get();
-                      if(doc.exists){
-                        storeToken(token: phoneController.text.trim());
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => doc.exists ? HomePage(
-                            phone: phoneController.text.trim(),
-                          ) : SignupScreen(
-                            phone: phoneController.text.trim(),
-                          ),
-                        ),
-                      );
-                    }
+                      var data = {
+                        'key': 'otp',
+                        'phone': phoneController.text.trim()
+                      };
+                      Provider.of<Auth>(context, listen: false).sendOtp(context, data);
+                      // var ref = FirebaseFirestore.instance.collection('drivers');
+                      // var doc = await ref.doc(phoneController.text.trim()).get();
+                      // if(doc.exists){
+                      //   storeToken(token: phoneController.text.trim());
+                      // }
                       // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (_) => VerifyNumberScreen(
-                      //         phone: phoneController.text.trim(),
-                      //       ),
-                      //     ));
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (_) => doc.exists ? HomePage(
+                      //       phone: phoneController.text.trim(),
+                      //     ) : SignupScreen(
+                      //       phone: phoneController.text.trim(),
+                      //     ),
+                      //   ),
+                      // );
+                    }
                   },
                 ),
                 SizedBox(height: size.height * 0.1),
