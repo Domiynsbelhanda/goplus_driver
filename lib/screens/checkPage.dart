@@ -14,32 +14,41 @@ class CheckPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    // TODO: implement build
     return keyss == null ? IntroScreen() :
-    StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('drivers')
-        .doc(keyss!).collection('courses').doc('courses').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        FutureBuilder(
+          future: FirebaseFirestore.instance.collection('drivers')
+              .doc(keyss!).collection('courses').get(),
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              return StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance.collection('drivers')
+                      .doc(keyss!).collection('courses').doc('courses').snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-        if(!snapshot.hasData){
-          return IntroScreen();
-        }
+                    if(!snapshot.hasData){
+                      return IntroScreen();
+                    }
 
-        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                    Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-        if(data['status'] == 'accept' || data['status'] == 'start'){
-          return GoogleMapsPolylines(
-            destination: LatLng(data['destination_latitude'], data['destination_longitude']),
-            origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-            position: LatLng(data['depart_latitude'], data['depart_longitude']),
-            id: cle!,
-            phone: data['user_id'],
-            key: _mapKey,
-          );
-        }
+                    if(data['status'] == 'accept' || data['status'] == 'start'){
+                      return GoogleMapsPolylines(
+                        destination: LatLng(data['destination_latitude'], data['destination_longitude']),
+                        origine: LatLng(data['depart_latitude'], data['depart_longitude']),
+                        position: LatLng(data['depart_latitude'], data['depart_longitude']),
+                        id: cle!,
+                        phone: data['user_id'],
+                        key: _mapKey,
+                      );
+                    }
 
-        return IntroScreen();
-        }
-    );
+                    return IntroScreen();
+                  }
+              );
+            } else {
+              return IntroScreen();
+            }
+          },
+        );
   }
 }

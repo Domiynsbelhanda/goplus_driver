@@ -104,21 +104,25 @@ class _HomePage extends State<HomePage>{
 
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-            if(data['ride']){
-              if(!data['ride_view'] && nb == 0){
-                FirebaseFirestore.instance.collection('drivers').doc(keyss).update({
-                  'ride': false,
-                  'ride_view': false
-                });
-                nb++;
-                progresso_dialog(context, keyss!, position!);
+            if(data['ride'] != null){
+              if(data['ride']){
+                if(!data['ride_view'] && nb == 0){
+                  FirebaseFirestore.instance.collection('drivers').doc(keyss).update({
+                    'ride': false,
+                    'ride_view': false
+                  });
+                  nb++;
+                  progresso_dialog(context, keyss!, position!);
+                }
+              }
+
+              if(!data['ride']){
+                nb = 0;
               }
             }
 
-            _initialcameraposition = LatLng(data['latitude'], data['longitude']);
-
-            if(!data['ride']){
-              nb = 0;
+            if(data['latitude'] != null){
+              _initialcameraposition = LatLng(data['latitude'], data['longitude']);
             }
 
             return SizedBox(
