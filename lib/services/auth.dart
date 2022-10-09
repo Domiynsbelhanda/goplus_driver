@@ -40,14 +40,15 @@ class Auth extends ChangeNotifier{
               }},
               20,
               false);
-        } else if (res['code'] == 'KO'){
+        } else if (res['code'] == 'OK'){
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => SignupScreen())
           );
-        } else {
+        }
+        else {
           notification_dialog_auth(
               context,
-              'Une erreur c\'est produite.',
+              'Une erreur c\'est produite. ${res['code']}',
               Icons.error,
               Colors.red,
               {'label': 'REESAYEZ', "onTap": (){
@@ -73,7 +74,7 @@ class Auth extends ChangeNotifier{
     }
   }
 
-  void register ({required Map cred, required BuildContext context}) async {
+  void register ({required Map<String, dynamic> cred, required BuildContext context}) async {
 
     notification_loader(context, (){});
 
@@ -82,6 +83,7 @@ class Auth extends ChangeNotifier{
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
+          FirebaseFirestore.instance.collection('drivers').doc(cred['phone']).set(cred);
           sendOtp(context, cred['phone']).then((value){
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
@@ -147,8 +149,6 @@ class Auth extends ChangeNotifier{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
       storeToken(token: data['phone']);
-
-      FirebaseFirestore.instance.collection('drivers').doc(data['phone']).set(data);
       notifyListeners();
       Navigator.pop(context);
       return datas['code'];
