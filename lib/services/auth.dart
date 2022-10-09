@@ -29,7 +29,7 @@ class Auth extends ChangeNotifier{
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
           );
-        } else if(res['NOK']){
+        } else if(res['code'] == 'NOK'){
           notification_dialog_auth(
               context,
               'Vérifiez votre mot de passe',
@@ -40,7 +40,7 @@ class Auth extends ChangeNotifier{
               }},
               20,
               false);
-        } else if (res['KO']){
+        } else if (res['code'] == 'KO'){
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => SignupScreen())
           );

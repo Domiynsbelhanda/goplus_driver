@@ -6,7 +6,6 @@ import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../widget/backButton.dart';
