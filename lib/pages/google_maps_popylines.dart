@@ -2,10 +2,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import '../widget/backButton.dart';
 
@@ -235,24 +237,32 @@ class _Poly extends State<GoogleMapsPolylines> {
                           "endhour": "${end.hour}:${end.minute}",
                           "price": (end.difference(start).inHours +1) * 5
                         };
-                        notification_dialog(
-                            context,
-                            (){
-                              FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
-                                  .doc('courses')
-                                  .update({
-                                'status': 'end',
-                                'end_time': FieldValue.serverTimestamp(),
-                                'duree': end.difference(start).inHours + 1,
-                                'prix': (end.difference(start).inHours +1) * 5
-                              });
-                            },
-                            'Course Terminée :\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
-                            Icons.drive_eta,
-                            Colors.green,
-                            15,
-                            false
-                        );
+
+                        Provider.of<Auth>(context, listen: false)
+                            .storeCourse(data: data, context: context).then((value){
+                           if(value['code'] == 'OK'){
+                             notification_dialog(
+                                 context,
+                                     (){
+                                   FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                                       .doc('courses')
+                                       .update({
+                                     'status': 'end',
+                                     'end_time': FieldValue.serverTimestamp(),
+                                     'duree': end.difference(start).inHours + 1,
+                                     'prix': (end.difference(start).inHours +1) * 5
+                                   });
+                                 },
+                                 'Course Terminée :\n Réf : ${value['rideref']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                                 Icons.drive_eta,
+                                 Colors.green,
+                                 15,
+                                 false
+                             );
+                           } else {
+
+                           }
+                        });
                       } else {
                         FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
                             .doc('courses')

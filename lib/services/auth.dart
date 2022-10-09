@@ -157,8 +157,16 @@ class Auth extends ChangeNotifier{
     }
   }
 
-  void storeCourse({required Map<String, dynamic> data, required BuildContext context}){
+  Future<Map<String, dynamic>> storeCourse({required Map<String, dynamic> data, required BuildContext context}) async{
     notification_loader(context, (){});
+    try{
+      Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
+      Map<String, dynamic> datas = jsonDecode(response.data);
+      notifyListeners();
+      return datas;
+    } catch(e){
+      return {'code': 'KO'};
+    }
   }
 
   void storeToken({required String token}) async{
