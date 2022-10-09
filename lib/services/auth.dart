@@ -157,6 +157,10 @@ class Auth extends ChangeNotifier{
     }
   }
 
+  void storeCourse({required Map<String, dynamic> data, required BuildContext context}){
+    notification_loader(context, (){});
+  }
+
   void storeToken({required String token}) async{
     this.storage.write(key: 'token', value: token);
     notifyListeners();

@@ -221,6 +221,20 @@ class _Poly extends State<GoogleMapsPolylines> {
                       if(data['status'] == 'start'){
                         DateTime start = DateTime.parse(data['start_time'].toDate().toString());
                         DateTime end = DateTime.parse(DateTime.now().toString());
+                        var datas = {
+                          "key": "ride",
+                          "action": "create",
+                          "driversid": widget.id,
+                          "clientsid": data['user_id'],
+                          "latinit": data['depart_latitude'],
+                          "longinit": data['depart_longitude'],
+                          "latend": data['destination_latitude'],
+                          "longend": data['destination_longitude'],
+                          "ridedate": "${start.day}-${start.month}-${start.year}",
+                          "starthour": "${start.hour}:${start.minute}",
+                          "endhour": "${end.hour}:${end.minute}",
+                          "price": (end.difference(start).inHours +1) * 5
+                        };
                         notification_dialog(
                             context,
                             (){
