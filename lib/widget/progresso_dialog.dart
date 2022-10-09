@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/google_maps_popylines.dart';
+import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
 
 import '../utils/app_colors.dart';
 
@@ -32,7 +33,7 @@ progresso_dialog(
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
             if(!snapshot.hasData){
-              return const Text('Wait');
+              return LoadingWidget();
             }
             
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;

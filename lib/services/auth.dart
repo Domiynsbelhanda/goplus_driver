@@ -26,6 +26,7 @@ class Auth extends ChangeNotifier{
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
+          this.storage.write(key: 'sid', value: res['sid']);
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
           );
@@ -84,6 +85,7 @@ class Auth extends ChangeNotifier{
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
           FirebaseFirestore.instance.collection('drivers').doc(cred['phone']).set(cred);
+          this.storage.write(key: 'sid', value: res['sid']);
           sendOtp(context, cred['phone']).then((value){
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
@@ -157,8 +159,8 @@ class Auth extends ChangeNotifier{
     }
   }
 
-  Future<Map<String, dynamic>> storeCourse({required Map<String, dynamic> data, required BuildContext context}) async{
-    notification_loader(context, (){});
+  Future<Map<String, dynamic>>
+  storeCourse({required Map<String, dynamic> data, required BuildContext context}) async{
     try{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
@@ -178,16 +180,8 @@ class Auth extends ChangeNotifier{
     return await storage.read(key: 'token');
   }
 
-  void logout() async{
-    try {
-      Dio.Response response = await dio()!.get('/user/revoke',
-          options: Dio.Options(headers: {'Authorization': 'Bearer $_token'})
-      );
-      cleanUp();
-      notifyListeners();
-    } catch (e){
-
-    }
+  Future<String?> getSid() async{
+    return await storage.read(key: 'sid');
   }
 
   void cleanUp() async {

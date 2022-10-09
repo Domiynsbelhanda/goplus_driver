@@ -118,12 +118,23 @@ class _HomePage extends State<HomePage>{
                 if(data['ride'] != null){
                   if(data['ride']){
                     if(!data['ride_view'] && nb == 0){
-                      FirebaseFirestore.instance.collection('drivers').doc(keyss).update({
+                      FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString())
+                          .update({
                         'ride': false,
                         'ride_view': false
                       });
                       nb++;
-                      progresso_dialog(context, keyss!, position!);
+                      Provider.of<Auth>(context, listen: false).getSid()
+                      .then((sid){
+                        FirebaseFirestore.instance.collection('drivers')
+                            .doc(snap.data.toString()).collection('courses')
+                            .doc('courses').update(
+                          {
+                            'sid_driver': sid
+                          }
+                        );
+                      });
+                      progresso_dialog(context, snap.data.toString(), position!);
                     }
                   }
 

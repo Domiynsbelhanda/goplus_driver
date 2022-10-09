@@ -9,6 +9,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 import '../widget/backButton.dart';
+import '../widget/notification_loader.dart';
 
 class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
@@ -225,8 +226,8 @@ class _Poly extends State<GoogleMapsPolylines> {
                         var datas = {
                           "key": "ride",
                           "action": "create",
-                          "driversid": widget.id,
-                          "clientsid": data['user_id'],
+                          "driversid": data['sid_driver'],
+                          "clientsid": data['sid_user'],
                           "latinit": data['depart_latitude'],
                           "longinit": data['depart_longitude'],
                           "latend": data['destination_latitude'],
@@ -238,7 +239,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                         };
 
                         Provider.of<Auth>(context, listen: false)
-                            .storeCourse(data: data, context: context).then((value){
+                            .storeCourse(data: datas, context: context).then((value){
                            if(value['code'] == 'OK'){
                              notification_dialog(
                                  context,
@@ -259,7 +260,16 @@ class _Poly extends State<GoogleMapsPolylines> {
                                  false
                              );
                            } else {
-
+                             notification_dialog(
+                                 context,
+                                     (){
+                                 },
+                                 'Course Terminée :\n Error : ${value['code']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                                 Icons.drive_eta,
+                                 Colors.green,
+                                 15,
+                                 false
+                             );
                            }
                         });
                       } else {
