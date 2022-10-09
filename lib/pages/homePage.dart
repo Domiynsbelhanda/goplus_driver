@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/main.dart';
+import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
+import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:goplus_driver/widget/progresso_dialog.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
@@ -89,115 +92,125 @@ class _HomePage extends State<HomePage>{
     CollectionReference users = FirebaseFirestore.instance.collection('drivers');
 
     return Scaffold(
-          body: StreamBuilder<DocumentSnapshot>(
-          stream: users.doc(keyss).snapshots(),
-          builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          body: FutureBuilder(
+            future: Provider.of<Auth>(context, listen: false).getToken(),
+            builder: (context, snap) {
 
-            if (snapshot.hasError) {
-              return Text("Something went wrong");
-            }
+              if(!snap.hasData){
+                return LoadingWidget();
+              }
 
-            if(!snapshot.hasData){
-              return const Text('');
-            }
+              return StreamBuilder<DocumentSnapshot>(
+              stream: users.doc(snap.data.toString()).snapshots(),
+              builder:
+                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
-            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-            if(data['ride'] != null){
-              if(data['ride']){
-                if(!data['ride_view'] && nb == 0){
-                  FirebaseFirestore.instance.collection('drivers').doc(keyss).update({
-                    'ride': false,
-                    'ride_view': false
-                  });
-                  nb++;
-                  progresso_dialog(context, keyss!, position!);
+                if (snapshot.hasError) {
+                  return Text("Something went wrong");
                 }
-              }
 
-              if(!data['ride']){
-                nb = 0;
-              }
-            }
+                if(!snapshot.hasData){
+                  return LoadingWidget();
+                }
 
-            if(data['latitude'] != null){
-              _initialcameraposition = LatLng(data['latitude'], data['longitude']);
-            }
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-            return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Stack(
-                children: [
-                  GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                        target: _initialcameraposition,
-                      zoom: 15
-                    ),
-                    mapType: MapType.normal,
-                    onMapCreated: _onMapCreated,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    markers: markers,
-                  ),
+                if(data['ride'] != null){
+                  if(data['ride']){
+                    if(!data['ride_view'] && nb == 0){
+                      FirebaseFirestore.instance.collection('drivers').doc(keyss).update({
+                        'ride': false,
+                        'ride_view': false
+                      });
+                      nb++;
+                      progresso_dialog(context, keyss!, position!);
+                    }
+                  }
 
-                  Positioned(
-                      bottom: 16.0,
-                      left: 0,
-                      right: 0,
-                      child: AppButton(
-                        name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
-                        color: isOnline ? AppColors.primaryColor : Colors.green,
-                        onTap: (){
-                          setState(() {
-                            isOnline = !isOnline;
-                          });
-                          if(isOnline){
-                            firestore.collection('drivers').doc(keyss).update({
-                              'online': isOnline,
-                            });
-                          } else {
-                            firestore.collection('drivers').doc(keyss).update({
-                              'online': isOnline,
-                            });
-                          }
-                        },
-                      )
-                  ),
+                  if(!data['ride']){
+                    nb = 0;
+                  }
+                }
 
-                  Positioned(
-                    top: 16.0,
-                    right: 16.0,
-                    child: Container(
-                      height: 48,
-                      width: 48,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(48.0)
-                      ),
-                      child: IconButton(
-                        onPressed: (){
-                          deleteToken('token');
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) => MyApp()
-                              ),
-                                  (Route<dynamic> route) => false
-                          );
-                        },
-                        icon: Icon(
-                          Icons.logout,
+                if(data['latitude'] != null){
+                  _initialcameraposition = LatLng(data['latitude'], data['longitude']);
+                }
+
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                            target: _initialcameraposition,
+                          zoom: 15
                         ),
+                        mapType: MapType.normal,
+                        onMapCreated: _onMapCreated,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                        markers: markers,
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
+
+                      Positioned(
+                          bottom: 16.0,
+                          left: 0,
+                          right: 0,
+                          child: AppButton(
+                            name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
+                            color: isOnline ? AppColors.primaryColor : Colors.green,
+                            onTap: (){
+                              setState(() {
+                                isOnline = !isOnline;
+                              });
+                              if(isOnline){
+                                firestore.collection('drivers').doc(keyss).update({
+                                  'online': isOnline,
+                                });
+                              } else {
+                                firestore.collection('drivers').doc(keyss).update({
+                                  'online': isOnline,
+                                });
+                              }
+                            },
+                          )
+                      ),
+
+                      Positioned(
+                        top: 16.0,
+                        right: 16.0,
+                        child: Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(48.0)
+                          ),
+                          child: IconButton(
+                            onPressed: (){
+                              deleteToken('token');
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) => MyApp()
+                                  ),
+                                      (Route<dynamic> route) => false
+                              );
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
       },
-    ),
+    );
+            }
+          ),
         );
   }
 }
