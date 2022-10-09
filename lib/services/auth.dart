@@ -40,7 +40,7 @@ class Auth extends ChangeNotifier{
               }},
               20,
               false);
-        } else if (res['code'] == 'OK'){
+        } else if (res['code'] == 'KO'){
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => SignupScreen())
           );
