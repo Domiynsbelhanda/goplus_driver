@@ -38,9 +38,18 @@ class Auth extends ChangeNotifier{
             );
           });
         } else if (res['code'] == 'KO'){
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => SignupScreen())
-          );
+          notification_dialog_auth(
+              context,
+              'Vous n\'avez pas de compte?',
+              Icons.error,
+              Colors.red,
+              {'label': 'REESAYEZ', "onTap": (){
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignupScreen())
+                );
+              }},
+              20,
+              false);
         }
         else {
           notification_dialog_auth(
@@ -91,11 +100,21 @@ class Auth extends ChangeNotifier{
               MaterialPageRoute(builder: (context) => CheckPage())
           );
         } else if (res['code'] == "KO"){
-          sendOtp(context, cred['phone']).then((value){
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
-            );
-          });
+          notification_dialog_auth(
+              context,
+              '${res['message']}',
+              Icons.error,
+              Colors.red,
+              {'label': 'REESAYEZ', "onTap": (){
+                Navigator.pop(context);
+                sendOtp(context, cred['phone']).then((value){
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
+                  );
+                });
+              }},
+              20,
+              false);
         } else {
           notification_dialog_auth(
               context,
