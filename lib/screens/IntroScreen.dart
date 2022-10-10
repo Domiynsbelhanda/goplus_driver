@@ -166,7 +166,7 @@ class _IntroScreenState extends State<IntroScreen> {
                               ],
                             ),
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.arrow_forward,
                                 color: Colors.black,
                               ),

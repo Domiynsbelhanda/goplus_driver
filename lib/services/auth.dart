@@ -181,6 +181,13 @@ class Auth extends ChangeNotifier{
     try{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
+
+      var validation = {
+        "key": "ride",
+        "action": "update",
+        "driversid": data['sid_driver'],
+        "rideref": datas['rideref']
+      };
       notifyListeners();
       return datas;
     } catch(e){
