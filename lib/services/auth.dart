@@ -188,6 +188,8 @@ class Auth extends ChangeNotifier{
         "driversid": data['sid_driver'],
         "rideref": datas['rideref']
       };
+      await dio()!.post('/v1/', data: jsonEncode(validation));
+
       notifyListeners();
       return datas;
     } catch(e){
