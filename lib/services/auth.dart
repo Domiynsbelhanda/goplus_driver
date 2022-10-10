@@ -26,21 +26,17 @@ class Auth extends ChangeNotifier{
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
-          this.storage.write(key: 'sid', value: res['sid']);
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
-          );
+          sendOtp(context, creds['phone']).then((value){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
+            );
+          });
         } else if(res['code'] == 'NOK'){
-          notification_dialog_auth(
-              context,
-              'Vérifiez votre mot de passe',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.pop(context);
-              }},
-              20,
-              false);
+          sendOtp(context, creds['phone']).then((value){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
+            );
+          });
         } else if (res['code'] == 'KO'){
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => SignupScreen())
@@ -85,7 +81,6 @@ class Auth extends ChangeNotifier{
         var res = jsonDecode(response.data);
         if(res['code'] == "OTP"){
           FirebaseFirestore.instance.collection('drivers').doc(cred['phone']).set(cred);
-          this.storage.write(key: 'sid', value: res['sid']);
           sendOtp(context, cred['phone']).then((value){
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
@@ -150,9 +145,12 @@ class Auth extends ChangeNotifier{
     try{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
-      storeToken(token: data['phone']);
-      notifyListeners();
       Navigator.pop(context);
+      if(datas['code'] == 'OK'){
+        this.storage.write(key: 'sid', value: datas['sid']);
+        storeToken(token: data['phone']);
+      }
+      notifyListeners();
       return datas['code'];
     } catch(e){
       return "KO";
