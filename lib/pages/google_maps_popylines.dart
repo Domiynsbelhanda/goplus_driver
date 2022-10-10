@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
@@ -244,6 +245,12 @@ class _Poly extends State<GoogleMapsPolylines> {
                              notification_dialog(
                                  context,
                                      (){
+                                   Navigator.pushAndRemoveUntil(
+                                       context,
+                                       MaterialPageRoute(
+                                           builder: (BuildContext context) => HomePage()
+                                       ),
+                                       (route) => false);
                                    FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
                                        .doc('courses')
                                        .update({
