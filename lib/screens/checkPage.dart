@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:goplus_driver/screens/IntroScreen.dart';
+import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:provider/provider.dart';
-
 import '../pages/google_maps_popylines.dart';
-import '../utils/global_variables.dart';
+import 'enter_phone_number_screen.dart';
 
 class CheckPage extends StatelessWidget{
 
@@ -21,7 +20,7 @@ class CheckPage extends StatelessWidget{
           builder: (context, snap) {
 
             if(!snap.hasData){
-              return IntroScreen();
+              return PhoneNumberScreen();
             }
 
             return StreamBuilder<DocumentSnapshot>(
@@ -38,7 +37,7 @@ class CheckPage extends StatelessWidget{
                       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
                         if(!snapshot.hasData){
-                          return IntroScreen();
+                          return HomePage();
                         }
 
                         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -54,11 +53,11 @@ class CheckPage extends StatelessWidget{
                           );
                         }
 
-                        return IntroScreen();
+                        return HomePage();
                       }
                   );
                 } else {
-                  return IntroScreen();
+                  return HomePage();
                 }
               },
             );
