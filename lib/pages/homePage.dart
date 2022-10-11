@@ -170,7 +170,7 @@ class _HomePage extends State<HomePage>{
                           right: 0,
                           child: AppButton(
                             name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
-                            color: isOnline ? AppColors.primaryColor : Colors.green,
+                            color: isOnline ? AppColors.primaryColor : Colors.black,
                             onTap: (){
                               setState(() {
                                 isOnline = !isOnline;
