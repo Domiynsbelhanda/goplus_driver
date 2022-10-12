@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import '../screens/signup_screen.dart';
 import '../screens/verify_number_screen.dart';
@@ -14,7 +13,6 @@ import 'dio.dart';
 
 
 class Auth extends ChangeNotifier{
-  String? _token;
 
   final storage = new FlutterSecureStorage();
 
