@@ -158,7 +158,7 @@ class Auth extends ChangeNotifier{
     }
   }
 
-  Future<String> checkOtp(BuildContext context, var data) async {
+  Future<Map<String, dynamic>> checkOtp(BuildContext context, var data) async {
     try{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
@@ -168,7 +168,7 @@ class Auth extends ChangeNotifier{
         storeToken(token: data['phone']);
       }
       notifyListeners();
-      return datas['code'];
+      return datas;
     } catch(e){
       return "KO";
     }

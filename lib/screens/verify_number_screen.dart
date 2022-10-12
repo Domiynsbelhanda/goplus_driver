@@ -4,6 +4,7 @@ import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
+import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:provider/provider.dart';
 import '../services/auth.dart';
 import '../widget/app_button.dart';
@@ -114,16 +115,36 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
 
                       Provider.of<Auth>(context, listen: false).checkOtp(context, data)
                           .then((value){
-                        if(value == 'KO'){
+                        if(value['code'] == 'KO'){
                           Navigator.pop(context);
                         } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    HomePage()
-                            ),
-                          );
+                          if(value['status'] == "1"){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomePage()
+                              ),
+                            );
+                          } else if(value['status'] == "2"){
+                            notification_dialog(context,
+                                (){},
+                                'Votre compte a été désactivée, contactez GO FLY.',
+                                Icons.close_rounded,
+                                Colors.red,
+                                20,
+                                false
+                            );
+                          } else if(value['status'] == "0"){
+                            notification_dialog(context,
+                                    (){},
+                                'Votre compte est en attente d\'activation, vous receverez un sms de confirmation.',
+                                Icons.verified_user_outlined,
+                                Colors.blueGrey,
+                                20,
+                                false
+                            );
+                          }
                         }
                       });
                     }
