@@ -42,14 +42,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String colour = 'jaune';
   List<S2Choice<String>> colouroptions = [
-    S2Choice<String>(value: 'jaune', title: 'Jaune'),
-    S2Choice<String>(value: 'rouge', title: 'Rouge'),
-    S2Choice<String>(value: 'bleu', title: 'Bleu'),
-    S2Choice<String>(value: 'gris', title: 'Grise'),
-    S2Choice<String>(value: 'noir', title: 'Noir'),
-    S2Choice<String>(value: 'vert', title: 'Verte'),
-    S2Choice<String>(value: 'orange', title: 'Orange'),
-    S2Choice<String>(value: 'blanc', title: 'Blanche'),
+    S2Choice<String>(value: 'Jaune', title: 'Jaune'),
+    S2Choice<String>(value: 'Rouge', title: 'Rouge'),
+    S2Choice<String>(value: 'Bleue', title: 'Bleue'),
+    S2Choice<String>(value: 'Grise', title: 'Grise'),
+    S2Choice<String>(value: 'Noire', title: 'Noire'),
+    S2Choice<String>(value: 'Verte', title: 'Verte'),
+    S2Choice<String>(value: 'Orange', title: 'Orange'),
+    S2Choice<String>(value: 'Blanche', title: 'Blanche'),
   ];
 
   @override
