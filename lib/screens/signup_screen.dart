@@ -40,6 +40,18 @@ class _SignupScreenState extends State<SignupScreen> {
     S2Choice<String>(value: '3', title: 'Mini Vanne'),
   ];
 
+  String colour = 'jaune';
+  List<S2Choice<String>> colouroptions = [
+    S2Choice<String>(value: 'jaune', title: 'Jaune'),
+    S2Choice<String>(value: 'rouge', title: 'Rouge'),
+    S2Choice<String>(value: 'bleu', title: 'Bleu'),
+    S2Choice<String>(value: 'gris', title: 'Grise'),
+    S2Choice<String>(value: 'noir', title: 'Noir'),
+    S2Choice<String>(value: 'vert', title: 'Verte'),
+    S2Choice<String>(value: 'orange', title: 'Orange'),
+    S2Choice<String>(value: 'blanc', title: 'Blanche'),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -144,6 +156,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           onChange: (state) => setState(() => carType = state.value)
                       ),
 
+                      SmartSelect<String>.single(
+                          title: 'Couleur',
+                          value: colour,
+                          choiceItems: colouroptions,
+                          onChange: (state) => setState(() => colour = state.value)
+                      ),
+
                       SizedBox(height: size.height * 0.07),
                       AppButton(
                           name: 'S\'INSRIRE',
@@ -164,6 +183,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "gender": value,
                                 "cartype": carType,
                                 'carplate': carPlaqueController.text.toString(),
+                                "colour": colour
                               };
 
                               Provider.of<Auth>(context, listen: false).register(context: context, cred: data);
