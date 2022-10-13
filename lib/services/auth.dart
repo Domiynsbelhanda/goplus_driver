@@ -1,14 +1,8 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:goplus_driver/screens/checkPage.dart';
-import '../screens/signup_screen.dart';
-import '../screens/verify_number_screen.dart';
-import '../widget/notification_dialog_auth.dart';
-import '../widget/notification_loader.dart';
 import 'dio.dart';
 
 
@@ -53,26 +47,6 @@ class Auth extends ChangeNotifier{
         'code': "ERROR",
         'error': e
       };
-    }
-
-    try {
-      Dio.Response response = await dio()!.post('/v1/', data: cred);
-      if(response.statusCode == 200){
-        var res = jsonDecode(response.data);
-
-      }
-    } catch (e){
-      notification_dialog_auth(
-          context,
-          'Une erreur c\'est produite.',
-          Icons.error,
-          Colors.red,
-          {'label': 'FERMER', "onTap": (){
-            Navigator.pop(context);
-            Navigator.pop(context);
-          }},
-          20,
-          false);
     }
   }
 
