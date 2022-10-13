@@ -9,6 +9,7 @@ import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/loadingAnimationWidget.dart';
 import '../utils/global_variables.dart';
 import '../widget/backButton.dart';
 
@@ -29,87 +30,100 @@ class _Poly extends State<GoogleMapsPolylines> {
 
   GoogleMapController? _controller;
   Location _location = Location();
-  CameraPosition _kGoogle = const CameraPosition(
-    target: LatLng(19.0759837, 72.8776559),
-    zoom: 14,
-  );
   late LatLng position;
   final Set<Marker> _markers = {};
 
   @override
   Widget build(BuildContext context) {
+
+    CollectionReference users = FirebaseFirestore.instance.collection('drivers');
+
     return Stack(
       children: [
         SafeArea(
           child: FutureBuilder<List<BitmapDescriptor>>(
             future : bitmapicon(),
             builder: (context, icons) {
-              return GoogleMap(
-                initialCameraPosition: _kGoogle,
-                mapType: MapType.normal,
-                markers: _markers,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                compassEnabled: true,
-                onMapCreated: (controller){
+              return StreamBuilder<DocumentSnapshot>(
+                stream: users.doc(widget.id).snapshots(),
+                builder: (context, driverInfo) {
 
-                  _controller = controller;
-                  _location.onLocationChanged.listen((l) async {
-                    position = LatLng(l.latitude!, l.longitude!);
-                    FirebaseFirestore.instance.collection('drivers').doc(widget.id).update({
-                      'longitude': l.longitude,
-                      'latitude' : l.latitude
-                    });
+                  if(!driverInfo.hasData){
+                    return LoadingWidget(message: 'Chargement en cours...',);
+                  }
 
-                    setState(() {
-                      _markers.clear();
-                      _markers.add(
-                        // added markers
-                          Marker(
-                              markerId: const MarkerId('Votre position'),
-                              position: position,
-                              infoWindow: const InfoWindow(
-                                title: 'Ma position',
-                                snippet: '',
-                              ),
-                              icon: icons.data![0]
-                          )
-                      );
-                      _markers.add(
-                        // added markers
-                          Marker(
-                              markerId: const MarkerId('Lieu de départ'),
-                              position: widget.origine,
-                              infoWindow: const InfoWindow(
-                                title: 'Lieu de départ',
-                                snippet: '',
-                              ),
-                              icon: icons.data![1]
-                          )
-                      );
-                      _markers.add(
-                          Marker( //add start location marker
-                            markerId: const MarkerId('Lieu \'arrivée'),
-                            position: widget.destination,
-                            infoWindow: const InfoWindow(
-                              title: 'Lieu de destination',
-                              snippet: '',
-                            ),
-                            icon: icons.data![2],
-                          )
-                      );
+                  Map<String, dynamic> data = driverInfo.data!.data() as Map<String, dynamic>;
 
-                      position = LatLng(l.latitude!, l.longitude!);
-                    });
+                  return GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(data['latitude'], data['longitude']),
+                      zoom: 14,
+                    ),
+                    mapType: MapType.normal,
+                    markers: _markers,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    compassEnabled: true,
+                    onMapCreated: (controller){
+                      _controller = controller;
+                      _location.onLocationChanged.listen((l) async {
+                        position = LatLng(l.latitude!, l.longitude!);
+                        FirebaseFirestore.instance.collection('drivers').doc(widget.id).update({
+                          'longitude': l.longitude,
+                          'latitude' : l.latitude
+                        });
+
+                        setState(() {
+                          _markers.clear();
+                          _markers.add(
+                            // added markers
+                              Marker(
+                                  markerId: const MarkerId('Votre position'),
+                                  position: position,
+                                  infoWindow: const InfoWindow(
+                                    title: 'Ma position',
+                                    snippet: '',
+                                  ),
+                                  icon: icons.data![0]
+                              )
+                          );
+                          _markers.add(
+                            // added markers
+                              Marker(
+                                  markerId: const MarkerId('Lieu de départ'),
+                                  position: widget.origine,
+                                  infoWindow: const InfoWindow(
+                                    title: 'Lieu de départ',
+                                    snippet: '',
+                                  ),
+                                  icon: icons.data![1]
+                              )
+                          );
+                          _markers.add(
+                              Marker( //add start location marker
+                                markerId: const MarkerId('Lieu \'arrivée'),
+                                position: widget.destination,
+                                infoWindow: const InfoWindow(
+                                  title: 'Lieu de destination',
+                                  snippet: '',
+                                ),
+                                icon: icons.data![2],
+                              )
+                          );
+
+                          position = LatLng(l.latitude!, l.longitude!);
+                        });
 
 
-                    _controller!.animateCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-                      ),
-                    );
-                  });
-                },
+                        _controller!.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+                          ),
+                        );
+                      });
+                    },
+                  );
+                }
               );
             }
           ),
