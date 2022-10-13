@@ -27,7 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   late List input;
 
-  String value = 'H';
+  String value = 'h';
   List<S2Choice<String>> options = [
     S2Choice<String>(value: 'h', title: 'Homme'),
     S2Choice<String>(value: 'f', title: 'Femme'),
@@ -40,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
     S2Choice<String>(value: '3', title: 'Mini Vanne'),
   ];
 
-  String colour = 'jaune';
+  String colour = 'Jaune';
   List<S2Choice<String>> colouroptions = [
     S2Choice<String>(value: 'Jaune', title: 'Jaune'),
     S2Choice<String>(value: 'Rouge', title: 'Rouge'),
