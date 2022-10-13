@@ -9,6 +9,7 @@ import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/global_variables.dart';
 import '../widget/backButton.dart';
 
 class GoogleMapsPolylines extends StatefulWidget {
@@ -34,129 +35,83 @@ class _Poly extends State<GoogleMapsPolylines> {
   );
   late LatLng position;
   final Set<Marker> _markers = {};
-  final Set<Polyline> _polyline = {};
-
-  // list of locations to display polylines
-  late List<LatLng> latLen;
-
-  void _onMapCreated(_cntlr)
-  {
-    _controller = _cntlr;
-    _location.onLocationChanged.listen((l) async {
-      position = LatLng(l.latitude!, l.longitude!);
-      FirebaseFirestore.instance.collection('drivers').doc(widget.id).update({
-        'longitude': l.longitude,
-        'latitude' : l.latitude
-      });
-      BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(),
-        "assets/images/car_android.png",
-      );
-
-      BitmapDescriptor departBitmap = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(),
-        "assets/images/drapeau-a-damier.png",
-      );
-
-      BitmapDescriptor arriveBitmap = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(),
-        "assets/images/drapeau.png",
-      );
-
-      setState(() {
-        _markers.clear();
-        _markers.add(
-          // added markers
-            Marker(
-                markerId: MarkerId('${latLen[1].longitude}'),
-                position: latLen[1],
-                infoWindow: InfoWindow(
-                  title: '${1 + 1} ${1 == 0 ? 'Votre Position' : 1 == 1 ? 'Lieu de ramassage' : 1 == 2 ? 'Destination du client' : ''}',
-                  snippet: '',
-                ),
-              icon: departBitmap
-            )
-        );
-        _markers.add(
-          // added markers
-            Marker(
-                markerId: MarkerId('${latLen[2].longitude}'),
-                position: latLen[2],
-                infoWindow: InfoWindow(
-                  title: '${2 + 1} ${2 == 0 ? 'Votre Position' : 2 == 1 ? 'Lieu de ramassage' : 2 == 2 ? 'Destination du client' : ''}',
-                  snippet: '',
-                ),
-              icon: arriveBitmap
-            )
-        );
-        _markers.add(
-            Marker( //add start location marker
-              markerId: MarkerId('Ma Position'),
-              position: LatLng(l.latitude!, l.longitude!),
-              infoWindow: InfoWindow(
-                title: 'Ma Position',
-                snippet: 'Moi',
-              ),
-              icon: markerbitmap,
-            )
-        );
-
-        position = LatLng(l.latitude!, l.longitude!);
-      });
-
-
-      _controller!.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-        ),
-      );
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    // if(widget.id != null){
-    //   FirebaseFirestore.instance.collection('drivers').doc(widget.id!).collection('courses')
-    //       .doc('courses')
-    //       .update({
-    //     'status': 'accept',
-    //   });
-    // }
-
-    latLen = [
-      widget.origine,
-      widget.destination,
-    ];
-
-    // declared for loop for various locations
-    for(int i=0; i<latLen.length; i++){
-      _polyline.add(
-          Polyline(
-            polylineId: PolylineId('1'),
-            points: latLen,
-            color: Colors.green,
-          )
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         SafeArea(
-          child: GoogleMap(
-            initialCameraPosition: _kGoogle,
-            mapType: MapType.normal,
-            markers: _markers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            compassEnabled: true,
-            polylines: _polyline,
-            onMapCreated: _onMapCreated,
+          child: FutureBuilder<List<BitmapDescriptor>>(
+            future : bitmapicon(),
+            builder: (context, icons) {
+              return GoogleMap(
+                initialCameraPosition: _kGoogle,
+                mapType: MapType.normal,
+                markers: _markers,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                compassEnabled: true,
+                onMapCreated: (controller){
+
+                  _controller = controller;
+                  _location.onLocationChanged.listen((l) async {
+                    position = LatLng(l.latitude!, l.longitude!);
+                    FirebaseFirestore.instance.collection('drivers').doc(widget.id).update({
+                      'longitude': l.longitude,
+                      'latitude' : l.latitude
+                    });
+
+                    setState(() {
+                      _markers.clear();
+                      _markers.add(
+                        // added markers
+                          Marker(
+                              markerId: const MarkerId('Votre position'),
+                              position: position,
+                              infoWindow: const InfoWindow(
+                                title: 'Ma position',
+                                snippet: '',
+                              ),
+                              icon: icons.data![0]
+                          )
+                      );
+                      _markers.add(
+                        // added markers
+                          Marker(
+                              markerId: const MarkerId('Lieu de départ'),
+                              position: widget.origine,
+                              infoWindow: const InfoWindow(
+                                title: 'Lieu de départ',
+                                snippet: '',
+                              ),
+                              icon: icons.data![1]
+                          )
+                      );
+                      _markers.add(
+                          Marker( //add start location marker
+                            markerId: const MarkerId('Lieu \'arrivée'),
+                            position: widget.destination,
+                            infoWindow: const InfoWindow(
+                              title: 'Lieu de destination',
+                              snippet: '',
+                            ),
+                            icon: icons.data![2],
+                          )
+                      );
+
+                      position = LatLng(l.latitude!, l.longitude!);
+                    });
+
+
+                    _controller!.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+                      ),
+                    );
+                  });
+                },
+              );
+            }
           ),
         ),
 
@@ -164,7 +119,7 @@ class _Poly extends State<GoogleMapsPolylines> {
           right: 16,
           top: 16,
           child: CloseButtons(context),
-        ) : SizedBox(),
+        ) : const SizedBox(),
 
         widget.phone != null ? Positioned(
             top: 32,
@@ -195,7 +150,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                 ),
               ),
             )
-        ) : SizedBox(),
+        ) : const SizedBox(),
 
         widget.phone != null ? Positioned(
             bottom: 32,

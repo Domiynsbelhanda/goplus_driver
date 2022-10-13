@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -10,6 +11,28 @@ bool? online;
 
 void storeToken({required String token}) async{
   await storage.write(key: 'token', value: token);
+}
+
+Future<List<BitmapDescriptor>> bitmapicon() async{
+  BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+    const ImageConfiguration(),
+    "assets/images/car_android.png",
+  );
+
+  BitmapDescriptor departBitmap = await BitmapDescriptor.fromAssetImage(
+    const ImageConfiguration(),
+    "assets/images/drapeau-a-damier.png",
+  );
+
+  BitmapDescriptor arriveBitmap = await BitmapDescriptor.fromAssetImage(
+    const ImageConfiguration(),
+    "assets/images/drapeau.png",
+  );
+  return [
+    markerbitmap,
+    departBitmap,
+    arriveBitmap
+  ];
 }
 
 void deleteToken(String key) async{
