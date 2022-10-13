@@ -44,8 +44,8 @@ class _Poly extends State<GoogleMapsPolylines> {
           child: FutureBuilder<List<BitmapDescriptor>>(
             future : bitmapicon(),
             builder: (context, icons) {
-              return StreamBuilder<DocumentSnapshot>(
-                stream: users.doc(widget.id).snapshots(),
+              return FutureBuilder<DocumentSnapshot>(
+                future: users.doc(widget.id).get(),
                 builder: (context, driverInfo) {
 
                   if(!driverInfo.hasData){
@@ -131,7 +131,7 @@ class _Poly extends State<GoogleMapsPolylines> {
 
         widget.phone != null ? Positioned(
           right: 16,
-          top: 16,
+          top: 80,
           child: CloseButtons(context),
         ) : const SizedBox(),
 
