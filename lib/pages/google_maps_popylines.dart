@@ -174,7 +174,7 @@ class _Poly extends State<GoogleMapsPolylines> {
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
               if(!snapshot.hasData){
-                return Text('Vérifiez votre connexion');
+                return LoadingWidget(message: "Chargement en cours...");
               }
 
               Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -256,7 +256,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                 ],
               );
             })
-        ) : SizedBox(),
+        ) : const SizedBox(),
       ],
     );
   }
