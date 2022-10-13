@@ -85,7 +85,7 @@ class _HomePage extends State<HomePage>{
                                 }
                             );
                           });
-                          progresso_dialog(context, snap.data.toString(), position!);
+                          progresso_dialog(context, snap.data.toString());
                         }
                       }
 

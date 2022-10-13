@@ -10,16 +10,15 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 import '../widget/backButton.dart';
-import '../widget/notification_loader.dart';
 
 class GoogleMapsPolylines extends StatefulWidget {
   LatLng origine;
   LatLng destination;
-  LatLng? position;
   String id;
   String? phone;
 
-  GoogleMapsPolylines({required Key key, this.phone, required this.id, required this.origine, required this.destination, this.position}) : super(key: key);
+  GoogleMapsPolylines({required Key key, this.phone,
+    required this.id, required this.origine, required this.destination}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -128,15 +127,9 @@ class _Poly extends State<GoogleMapsPolylines> {
     // }
 
     latLen = [
-      widget.position!,
       widget.origine,
       widget.destination,
     ];
-
-    _kGoogle = CameraPosition(
-      target: widget.position!,
-      zoom: 14,
-    );
 
     // declared for loop for various locations
     for(int i=0; i<latLen.length; i++){

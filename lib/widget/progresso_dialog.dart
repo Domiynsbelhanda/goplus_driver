@@ -9,7 +9,7 @@ import '../utils/app_colors.dart';
 
 progresso_dialog(
     BuildContext contexts,
-    String text, LatLng location) async {
+    String text) async {
 
   await Future.delayed(Duration(microseconds: 1));
 
@@ -148,7 +148,6 @@ progresso_dialog(
                                 child: GoogleMapsPolylines(
                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-                                  position: location,
                                   id: text,
                                   key: _mapKey,
                                 ),
@@ -185,7 +184,6 @@ progresso_dialog(
                                               GoogleMapsPolylines(
                                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-                                                  position: location,
                                                   id: text,
                                                   phone: data['user_id'],
                                                 key: _mapKey,
