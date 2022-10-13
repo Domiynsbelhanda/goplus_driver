@@ -4,6 +4,7 @@ import '../screens/loadingAnimationWidget.dart';
 
 notification_loader(
     BuildContext context,
+    String message,
     var function) {
 
   // show the dialog
@@ -11,7 +12,7 @@ notification_loader(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return LoadingWidget();
+      return LoadingWidget(message: message);
     },
   );
 }

@@ -16,72 +16,27 @@ class Auth extends ChangeNotifier{
 
   final storage = new FlutterSecureStorage();
 
-  void login ({required Map creds, required BuildContext context}) async {
-    notification_loader(context, (){});
+  Future<Map<String, dynamic>> login ({required Map creds, required BuildContext context}) async {
 
     try {
       Dio.Response response = await dio()!.post('/v1/', data: creds);
+      Map<String, dynamic> res = jsonDecode(response.data);
       if(response.statusCode == 200){
-        var res = jsonDecode(response.data);
-        if(res['code'] == "OTP"){
-          sendOtp(context, creds['phone']).then((value){
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
-            );
-          });
-        } else if(res['code'] == 'NOK'){
-          sendOtp(context, creds['phone']).then((value){
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: creds['phone']))
-            );
-          });
-        } else if (res['code'] == 'KO'){
-          notification_dialog_auth(
-              context,
-              'Vous n\'avez pas de compte?',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SignupScreen())
-                );
-              }},
-              20,
-              false);
-        }
-        else {
-          notification_dialog_auth(
-              context,
-              'Une erreur c\'est produite. ${res['code']}',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }},
-              20,
-              false);
-        }
+        return res;
+      } else {
+        return {
+          'code': "NULL"
+        };
       }
     } catch (e){
-      notification_dialog_auth(
-          context,
-          'Une erreur c\'est produite.',
-          Icons.error,
-          Colors.red,
-          {'label': 'FERMER', "onTap": (){
-            Navigator.pop(context);
-            Navigator.pop(context);
-          }},
-          20,
-          false);
+      return {
+        'code': "ERROR",
+        'error': e
+      };
     }
   }
 
   void register ({required Map<String, dynamic> cred, required BuildContext context}) async {
-
-    notification_loader(context, (){});
-
     try {
       Dio.Response response = await dio()!.post('/v1/', data: cred);
       if(response.statusCode == 200){
@@ -151,7 +106,6 @@ class Auth extends ChangeNotifier{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
       notifyListeners();
-      Navigator.pop(context);
       return datas['code'];
     } catch(e){
       return "KO";
@@ -162,7 +116,6 @@ class Auth extends ChangeNotifier{
     try{
       Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
       Map<String, dynamic> datas = jsonDecode(response.data);
-      Navigator.pop(context);
       if(datas['code'] == 'OK'){
         this.storage.write(key: 'sid', value: datas['sid']);
         storeToken(token: data['phone']);
@@ -170,7 +123,9 @@ class Auth extends ChangeNotifier{
       notifyListeners();
       return datas;
     } catch(e){
-      return "KO";
+      return {
+        'code': "KO"
+      };
     }
   }
 

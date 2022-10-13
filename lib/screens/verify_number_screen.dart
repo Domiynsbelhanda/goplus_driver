@@ -103,7 +103,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   name: 'VERIFIEZ',
                   color: AppColors.primaryColor,
                   onTap: () async{
-                    notification_loader(context, (){});
+                    notification_loader(context, 'Vérification OTP en cours...', (){});
                     if(otp != null){
                       var data = {
                         'key': "create_user",

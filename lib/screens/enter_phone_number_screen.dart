@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/services/auth.dart';
+import 'package:goplus_driver/widget/notification_dialog_auth.dart';
+import 'package:goplus_driver/widget/notification_loader.dart';
 import 'package:provider/provider.dart';
 import '../pages/homePage.dart';
 import '../utils/app_colors.dart';
@@ -145,13 +147,85 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       name: 'CONNEXION',
                       onTap: () async {
                         if (formkey.currentState!.validate()){
+                          notification_loader(context, 'Connexion en cours', (){});
                           var data = {
                             "key": "check_user",
                             "action": "driver",
                             "phone": phoneController.text.trim(),
                             "pass": passwordController.text.trim()
                           };
-                          Provider.of<Auth>(context, listen: false).login(context: context, creds: data);
+                          Provider.of<Auth>(context, listen: false)
+                              .login(context: context, creds: data).then((value){
+                                Navigator.pop(context);
+
+                                if(value['code'] == 'OTP'){
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) =>
+                                          VerifyNumberScreen(phone: phoneController.text.trim()))
+                                  );
+                                } if(value['code'] == 'KO'){
+                                  notification_dialog_auth(
+                                      context,
+                                      'Vous n\'avez pas de compte, créez en un.',
+                                      Icons.person,
+                                      Colors.red,
+                                      {'label': 'CREER', "onTap": (){
+                                        Navigator.pop(context);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context) =>
+                                            SignupScreen())
+                                        );
+                                      }},
+                                      20,
+                                      false);
+                                }
+                                else if (value['code'] == 'NOK'){
+                                  notification_dialog_auth(
+                                      context,
+                                      'Mot de passe incorrect, veuillez réessayez.',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'REESAYEZ', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                } else if(value['code'] == 'NULL'){
+                                  notification_dialog_auth(
+                                      context,
+                                      'Une erreur c\'est produite.',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'REESAYEZ', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                } else if(value['code'] == 'ERROR'){
+                                  notification_dialog_auth(
+                                      context,
+                                      'Une erreur c\'est produite.',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'FERMER', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                } else {
+                                  notification_dialog_auth(
+                                      context,
+                                      'Une erreur c\'est produite.',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'REESAYEZ', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                }
+
+                          });
                           // var ref = FirebaseFirestore.instance.collection('drivers');
                           // var doc = await ref.doc(phoneController.text.trim()).get();
                           // if(doc.exists){

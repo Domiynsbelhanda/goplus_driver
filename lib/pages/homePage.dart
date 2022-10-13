@@ -97,7 +97,7 @@ class _HomePage extends State<HomePage>{
             builder: (context, snap) {
 
               if(!snap.hasData){
-                return LoadingWidget();
+                return LoadingWidget(message: '',);
               }
 
               return StreamBuilder<DocumentSnapshot>(
@@ -110,7 +110,7 @@ class _HomePage extends State<HomePage>{
                 }
 
                 if(!snapshot.hasData){
-                  return LoadingWidget();
+                  return LoadingWidget(message: '',);
                 }
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;

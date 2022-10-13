@@ -33,7 +33,7 @@ progresso_dialog(
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
             if(!snapshot.hasData){
-              return LoadingWidget();
+              return LoadingWidget(message: 'Pas de course, veuillez patienter.',);
             }
             
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
