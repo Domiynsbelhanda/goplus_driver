@@ -38,7 +38,6 @@ class _MyApp extends State<MyApp> {
   @override
   void initState(){
     super.initState();
-    getToken();
   }
 
   @override

@@ -6,15 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 final storage = new FlutterSecureStorage();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
-String? keyss;
 bool? online;
 
 void storeToken({required String token}) async{
   await storage.write(key: 'token', value: token);
-}
-
-void getToken() async{
-  keyss = await storage.read(key: 'token');
 }
 
 void deleteToken(String key) async{

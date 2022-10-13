@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:provider/provider.dart';
 import '../pages/google_maps_popylines.dart';
@@ -27,6 +28,10 @@ class CheckPage extends StatelessWidget{
               stream: FirebaseFirestore.instance.collection('drivers')
                   .doc(snap.data.toString()).collection('courses').doc('courses').snapshots(),
               builder: (context, snapshot){
+
+                if(!snapshot.hasData){
+                  return LoadingWidget(message: 'En cours de chargement ...');
+                }
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
