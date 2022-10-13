@@ -118,6 +118,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         if(value['code'] == 'KO'){
                           Navigator.pop(context);
                         } else {
+                          Navigator.pop(context);
                           if(value['status'] == "1"){
                             Navigator.push(
                               context,
@@ -143,6 +144,14 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                                 Colors.blueGrey,
                                 20,
                                 false
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomePage()
+                              ),
                             );
                           }
                         }
