@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/screens/verify_number_screen.dart';
+import 'package:goplus_driver/widget/notification_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_select/smart_select.dart';
 import '../services/auth.dart';
 import '../utils/app_colors.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
+import '../widget/notification_dialog_auth.dart';
+import 'checkPage.dart';
 
 class SignupScreen extends StatefulWidget {
 
@@ -168,8 +173,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           name: 'S\'INSRIRE',
                           color: AppColors.primaryColor,
                           onTap: (){
-
                             if(formkey.currentState!.validate()){
+                              notification_loader(context, 'Inscription en cours...', (){});
                               var data = {
                                 "key": "create_user",
                                 "action": "driver",
@@ -186,7 +191,46 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "colour": colour
                               };
 
-                              Provider.of<Auth>(context, listen: false).register(context: context, cred: data);
+                              Provider.of<Auth>(context, listen: false)
+                                  .register(context: context, cred: data).then((res){
+                                if(res['code'] == "OTP"){
+                                  FirebaseFirestore.instance.collection('drivers')
+                                      .doc(phoneController.text.trim()).set(data);
+                                  Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
+                                      .then((value){
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: phoneController.text.trim()))
+                                    );
+                                  });
+                                } else if(res['code'] == "NOK"){
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => CheckPage())
+                                  );
+                                } else if (res['code'] == "KO"){
+                                  notification_dialog_auth(
+                                      context,
+                                      '${res['message']}',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'FERMER', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                } else {
+                                  notification_dialog_auth(
+                                      context,
+                                      'Une erreur c\'est produite.',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'REESAYEZ', "onTap": (){
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                }
+                              });
                             }
                           }),
                     ],

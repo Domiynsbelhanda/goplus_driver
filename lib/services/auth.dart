@@ -36,51 +36,30 @@ class Auth extends ChangeNotifier{
     }
   }
 
-  void register ({required Map<String, dynamic> cred, required BuildContext context}) async {
+  Future<Map<String, dynamic>> register ({required Map<String, dynamic> cred, required BuildContext context}) async {
+
+    try {
+      Dio.Response response = await dio()!.post('/v1/', data: cred);
+      Map<String, dynamic> res = jsonDecode(response.data);
+      if(response.statusCode == 200){
+        return res;
+      } else {
+        return {
+          'code': "NULL"
+        };
+      }
+    } catch (e){
+      return {
+        'code': "ERROR",
+        'error': e
+      };
+    }
+
     try {
       Dio.Response response = await dio()!.post('/v1/', data: cred);
       if(response.statusCode == 200){
         var res = jsonDecode(response.data);
-        if(res['code'] == "OTP"){
-          FirebaseFirestore.instance.collection('drivers').doc(cred['phone']).set(cred);
-          sendOtp(context, cred['phone']).then((value){
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
-            );
-          });
-        } else if(res['code'] == "NOK"){
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => CheckPage())
-          );
-        } else if (res['code'] == "KO"){
-          notification_dialog_auth(
-              context,
-              '${res['message']}',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.pop(context);
-                sendOtp(context, cred['phone']).then((value){
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: cred['phone']))
-                  );
-                });
-              }},
-              20,
-              false);
-        } else {
-          notification_dialog_auth(
-              context,
-              'Une erreur c\'est produite.',
-              Icons.error,
-              Colors.red,
-              {'label': 'REESAYEZ', "onTap": (){
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }},
-              20,
-              false);
-        }
+
       }
     } catch (e){
       notification_dialog_auth(
