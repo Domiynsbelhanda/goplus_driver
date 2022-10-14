@@ -183,7 +183,8 @@ class _Poly extends State<GoogleMapsPolylines> {
                 children: [
                   AppButton(
                     onTap: (){
-                      if(data['status'] == 'start'){
+                      if(!(data['status'] == 'start')){
+
                         Map<String, dynamic> datas;
                         DateTime start = DateTime.parse(data['start_time'].toDate().toString());
                         DateTime end = DateTime.parse(DateTime.now().toString());
@@ -198,6 +199,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                             "longinit": data['depart_longitude'],
                             "ridedate": "${start.day}-${start.month}-${start.year}",
                             "starthour": "${start.hour}:${start.minute}",
+                            "endhour": "${end.hour}:${end.minute}",
                             "type": 2
                           };
                         } else {
@@ -218,70 +220,111 @@ class _Poly extends State<GoogleMapsPolylines> {
                         }
 
                         Provider.of<Auth>(context, listen: false)
-                            .storeCourse(data: datas, context: context).then((value){
-                           if(value['code'] == 'OK'){
-
-                             var price;
-                             if(!data['airport']){
-                               if(data['carType'] == "1"){
-                                 price = (end.difference(start).inMinutes / 30) * 8;
-                               } else if(data['carType'] == "2") {
-                                 price = (end.difference(start).inMinutes / 30) * 12;
-                               } else if (data['carType'] == "3"){
-                                 price = (end.difference(start).inMinutes / 30) * 14;
-                               }
-                             } else {
-                               if(data['carType'] == "1"){
-                                 price = 40;
-                               } else if(data['carType'] == "2") {
-                                 price = 55;
-                               } else if (data['carType'] == "3"){
-                                 price = 95;
-                               }
-                             }
-                             notification_dialog(
-                                 context,
-                                     (){
-                                   Navigator.pushAndRemoveUntil(
-                                       context,
-                                       MaterialPageRoute(
-                                           builder: (BuildContext context) => HomePage()
-                                       ),
-                                       (route) => false);
-                                   FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
-                                       .doc('courses')
-                                       .update({
-                                     'status': 'end',
-                                     'end_time': FieldValue.serverTimestamp(),
-                                     'duree': (end.difference(start).inMinutes),
-                                     'prix': (end.difference(start).inMinutes) * 5
-                                   });
-                                 },
-                                 'Course Terminée :\n Réf : ${value['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
-                                 Icons.drive_eta,
-                                 Colors.green,
-                                 15,
-                                 false
-                             );
-                           } else {
-                             notification_dialog(
-                                 context,
-                                     (){
-                                 },
-                                 'Course Terminée :\n Error : ${value['code']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
-                                 Icons.drive_eta,
-                                 Colors.green,
-                                 15,
-                                 false
-                             );
-                           }
+                            .storeCourse(data: datas, context: context).then((value)
+                        {
+                          FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                              .doc('courses')
+                              .update({
+                            'status': 'start',
+                            'rideref': value['rideref'],
+                            'start_time': FieldValue.serverTimestamp()
+                          });
                         });
                       } else {
-                        FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
-                            .doc('courses')
-                            .update({
-                          'status': 'start',
-                          'start_time': FieldValue.serverTimestamp()
+
+                        Map<String, dynamic> datas;
+                        DateTime start = DateTime.parse(data['start_time'].toDate().toString());
+                        DateTime end = DateTime.parse(DateTime.now().toString());
+
+                        var price;
+                        if(!data['airport']){
+                          if(data['carType'] == "1"){
+                            price = (end.difference(start).inMinutes / 30) * 10;
+                          } else if(data['carType'] == "2") {
+                            price = (end.difference(start).inMinutes / 30) * 12;
+                          } else if (data['carType'] == "3"){
+                            price = (end.difference(start).inMinutes / 30) * 14;
+                          }
+                        } else {
+                          if(data['carType'] == "1"){
+                            price = 40;
+                          } else if(data['carType'] == "2") {
+                            price = 55;
+                          } else if (data['carType'] == "3"){
+                            price = 95;
+                          }
+                        }
+
+                        datas = {
+                          "key": "ride",
+                          "action": "update",
+                          "driversid": data['sid_driver'],
+                          "clientsid": data['sid_user'],
+                          "endhour": "${end.hour}:${end.minute}",
+                          "type": "1",
+                          "service" : "4",
+                          "price": price
+                        };
+
+                        Provider.of<Auth>(context, listen: false)
+                            .storeCourse(data: datas, context: context).then((value)
+                        {
+                          if('OK' == 'OK'){
+
+                            var price;
+                            if(!data['airport']){
+                              if(data['carType'] == "1"){
+                                price = (end.difference(start).inMinutes / 30) * 10;
+                              } else if(data['carType'] == "2") {
+                                price = (end.difference(start).inMinutes / 30) * 12;
+                              } else if (data['carType'] == "3"){
+                                price = (end.difference(start).inMinutes / 30) * 14;
+                              }
+                            } else {
+                              if(data['carType'] == "1"){
+                                price = 40;
+                              } else if(data['carType'] == "2") {
+                                price = 55;
+                              } else if (data['carType'] == "3"){
+                                price = 95;
+                              }
+                            }
+                            notification_dialog(
+                                context,
+                                    (){
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) => HomePage()
+                                      ),
+                                          (route) => false);
+                                  FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                                      .doc('courses')
+                                      .update({
+                                    'status': 'end',
+                                    'end_time': FieldValue.serverTimestamp(),
+                                    'duree': (end.difference(start).inMinutes),
+                                    'prix': (end.difference(start).inMinutes) * 5
+                                  });
+                                },
+                                'Course Terminée :\n Réf : ${value['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
+                                Icons.drive_eta,
+                                Colors.green,
+                                15,
+                                false
+                            );
+                          } else {
+                            notification_dialog(
+                                context,
+                                    (){
+                                },
+                                'Course Terminée :\n Error : ${value['code']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                                Icons.drive_eta,
+                                Colors.green,
+                                15,
+                                false
+                            );
+                          }
                         });
                       }
                     },
