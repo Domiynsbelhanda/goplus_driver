@@ -117,11 +117,11 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         };
                       } else {
                         data = {
-                          'key': "create_user",
+                          'key': "check_user",
                           'action': "rotp",
                           'otp': otp!,
                           'phone': widget.phone,
-                          "level": "3"
+                          "level": "4"
                         };
                       }
 
@@ -130,44 +130,35 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         if(value['code'] == 'KO'){
                           Navigator.pop(context);
                         } else {
-                          Navigator.pop(context);
-                          if(value['status'] == "1"){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      HomePage()
-                              ),
-                            );
-                          }
-                          else if(value['status'] == "2"){
-                            notification_dialog(context,
-                                (){},
-                                'Votre compte a été désactivée, contactez GO FLY.',
-                                Icons.close_rounded,
-                                Colors.red,
-                                20,
-                                false
-                            );
-                          }
-                          else if(value['status'] == "0"){
-                            notification_dialog(context,
-                                    (){},
-                                'Votre compte est en attente d\'activation, vous receverez un sms de confirmation.',
-                                Icons.verified_user_outlined,
-                                Colors.blueGrey,
-                                20,
-                                false
-                            );
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      HomePage()
-                              ),
-                            );
-                          }
+                          var checkSid = {
+                            'key': "check_user",
+                            'action': "sid",
+                            'sid': value['sid'],
+                            "level": "4"
+                          };
+                          Provider.of<Auth>(context, listen: false).checkSID(context, checkSid).then(
+                                  (sid){
+
+                                    if(sid['code'] == 'OK'){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                HomePage()
+                                        ),
+                                      );
+                                    } else {
+                                      notification_dialog(context,
+                                              (){},
+                                          'Votre compte a été désactivée, contactez GO FLY.',
+                                          Icons.close_rounded,
+                                          Colors.red,
+                                          20,
+                                          false
+                                      );
+                                    }
+
+                          });
                         }
                       });
                     }

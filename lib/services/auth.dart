@@ -82,6 +82,19 @@ class Auth extends ChangeNotifier{
     }
   }
 
+  Future<Map<String, dynamic>> checkSID(BuildContext context, var data) async {
+    try{
+      Dio.Response response = await dio()!.post('/v1/', data: jsonEncode(data));
+      Map<String, dynamic> datas = jsonDecode(response.data);
+      notifyListeners();
+      return datas;
+    } catch(e){
+      return {
+        'code': "KO"
+      };
+    }
+  }
+
   Future<Map<String, dynamic>>
   storeCourse({required Map<String, dynamic> data, required BuildContext context}) async{
     try{
