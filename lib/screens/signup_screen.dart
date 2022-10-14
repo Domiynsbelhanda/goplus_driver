@@ -34,8 +34,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String value = 'h';
   List<S2Choice<String>> options = [
-    S2Choice<String>(value: 'h', title: 'Homme'),
-    S2Choice<String>(value: 'f', title: 'Femme'),
+    S2Choice<String>(value: 'H', title: 'Homme'),
+    S2Choice<String>(value: 'F', title: 'Femme'),
   ];
 
   String carType = '1';
@@ -243,7 +243,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                   Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
                                       .then((value){
                                     Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) => VerifyNumberScreen(phone: phoneController.text.trim()))
+                                        MaterialPageRoute(builder: (context) =>
+                                            VerifyNumberScreen(
+                                                phone: phoneController.text.trim(),
+                                              register: true,
+                                            )
+                                        )
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){

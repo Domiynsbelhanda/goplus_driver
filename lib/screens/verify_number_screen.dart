@@ -12,8 +12,9 @@ import '../widget/app_widgets/app_bar.dart';
 import '../widget/notification_loader.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
+  bool register;
   String phone;
-  VerifyNumberScreen({Key? key, required this.phone}) : super(key: key);
+  VerifyNumberScreen({Key? key, required this.phone, required this.register}) : super(key: key);
 
   @override
   _VerifyNumberState createState() => _VerifyNumberState();
