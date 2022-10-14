@@ -184,22 +184,38 @@ class _Poly extends State<GoogleMapsPolylines> {
                   AppButton(
                     onTap: (){
                       if(data['status'] == 'start'){
+                        Map<String, dynamic> datas;
                         DateTime start = DateTime.parse(data['start_time'].toDate().toString());
                         DateTime end = DateTime.parse(DateTime.now().toString());
-                        var datas = {
-                          "key": "ride",
-                          "action": "create",
-                          "driversid": data['sid_driver'],
-                          "clientsid": data['sid_user'],
-                          "latinit": data['depart_latitude'],
-                          "longinit": data['depart_longitude'],
-                          "latend": data['destination_latitude'],
-                          "longend": data['destination_longitude'],
-                          "ridedate": "${start.day}-${start.month}-${start.year}",
-                          "starthour": "${start.hour}:${start.minute}",
-                          "endhour": "${end.hour}:${end.minute}",
-                          "price": (end.difference(start).inHours +1) * 5
-                        };
+
+                        if(data['airport']){
+                          datas = {
+                            "key": "ride",
+                            "action": "create",
+                            "driversid": data['sid_driver'],
+                            "clientsid": data['sid_user'],
+                            "latinit": data['depart_latitude'],
+                            "longinit": data['depart_longitude'],
+                            "ridedate": "${start.day}-${start.month}-${start.year}",
+                            "starthour": "${start.hour}:${start.minute}",
+                            "type": 2
+                          };
+                        } else {
+                          datas = {
+                            "key": "ride",
+                            "action": "create",
+                            "driversid": data['sid_driver'],
+                            "clientsid": data['sid_user'],
+                            "latinit": data['depart_latitude'],
+                            "longinit": data['depart_longitude'],
+                            "latend": data['destination_latitude'],
+                            "longend": data['destination_longitude'],
+                            "ridedate": "${start.day}-${start.month}-${start.year}",
+                            "starthour": "${start.hour}:${start.minute}",
+                            "endhour": "${end.hour}:${end.minute}",
+                            "type": "1"
+                          };
+                        }
 
                         Provider.of<Auth>(context, listen: false)
                             .storeCourse(data: datas, context: context).then((value){
