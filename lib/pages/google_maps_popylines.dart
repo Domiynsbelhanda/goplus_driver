@@ -224,19 +224,19 @@ class _Poly extends State<GoogleMapsPolylines> {
                              var price;
                              if(!data['airport']){
                                if(data['carType'] == "1"){
-                                 price = (end.difference(start).inMinutes / 30) * 7;
+                                 price = (end.difference(start).inMinutes / 30) * 8;
                                } else if(data['carType'] == "2") {
                                  price = (end.difference(start).inMinutes / 30) * 12;
                                } else if (data['carType'] == "3"){
-                                 price = (end.difference(start).inMinutes / 30) * 27;
+                                 price = (end.difference(start).inMinutes / 30) * 14;
                                }
                              } else {
                                if(data['carType'] == "1"){
-                                 price = 42;
+                                 price = 40;
                                } else if(data['carType'] == "2") {
-                                 price = 52;
+                                 price = 55;
                                } else if (data['carType'] == "3"){
-                                 price = 102;
+                                 price = 95;
                                }
                              }
                              notification_dialog(
