@@ -152,7 +152,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             "key": "check_user",
                             "action": "driver",
                             "phone": phoneController.text.trim(),
-                            "pass": passwordController.text.trim()
+                            "password": passwordController.text.trim()
                           };
                           Provider.of<Auth>(context, listen: false)
                               .login(context: context, creds: data).then((value){
@@ -161,7 +161,11 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 if(value['code'] == 'OTP'){
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) =>
-                                          VerifyNumberScreen(phone: phoneController.text.trim()))
+                                          VerifyNumberScreen(
+                                              phone: phoneController.text.trim(),
+                                            register: false,
+                                          )
+                                      )
                                   );
                                 } if(value['code'] == 'KO'){
                                   notification_dialog_auth(

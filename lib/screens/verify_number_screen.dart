@@ -106,13 +106,24 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   onTap: () async{
                     notification_loader(context, 'Vérification OTP en cours...', (){});
                     if(otp != null){
-                      var data = {
-                        'key': "create_user",
-                        'action': "rotp",
-                        'otp': otp!,
-                        'phone': widget.phone,
-                        "level": 4
-                      };
+                      var data;
+                      if(widget.register){
+                        data = {
+                          'key': "create_user",
+                          'action': "rotp",
+                          'otp': otp!,
+                          'phone': widget.phone,
+                          "level": "4"
+                        };
+                      } else {
+                        data = {
+                          'key': "create_user",
+                          'action': "rotp",
+                          'otp': otp!,
+                          'phone': widget.phone,
+                          "level": "3"
+                        };
+                      }
 
                       Provider.of<Auth>(context, listen: false).checkOtp(context, data)
                           .then((value){
@@ -128,7 +139,8 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                                       HomePage()
                               ),
                             );
-                          } else if(value['status'] == "2"){
+                          }
+                          else if(value['status'] == "2"){
                             notification_dialog(context,
                                 (){},
                                 'Votre compte a été désactivée, contactez GO FLY.',
@@ -137,7 +149,8 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                                 20,
                                 false
                             );
-                          } else if(value['status'] == "0"){
+                          }
+                          else if(value['status'] == "0"){
                             notification_dialog(context,
                                     (){},
                                 'Votre compte est en attente d\'activation, vous receverez un sms de confirmation.',
