@@ -220,6 +220,25 @@ class _Poly extends State<GoogleMapsPolylines> {
                         Provider.of<Auth>(context, listen: false)
                             .storeCourse(data: datas, context: context).then((value){
                            if(value['code'] == 'OK'){
+
+                             var price;
+                             if(!data['airport']){
+                               if(data['carType'] == "1"){
+                                 price = (end.difference(start).inMinutes / 30) * 7;
+                               } else if(data['carType'] == "2") {
+                                 price = (end.difference(start).inMinutes / 30) * 12;
+                               } else if (data['carType'] == "3"){
+                                 price = (end.difference(start).inMinutes / 30) * 27;
+                               }
+                             } else {
+                               if(data['carType'] == "1"){
+                                 price = 42;
+                               } else if(data['carType'] == "2") {
+                                 price = 52;
+                               } else if (data['carType'] == "3"){
+                                 price = 102;
+                               }
+                             }
                              notification_dialog(
                                  context,
                                      (){
@@ -234,11 +253,11 @@ class _Poly extends State<GoogleMapsPolylines> {
                                        .update({
                                      'status': 'end',
                                      'end_time': FieldValue.serverTimestamp(),
-                                     'duree': end.difference(start).inHours + 1,
-                                     'prix': (end.difference(start).inHours +1) * 5
+                                     'duree': (end.difference(start).inMinutes),
+                                     'prix': (end.difference(start).inMinutes) * 5
                                    });
                                  },
-                                 'Course Terminée :\n Réf : ${value['rideref']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                                 'Course Terminée :\n Réf : ${value['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
                                  Icons.drive_eta,
                                  Colors.green,
                                  15,
