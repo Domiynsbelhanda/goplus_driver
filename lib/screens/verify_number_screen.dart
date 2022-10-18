@@ -47,12 +47,12 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                 SizedBox(height: size.height * 0.08),
                 Text(
                   'Vérification du numéro de téléphone \n+243${widget.phone}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24.0,
                   ),
                 ),
-                SizedBox(height: 8.0,),
+                const SizedBox(height: 8.0,),
 
                 SizedBox(height: size.height * 0.02),
                 SizedBox(
