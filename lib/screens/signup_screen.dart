@@ -237,6 +237,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                               Provider.of<Auth>(context, listen: false)
                                   .register(context: context, cred: data).then((res){
+                                    Navigator.pop(context);
                                 if(res['code'] == "OTP"){
                                   FirebaseFirestore.instance.collection('drivers')
                                       .doc(phoneController.text.trim()).set(data);
@@ -252,9 +253,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => CheckPage())
-                                  );
+                                  notification_dialog_auth(
+                                      context,
+                                      '${res['message']}',
+                                      Icons.error,
+                                      Colors.red,
+                                      {'label': 'FERMER', "onTap": (){
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context) => CheckPage())
+                                        );
+                                      }},
+                                      20,
+                                      false);
+
                                 } else if (res['code'] == "KO"){
                                   notification_dialog_auth(
                                       context,

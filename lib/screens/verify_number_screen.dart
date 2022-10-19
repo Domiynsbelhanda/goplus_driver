@@ -132,23 +132,33 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         if(value['code'] == 'KO'){
                           Navigator.pop(context);
                         } else {
-                          notification_dialog_auth(
-                              context,
-                              "Votre compte a été crée, veuillez patienter l'activation de la part de GO FLY.",
-                              Icons.person,
-                              Colors.red,
-                              {'label': "FERMER", "onTap": (){
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context)
-                                        => PhoneNumberScreen()
+                          if(!widget.register){
+                            Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context)
+                                    => HomePage()
 
-                                    )
-                                );
-                              }
-                              },
-                              20,
-                              false);
+                                )
+                            );
+                          } else {
+                            notification_dialog_auth(
+                                context,
+                                "Votre compte a été crée, veuillez patienter l'activation de la part de GO FLY.",
+                                Icons.person,
+                                Colors.red,
+                                {'label': "FERMER", "onTap": (){
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context)
+                                          => PhoneNumberScreen()
+
+                                      )
+                                  );
+                                }
+                                },
+                                20,
+                                false);
+                          }
                         }
                       });
                     }
