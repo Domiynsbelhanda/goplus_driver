@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/enter_phone_number_screen.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../services/auth.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
+import '../widget/notification_dialog_auth.dart';
 import '../widget/notification_loader.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
@@ -130,35 +132,23 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         if(value['code'] == 'KO'){
                           Navigator.pop(context);
                         } else {
-                          var checkSid = {
-                            'key': "check_user",
-                            'action': "sid",
-                            'sid': value['sid'],
-                            "level": "4"
-                          };
-                          Provider.of<Auth>(context, listen: false).checkSID(context, checkSid).then(
-                                  (sid){
+                          notification_dialog_auth(
+                              context,
+                              "Votre compte a été crée, veuillez patienter l'activation de la part de GO FLY.",
+                              Icons.person,
+                              Colors.red,
+                              {'label': "FERMER", "onTap": (){
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context)
+                                        => PhoneNumberScreen()
 
-                                    if(sid['code'] == 'OK'){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                HomePage()
-                                        ),
-                                      );
-                                    } else {
-                                      notification_dialog(context,
-                                              (){},
-                                          'Votre compte a été désactivée, contactez GO FLY.',
-                                          Icons.close_rounded,
-                                          Colors.red,
-                                          20,
-                                          false
-                                      );
-                                    }
-
-                          });
+                                    )
+                                );
+                              }
+                              },
+                              20,
+                              false);
                         }
                       });
                     }

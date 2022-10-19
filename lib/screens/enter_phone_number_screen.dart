@@ -186,13 +186,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       "${value['message']}",
                                       Icons.person,
                                       Colors.red,
-                                      {'label': "S'INSCRIRE", "onTap": (){
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => SignupScreen()
-                                          ),
-                                        );
+                                      {'label': "FERMER", "onTap": (){
+                                        Navigator.pop(context);
                                       }
                                       },
                                       20,
