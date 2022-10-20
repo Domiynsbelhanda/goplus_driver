@@ -28,7 +28,7 @@ class _LoadingWidget extends State<LoadingWidget>{
     size = MediaQuery.of(context).size;
     message = widget.message;
 
-    Future.delayed(const Duration(seconds: 15)).then((value) {
+    Future.delayed(const Duration(seconds: 1)).then((value) {
       setState(() {
         _showWidget = true;
       });

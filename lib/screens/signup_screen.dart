@@ -232,7 +232,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "gender": value,
                                 "cartype": carType,
                                 'carplate': carPlaqueController.text.toString(),
-                                "colour": colour
+                                "colour": colour,
+                                "longitude": 0.5,
+                                "latitude": 0.5
                               };
 
                               Provider.of<Auth>(context, listen: false)
