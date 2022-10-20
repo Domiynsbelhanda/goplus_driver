@@ -280,11 +280,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                 } else {
                                   notification_dialog_auth(
                                       context,
-                                      'Une erreur c\'est produite.',
+                                      'Une erreur s\'est produite.',
                                       Icons.error,
                                       Colors.red,
                                       {'label': 'REESAYEZ', "onTap": (){
-                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       }},
                                       20,
