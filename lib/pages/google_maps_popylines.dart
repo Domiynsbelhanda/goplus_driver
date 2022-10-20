@@ -183,11 +183,10 @@ class _Poly extends State<GoogleMapsPolylines> {
                 children: [
                   AppButton(
                     onTap: (){
-                      if(!(data['status'] == 'start')){
+                      if((data['status'] == 'accept')){
 
                         Map<String, dynamic> datas;
-                        DateTime start = DateTime.parse(data['start_time'].toDate().toString());
-                        DateTime end = DateTime.parse(DateTime.now().toString());
+                        DateTime start = DateTime.parse(DateTime.now().toString());
 
                         if(data['airport']){
                           datas = {
@@ -199,7 +198,6 @@ class _Poly extends State<GoogleMapsPolylines> {
                             "longinit": data['depart_longitude'],
                             "ridedate": "${start.day}-${start.month}-${start.year}",
                             "starthour": "${start.hour}:${start.minute}",
-                            "endhour": "${end.hour}:${end.minute}",
                             "type": 2
                           };
                         } else {
@@ -214,7 +212,6 @@ class _Poly extends State<GoogleMapsPolylines> {
                             "longend": data['destination_longitude'],
                             "ridedate": "${start.day}-${start.month}-${start.year}",
                             "starthour": "${start.hour}:${start.minute}",
-                            "endhour": "${end.hour}:${end.minute}",
                             "type": "1"
                           };
                         }
@@ -236,14 +233,14 @@ class _Poly extends State<GoogleMapsPolylines> {
                         DateTime start = DateTime.parse(data['start_time'].toDate().toString());
                         DateTime end = DateTime.parse(DateTime.now().toString());
 
-                        var price;
+                        var price = 0.0;
                         if(!data['airport']){
                           if(data['carType'] == "1"){
-                            price = (end.difference(start).inMinutes / 30) * 10;
+                            price = ((end.difference(start).inMinutes / 30) +1) * 10;
                           } else if(data['carType'] == "2") {
-                            price = (end.difference(start).inMinutes / 30) * 12;
+                            price = ((end.difference(start).inMinutes / 30) +1) * 12;
                           } else if (data['carType'] == "3"){
-                            price = (end.difference(start).inMinutes / 30) * 14;
+                            price = ((end.difference(start).inMinutes / 30) +1) * 14;
                           }
                         } else {
                           if(data['carType'] == "1"){
@@ -261,6 +258,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                           "driversid": data['sid_driver'],
                           "clientsid": data['sid_user'],
                           "endhour": "${end.hour}:${end.minute}",
+                          "rideref": data['rideref'],
                           "type": "1",
                           "service" : "4",
                           "price": price
@@ -269,26 +267,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                         Provider.of<Auth>(context, listen: false)
                             .storeCourse(data: datas, context: context).then((value)
                         {
-                          if('OK' == 'OK'){
-
-                            var price;
-                            if(!data['airport']){
-                              if(data['carType'] == "1"){
-                                price = (end.difference(start).inMinutes / 30) * 10;
-                              } else if(data['carType'] == "2") {
-                                price = (end.difference(start).inMinutes / 30) * 12;
-                              } else if (data['carType'] == "3"){
-                                price = (end.difference(start).inMinutes / 30) * 14;
-                              }
-                            } else {
-                              if(data['carType'] == "1"){
-                                price = 40;
-                              } else if(data['carType'] == "2") {
-                                price = 55;
-                              } else if (data['carType'] == "3"){
-                                price = 95;
-                              }
-                            }
+                          if(value['code'] == "OK"){
                             notification_dialog(
                                 context,
                                     (){
@@ -307,7 +286,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                                     'prix': (end.difference(start).inMinutes) * 5
                                   });
                                 },
-                                'Course Terminée :\n Réf : ${value['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
+                                'Course Terminée :\n Réf : ${datas['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
                                 Icons.drive_eta,
                                 Colors.green,
                                 15,
@@ -317,8 +296,9 @@ class _Poly extends State<GoogleMapsPolylines> {
                             notification_dialog(
                                 context,
                                     (){
+                                  Navigator.pop(context);
                                 },
-                                'Course Terminée :\n Error : ${value['code']}\nDébut : ${start}\nFin : ${end},\n Durée : ${end.difference(start)},\n Prix : ${(end.difference(start).inHours +1) * 5}\$',
+                                "Une erreur s'est produite, essayez de terminer la course.",
                                 Icons.drive_eta,
                                 Colors.green,
                                 15,
