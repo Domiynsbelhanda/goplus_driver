@@ -11,11 +11,11 @@ progresso_dialog(
     BuildContext contexts,
     String text) async {
 
-  await Future.delayed(Duration(microseconds: 1));
+  await Future.delayed(const Duration(microseconds: 1));
 
   double width = MediaQuery.of(contexts).size.width;
 
-  final Key _mapKey = UniqueKey();
+  final Key mapKey = UniqueKey();
 
   // show the dialog
   showDialog(
@@ -52,11 +52,11 @@ progresso_dialog(
                             size: width / 5,
                           ),
 
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
 
-                          Container(
+                          SizedBox(
                             width : width / 1.5,
-                            child: Text(
+                            child: const Text(
                                 'La commande a été annulée par le client.',
                                 style: TextStyle(
                                   fontSize: 20,
@@ -65,7 +65,7 @@ progresso_dialog(
                             ),
                           ),
 
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
 
                           TextButton(
                             child: Container(
@@ -74,7 +74,7 @@ progresso_dialog(
                                     color: AppColors.primaryColor,
                                     borderRadius: BorderRadius.circular(8.0)
                                 ),
-                                child: Text(
+                                child: const Text(
                                   'FERMER',
                                   style: TextStyle(
                                       color: Colors.black
@@ -116,13 +116,13 @@ progresso_dialog(
                           TimerCountdown(
                             secondsDescription: 'Secondes',
                             minutesDescription: 'Minutes',
-                            timeTextStyle: TextStyle(
+                            timeTextStyle: const TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold
                             ),
                             format: CountDownTimerFormat.minutesSeconds,
                             endTime: DateTime.now().add(
-                              Duration(
+                              const Duration(
                                 minutes: 1,
                                 seconds: 40,
                               ),
@@ -149,7 +149,7 @@ progresso_dialog(
                                   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
                                   id: text,
-                                  key: _mapKey,
+                                  key: mapKey,
                                 ),
                               )
                           : SizedBox(),
@@ -186,7 +186,7 @@ progresso_dialog(
                                                   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
                                                   id: text,
                                                   phone: data['user_id'],
-                                                key: _mapKey,
+                                                key: mapKey,
                                               )
                                       ),
                                           (Route<dynamic> route) => false

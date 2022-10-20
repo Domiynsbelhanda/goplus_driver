@@ -28,10 +28,14 @@ class _LoadingWidget extends State<LoadingWidget>{
     size = MediaQuery.of(context).size;
     message = widget.message;
 
-    Future.delayed(const Duration(seconds: 1)).then((value) {
-      setState(() {
+    Future.delayed(const Duration(seconds: 15)).then((value) {
+      try{
+        setState(() {
+          _showWidget = true;
+        });
+      } catch(e){
         _showWidget = true;
-      });
+      }
     });
 
     return Scaffold(
@@ -53,7 +57,7 @@ class _LoadingWidget extends State<LoadingWidget>{
               Align(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: EdgeInsets.only(top : 96.0),
+                  padding: const EdgeInsets.only(top : 96.0),
                   child: message != null ?
                   Text(
                       'Veuillez patienter\n${message}',
