@@ -20,12 +20,19 @@ class _LoadingWidget extends State<LoadingWidget>{
 
   late Size size;
   late String message;
+  bool _showWidget = false;
 
   @override
   Widget build(BuildContext context) {
 
     size = MediaQuery.of(context).size;
     message = widget.message;
+
+    Future.delayed(const Duration(seconds: 15)).then((value) {
+      setState(() {
+        _showWidget = true;
+      });
+    });
 
     return Scaffold(
       body: SizedBox(
@@ -49,12 +56,50 @@ class _LoadingWidget extends State<LoadingWidget>{
                   padding: EdgeInsets.only(top : 96.0),
                   child: message != null ?
                   Text(
-                      'Veuillez patienter\n${message}'
+                      'Veuillez patienter\n${message}',
+                      textAlign: TextAlign.center
                   ) : const Text(
-                      'Veuillez patienter.'
+                      'Veuillez patienter...',
+                      textAlign: TextAlign.center
                   ),
                 ),
-              )
+              ),
+
+              _showWidget ? Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                    padding: const EdgeInsets.only(bottom : 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                            'Connection lente ...'
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'CLIQUEZ ICI',
+                                    style: TextStyle(
+                                        color: Colors.yellow,
+                                        fontSize: 20
+                                    ),
+                                  )
+                              ),
+
+                              const Text(
+                                  'pour fermer et reesayez.'
+                              ),
+                            ]
+                        ),
+                      ],
+                    )
+                ),
+              ) : const SizedBox()
             ],
           )
       ),
