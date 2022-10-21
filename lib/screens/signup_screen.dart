@@ -240,9 +240,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               Provider.of<Auth>(context, listen: false)
                                   .register(context: context, cred: data).then((res){
 
-                                    Navigator.pop(context);
-
                                 if(res['code'] == "OTP"){
+                                  Navigator.pop(context);
                                   FirebaseFirestore.instance.collection('drivers')
                                       .doc(phoneController.text.trim()).set(data);
                                   Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
@@ -258,6 +257,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){
+                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
@@ -275,6 +275,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       false);
 
                                 } else if (res['code'] == "KO"){
+                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
@@ -286,6 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       20,
                                       false);
                                 } else {
+                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       'Une erreur s\'est produite.',
