@@ -245,13 +245,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                       .doc(phoneController.text.trim()).set(data);
                                   Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
                                       .then((value){
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) =>
-                                            VerifyNumberScreen(
-                                                phone: phoneController.text.trim(),
-                                              register: true,
-                                            )
-                                        )
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => VerifyNumberScreen(
+                                            phone: phoneController.text.trim(),
+                                            register: true,
+                                          )
+                                      ),
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){
@@ -261,8 +262,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                       Icons.error,
                                       Colors.red,
                                       {'label': 'FERMER', "onTap": (){
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(builder: (context) => CheckPage())
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => CheckPage()
+                                          ),
                                         );
                                       }},
                                       20,
