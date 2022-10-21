@@ -288,7 +288,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                                 },
                                 'Course Terminée :\n Réf : ${datas['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
                                 Icons.drive_eta,
-                                Colors.green,
+                                Colors.yellow,
                                 15,
                                 false
                             );
@@ -300,7 +300,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                                 },
                                 "Une erreur s'est produite, essayez de terminer la course.",
                                 Icons.drive_eta,
-                                Colors.green,
+                                Colors.black,
                                 15,
                                 false
                             );

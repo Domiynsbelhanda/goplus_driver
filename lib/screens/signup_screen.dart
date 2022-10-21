@@ -247,7 +247,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       .doc(phoneController.text.trim()).set(data);
                                   Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
                                       .then((value){
-                                    Navigator.push(
+                                    Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => VerifyNumberScreen(
@@ -255,6 +255,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             register: true,
                                           )
                                       ),
+                                            (route)=>false
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){
@@ -262,14 +263,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
-                                      Icons.error,
-                                      Colors.red,
+                                      Icons.warning,
+                                      Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
-                                        Navigator.push(
+                                        Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) => CheckPage()
                                           ),
+                                                (route)=>false
                                         );
                                       }},
                                       20,
@@ -280,8 +282,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
-                                      Icons.error,
-                                      Colors.red,
+                                      Icons.warning,
+                                      Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
                                         Navigator.pop(context);
                                       }},
@@ -292,8 +294,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   notification_dialog_auth(
                                       context,
                                       'Une erreur s\'est produite.',
-                                      Icons.error,
-                                      Colors.red,
+                                      Icons.warning,
+                                      Colors.yellow,
                                       {'label': 'REESAYEZ', "onTap": (){
                                         Navigator.pop(context);
                                       }},

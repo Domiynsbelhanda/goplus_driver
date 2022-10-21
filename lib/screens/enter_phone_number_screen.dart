@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/notification_dialog_auth.dart';
 import 'package:goplus_driver/widget/notification_loader.dart';
 import 'package:provider/provider.dart';
-import '../pages/homePage.dart';
 import '../utils/app_colors.dart';
-import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import 'verify_number_screen.dart';
@@ -162,7 +159,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       context,
                                       '${value['message']}',
                                       Icons.person,
-                                      Colors.red,
+                                      Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
                                         Navigator.pop(context);
                                       }},
@@ -185,7 +182,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       context,
                                       "${value['message']}",
                                       Icons.person,
-                                      Colors.red,
+                                      Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
                                         Navigator.pop(context);
                                       }
@@ -198,7 +195,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       context,
                                       "${value['message']}",
                                       Icons.person,
-                                      Colors.red,
+                                      Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
                                         Navigator.pop(context);
                                       }
@@ -210,7 +207,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       context,
                                       "Une erreur c'est produite.",
                                       Icons.person,
-                                      Colors.red,
+                                      Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
                                         Navigator.pop(context);
                                       }
@@ -243,12 +240,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                               SignupScreen()
                           ),
+                                (route)=>false
                         );
                       },
                       child: const Text(

@@ -145,14 +145,14 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                                 context,
                                 "Votre compte a été crée, veuillez patienter l'activation de la part de GO FLY.",
                                 Icons.person,
-                                Colors.red,
+                                Colors.yellow,
                                 {'label': "FERMER", "onTap": (){
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context)
-                                          => PhoneNumberScreen()
-
-                                      )
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PhoneNumberScreen()
+                                    ),
+                                      (route)=>false
                                   );
                                 }
                                 },
