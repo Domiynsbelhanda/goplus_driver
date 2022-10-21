@@ -239,7 +239,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                               Provider.of<Auth>(context, listen: false)
                                   .register(context: context, cred: data).then((res){
+
                                     Navigator.pop(context);
+
                                 if(res['code'] == "OTP"){
                                   FirebaseFirestore.instance.collection('drivers')
                                       .doc(phoneController.text.trim()).set(data);

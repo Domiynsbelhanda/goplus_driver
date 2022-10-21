@@ -22,6 +22,12 @@ class _LoadingWidget extends State<LoadingWidget>{
   late String message;
   bool _showWidget = false;
 
+  void updateShow(){
+    setState(() {
+      _showWidget = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -29,13 +35,7 @@ class _LoadingWidget extends State<LoadingWidget>{
     message = widget.message;
 
     Future.delayed(const Duration(seconds: 15)).then((value) {
-      try{
-        setState(() {
-          _showWidget = true;
-        });
-      } catch(e){
-        _showWidget = true;
-      }
+      updateShow();
     });
 
     return Scaffold(
