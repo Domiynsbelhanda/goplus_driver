@@ -5,7 +5,9 @@ import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
+import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
+import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:provider/provider.dart';
 import '../services/auth.dart';
 import '../widget/app_button.dart';
@@ -106,7 +108,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   name: 'VERIFIEZ',
                   color: AppColors.primaryColor,
                   onTap: () async{
-                    notification_loader(context, 'Vérification OTP en cours...', (){});
+                    showLoader("Checking OTP en cours\nVeuillez patienter...");
                     if(otp != null){
                       var data;
                       if(widget.register){
@@ -129,16 +131,18 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
 
                       Provider.of<Auth>(context, listen: false).checkOtp(context, data)
                           .then((value){
+                            disableLoader();
                         if(value['code'] == 'KO'){
-                          Navigator.pop(context);
                         } else {
                           if(!widget.register){
-                            Navigator.of(context).push(
+                            Navigator.pushAndRemoveUntil(
+                              context,
                                 MaterialPageRoute(
                                     builder: (context)
                                     => HomePage()
 
-                                )
+                                ),
+                                (route)=>false
                             );
                           } else {
                             notification_dialog_auth(

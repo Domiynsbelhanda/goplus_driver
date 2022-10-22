@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/services/auth.dart';
+import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/notification_dialog_auth.dart';
 import 'package:goplus_driver/widget/notification_loader.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
+import '../widget/show_loader.dart';
 import 'verify_number_screen.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
@@ -109,6 +112,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             keyboardType: TextInputType.number,
                             cursorColor: AppColors.primaryColor,
                             controller: phoneController,
+                            maxLength: 9,
                             decoration: const InputDecoration(
                               hintText: "812345678",
                               contentPadding: EdgeInsets.all(10.0),
@@ -144,7 +148,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       name: 'CONNEXION',
                       onTap: () async {
                         if (formkey.currentState!.validate()){
-                          notification_loader(context, 'Connexion en cours', (){});
+                          showLoader("Inscription en cours...\nVeuillez patienter...");
                           var data = {
                             "key": "check_user",
                             "action": "driver",
@@ -153,7 +157,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           };
                           Provider.of<Auth>(context, listen: false)
                               .login(context: context, creds: data).then((value){
-                                Navigator.pop(context);
+                                disableLoader();
                                 if(value['code'].toString() == '400'){
                                   notification_dialog_auth(
                                       context,
