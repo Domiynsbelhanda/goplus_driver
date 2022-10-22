@@ -62,6 +62,7 @@ class _MyApp extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData,
       title: "Go Plus Driver",
+      builder: EasyLoading.init(),
       home: AnimatedSplashScreen(
         nextScreen: CheckPage(),
         duration: 2500,
