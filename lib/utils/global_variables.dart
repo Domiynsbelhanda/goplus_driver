@@ -13,6 +13,10 @@ void storeToken({required String token}) async{
   await storage.write(key: 'token', value: token);
 }
 
+void storeSID({required String token}) async{
+  await storage.write(key: 'sid', value: token);
+}
+
 Future<List<BitmapDescriptor>> bitmapicon() async{
   BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(),

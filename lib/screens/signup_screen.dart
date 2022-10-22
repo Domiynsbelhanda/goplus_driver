@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/verify_number_screen.dart';
 import 'package:goplus_driver/widget/notification_loader.dart';
+import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_select/smart_select.dart';
 import '../services/auth.dart';
@@ -218,7 +219,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: AppColors.primaryColor,
                           onTap: (){
                             if(formkey.currentState!.validate()){
-                              notification_loader(context, 'Inscription en cours...', (){});
+                              showLoader("Inscription en cours\nVeuillez patienter...");
                               var data = {
                                 "key": "create_user",
                                 "action": "driver",

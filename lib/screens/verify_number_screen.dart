@@ -134,6 +134,8 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                             disableLoader();
                         if(value['code'] == 'KO'){
                         } else {
+                          storeSID(token: value['sid']);
+                          storeToken(token: data['phone']);
                           if(!widget.register){
                             Navigator.pushAndRemoveUntil(
                               context,
