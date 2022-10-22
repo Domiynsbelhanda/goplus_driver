@@ -166,14 +166,16 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       20,
                                       false);
                                 } else if(value['code'] == "OTP"){
-                                  Navigator.of(context).push(
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
                                       MaterialPageRoute(
                                           builder: (context)
                                           => VerifyNumberScreen(
                                               register: false,
                                               phone: phoneController.text.trim())
 
-                                      )
+                                      ),
+                                      (route)=> false
                                   );
                                 }
 
@@ -183,8 +185,16 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       "${value['message']}",
                                       Icons.person,
                                       Colors.yellow,
-                                      {'label': "FERMER", "onTap": (){
-                                        Navigator.pop(context);
+                                      {'label': "CREER UN COMPTE", "onTap": (){
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context)
+                                                => SignupScreen()
+
+                                            ),
+                                                (route)=> false
+                                        );
                                       }
                                       },
                                       20,
