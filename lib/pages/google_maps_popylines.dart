@@ -117,7 +117,7 @@ class _Poly extends State<GoogleMapsPolylines> {
 
                         _controller!.animateCamera(
                           CameraUpdate.newCameraPosition(
-                            CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+                            CameraPosition(target: LatLng(l.latitude!, l.longitude!)),
                           ),
                         );
                       });
