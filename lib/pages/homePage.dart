@@ -43,8 +43,6 @@ class _HomePage extends State<HomePage>{
             future: Provider.of<Auth>(context, listen: false).getToken(),
             builder: (context, snap) {
 
-              return Text('${snap.data}');
-
               if(!snap.hasData){
                 return LoadingWidget(message: 'Chargement en cours...',);
               }
