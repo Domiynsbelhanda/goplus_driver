@@ -8,6 +8,7 @@ import 'package:goplus_driver/widget/app_button.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/loadingAnimationWidget.dart';
 import '../utils/global_variables.dart';
@@ -141,29 +142,32 @@ class _Poly extends State<GoogleMapsPolylines> {
         widget.phone != null ? Positioned(
             top: 32,
             left: 16,
-            child: Container(
-              width: MediaQuery.of(context).size.width / 1.5,
-              decoration: const BoxDecoration(
-                  color: Colors.white
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    const Icon(
-                        Icons.call
-                    ),
-                    const SizedBox(
-                      width: 8.0,
-                    ),
-                    Text(
-                        '+243${widget.phone}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black
+            child: GestureDetector(
+              onTap: ()=> _makePhoneCall('+243${widget.phone}'),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                decoration: const BoxDecoration(
+                    color: Colors.white
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                          Icons.call
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      Text(
+                          '+243${widget.phone}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -320,5 +324,13 @@ class _Poly extends State<GoogleMapsPolylines> {
         ) : const SizedBox(),
       ],
     );
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 }
