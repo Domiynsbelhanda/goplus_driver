@@ -164,7 +164,7 @@ progresso_dialog(
                                         color: AppColors.primaryColor,
                                         borderRadius: BorderRadius.circular(8.0)
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       'ACCEPTER',
                                       style: TextStyle(
                                           color: Colors.black
