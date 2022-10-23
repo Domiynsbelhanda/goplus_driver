@@ -98,7 +98,7 @@ progresso_dialog(
                 ),
               );
             } else {
-              Vibration.vibrate(amplitude: 128);
+              Vibration.vibrate(amplitude: 128, duration: 5000);
               return SizedBox(
                 width: width / 1,
                 height: data['status'] == 'see' ? MediaQuery.of(context).size.height - 64 : width /1.3,
