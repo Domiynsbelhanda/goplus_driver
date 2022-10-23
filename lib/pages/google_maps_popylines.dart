@@ -57,7 +57,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                   return GoogleMap(
                     initialCameraPosition: CameraPosition(
                       target: LatLng(data['latitude'], data['longitude']),
-                      zoom: 14,
+                      zoom: 15,
                     ),
                     mapType: MapType.normal,
                     markers: _markers,
@@ -117,7 +117,10 @@ class _Poly extends State<GoogleMapsPolylines> {
 
                         _controller!.animateCamera(
                           CameraUpdate.newCameraPosition(
-                            CameraPosition(target: LatLng(l.latitude!, l.longitude!)),
+                            CameraPosition(
+                                target: LatLng(l.latitude!, l.longitude!),
+                              zoom: 15
+                            ),
                           ),
                         );
                       });
