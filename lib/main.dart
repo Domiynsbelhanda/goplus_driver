@@ -67,7 +67,7 @@ class _MyApp extends State<MyApp> {
         nextScreen: CheckPage(),
         duration: 2500,
         splash: "assets/icon/white-text.png",
-        backgroundColor : Color(0xFFFFD80E),
+        backgroundColor : const Color(0xFFFFD80E),
       ),
     );
   }
