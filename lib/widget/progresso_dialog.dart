@@ -4,6 +4,7 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/google_maps_popylines.dart';
 import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
+import 'package:vibration/vibration.dart';
 
 import '../utils/app_colors.dart';
 
@@ -97,6 +98,7 @@ progresso_dialog(
                 ),
               );
             } else {
+              Vibration.vibrate(amplitude: 128);
               return SizedBox(
                 width: width / 1,
                 height: data['status'] == 'see' ? MediaQuery.of(context).size.height - 64 : width /1.3,
@@ -128,6 +130,7 @@ progresso_dialog(
                               ),
                             ),
                             onEnd: () {
+                              Vibration.cancel();
                               FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                 'online': true,
                                 'ride': false,
@@ -152,7 +155,7 @@ progresso_dialog(
                                   key: mapKey,
                                 ),
                               )
-                          : SizedBox(),
+                          : const SizedBox(),
 
                           data['status'] == 'see' ?
                           Row(
@@ -172,6 +175,7 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
+                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                                       .doc('courses')
                                       .update({
@@ -203,7 +207,7 @@ progresso_dialog(
                                         color: AppColors.primaryColor,
                                         borderRadius: BorderRadius.circular(8.0)
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       'REFUSER',
                                       style: TextStyle(
                                           color: Colors.black
@@ -211,6 +215,7 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
+                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                     'online': true,
                                     'ride': false,
@@ -235,7 +240,7 @@ progresso_dialog(
                                         color: AppColors.primaryColor,
                                         borderRadius: BorderRadius.circular(8.0)
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       'VOIR',
                                       style: TextStyle(
                                           color: Colors.black
@@ -243,6 +248,7 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
+                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                                       .doc('courses')
                                       .update({
@@ -260,7 +266,7 @@ progresso_dialog(
                                         color: AppColors.primaryColor,
                                         borderRadius: BorderRadius.circular(8.0)
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       'REFUSER',
                                       style: TextStyle(
                                           color: Colors.black
@@ -268,6 +274,7 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
+                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                     'online': true,
                                     'ride': false,
