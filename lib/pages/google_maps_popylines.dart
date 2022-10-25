@@ -312,7 +312,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                                     'status': 'end',
                                     'end_time': FieldValue.serverTimestamp(),
                                     'duree': (end.difference(start).inMinutes),
-                                    'prix': (end.difference(start).inMinutes) * 5
+                                    'prix': price
                                   });
                                 },
                                 'Course Terminée :\n Réf : ${datas['rideref']}\nDébut : $start\nFin : $end,\n Durée : ${end.difference(start)},\n Prix : $price\$',
