@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/notification_dialog_auth.dart';
-import 'package:goplus_driver/widget/notification_loader.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../widget/app_button.dart';
@@ -148,7 +146,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       name: 'CONNEXION',
                       onTap: () async {
                         if (formkey.currentState!.validate()){
-                          showLoader("Inscription en cours...\nVeuillez patienter...");
+                          showLoader("Connexion en cours...\nVeuillez patienter...");
                           var data = {
                             "key": "check_user",
                             "action": "driver",

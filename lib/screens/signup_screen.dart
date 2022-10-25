@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/verify_number_screen.dart';
-import 'package:goplus_driver/widget/notification_loader.dart';
+import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_select/smart_select.dart';
@@ -241,9 +241,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
                               Provider.of<Auth>(context, listen: false)
                                   .register(context: context, cred: data).then((res){
-
+                                disableLoader();
                                 if(res['code'] == "OTP"){
-                                  Navigator.pop(context);
                                   FirebaseFirestore.instance.collection('drivers')
                                       .doc(phoneController.text.trim()).set(data);
                                   Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
@@ -260,7 +259,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                     );
                                   });
                                 } else if(res['code'] == "NOK"){
-                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
@@ -279,7 +277,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                       false);
 
                                 } else if (res['code'] == "KO"){
-                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       '${res['message']}',
@@ -291,7 +288,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                       20,
                                       false);
                                 } else {
-                                  Navigator.pop(context);
                                   notification_dialog_auth(
                                       context,
                                       'Une erreur s\'est produite.',
