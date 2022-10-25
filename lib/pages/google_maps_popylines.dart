@@ -5,7 +5,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
+import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/notification_dialog.dart';
+import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -190,6 +192,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                 children: [
                   AppButton(
                     onTap: (){
+                      showLoader("Veuillez patienter");
                       if((data['status'] == 'accept')){
 
                         Map<String, dynamic> datas;
@@ -203,9 +206,11 @@ class _Poly extends State<GoogleMapsPolylines> {
                             "clientsid": data['sid_user'],
                             "latinit": data['depart_latitude'],
                             "longinit": data['depart_longitude'],
+                            "latend": data['destination_latitude'],
+                            "longend": data['destination_longitude'],
                             "ridedate": "${start.day}-${start.month}-${start.year}",
                             "starthour": "${start.hour}:${start.minute}",
-                            "type": 2
+                            "type": "2"
                           };
                         } else {
                           datas = {
@@ -223,16 +228,32 @@ class _Poly extends State<GoogleMapsPolylines> {
                           };
                         }
 
+
                         Provider.of<Auth>(context, listen: false)
                             .storeCourse(data: datas, context: context).then((value)
                         {
-                          FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
-                              .doc('courses')
-                              .update({
-                            'status': 'start',
-                            'rideref': value['rideref'],
-                            'start_time': FieldValue.serverTimestamp()
-                          });
+                          disableLoader();
+
+                          if(value['code'] == 'OK'){
+                            FirebaseFirestore.instance.collection('drivers').doc(widget.id).collection('courses')
+                                .doc('courses')
+                                .update({
+                              'status': 'start',
+                              'rideref': value['rideref'],
+                              'start_time': FieldValue.serverTimestamp()
+                            });
+                          } else {
+                            notification_dialog(
+                                context,
+                                    (){
+                                },
+                                "$value",
+                                Icons.drive_eta,
+                                Colors.black,
+                                15,
+                                false
+                            );
+                          }
                         });
                       } else {
 
@@ -274,6 +295,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                         Provider.of<Auth>(context, listen: false)
                             .storeCourse(data: datas, context: context).then((value)
                         {
+                          disableLoader();
                           if(value['code'] == "OK"){
                             notification_dialog(
                                 context,
@@ -303,7 +325,6 @@ class _Poly extends State<GoogleMapsPolylines> {
                             notification_dialog(
                                 context,
                                     (){
-                                  Navigator.pop(context);
                                 },
                                 "Une erreur s'est produite, essayez de terminer la course.",
                                 Icons.drive_eta,

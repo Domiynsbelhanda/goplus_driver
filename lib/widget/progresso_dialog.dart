@@ -98,7 +98,6 @@ progresso_dialog(
                 ),
               );
             } else {
-              Vibration.vibrate(amplitude: 300, duration: 20000);
               return SizedBox(
                 width: width / 1,
                 height: data['status'] == 'see' ? MediaQuery.of(context).size.height - 64 : width /1.3,
@@ -130,7 +129,6 @@ progresso_dialog(
                               ),
                             ),
                             onEnd: () {
-                              Vibration.cancel();
                               FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                 'online': true,
                                 'ride': false,
@@ -175,7 +173,6 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                                       .doc('courses')
                                       .update({
@@ -215,7 +212,6 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                     'online': true,
                                     'ride': false,
@@ -248,7 +244,6 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).collection('courses')
                                       .doc('courses')
                                       .update({
@@ -274,7 +269,6 @@ progresso_dialog(
                                     )
                                 ),
                                 onPressed: (){
-                                  Vibration.cancel();
                                   FirebaseFirestore.instance.collection('drivers').doc(text).update({
                                     'online': true,
                                     'ride': false,
