@@ -5,7 +5,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
-
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
