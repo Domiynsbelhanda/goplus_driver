@@ -59,13 +59,13 @@ dependencies:
   firebase_core:
   cloud_firestore:
   flutter_secure_storage: ^5.1.0
-  loading_animation_widget:
   flutter_timer_countdown: ^1.0.5
-  label_marker: ^1.0.1
-  smart_select: ^4.3.2
+  chips_choice: ^3.0.0
   flutter_easyloading: ^3.0.5
-  vibration: ^1.7.5
   url_launcher: ^6.1.5
+  toast: ^0.2.9
+  internet_connection_checker: ^1.0.0+1
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:
