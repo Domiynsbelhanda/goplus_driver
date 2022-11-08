@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/services/auth.dart';
-import 'package:goplus_driver/widget/disable_loader.dart';
 import 'package:goplus_driver/widget/notification_dialog_auth.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
+import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
-import '../widget/show_loader.dart';
 import 'verify_number_screen.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
@@ -154,7 +153,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             "password": passwordController.text.trim()
                           };
                           Provider.of<Auth>(context, listen: false)
-                              .login(context: context, creds: data).then((value){
+                              .request(data: data).then((value){
                                 disableLoader();
                                 if(value['code'].toString() == '400'){
                                   notification_dialog_auth(

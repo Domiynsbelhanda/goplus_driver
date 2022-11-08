@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/homePage.dart';
-import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:provider/provider.dart';
-import '../pages/google_maps_popylines.dart';
 import 'enter_phone_number_screen.dart';
 
 class CheckPage extends StatelessWidget{
@@ -30,7 +28,7 @@ class CheckPage extends StatelessWidget{
               builder: (context, snapshot){
 
                 if(!snapshot.hasData){
-                  return LoadingWidget(message: 'En cours de chargement ...');
+                  return const Text('En cours de chargement ...');
                 }
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -52,13 +50,13 @@ class CheckPage extends StatelessWidget{
                         }
 
                         if(data['status'] == 'accept' || data['status'] == 'start'){
-                          return GoogleMapsPolylines(
-                            destination: LatLng(data['destination_latitude'], data['destination_longitude']),
-                            origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-                            id: snap.data.toString(),
-                            phone: data['user_id'],
-                            key: _mapKey,
-                          );
+                          // return GoogleMapsPolylines(
+                          //   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
+                          //   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
+                          //   id: snap.data.toString(),
+                          //   phone: data['user_id'],
+                          //   key: _mapKey,
+                          // );
                         }
 
                         return HomePage();

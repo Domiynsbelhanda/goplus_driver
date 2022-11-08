@@ -2,11 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/main.dart';
-import 'package:goplus_driver/screens/loadingAnimationWidget.dart';
 import 'package:goplus_driver/services/auth.dart';
-import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/app_button.dart';
-import 'package:goplus_driver/widget/progresso_dialog.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
@@ -44,11 +41,11 @@ class _HomePage extends State<HomePage>{
             builder: (context, snap) {
 
               if(!snap.hasData){
-                return LoadingWidget(message: 'Chargement en cours...',);
+                return const Text('Chargement en cours...',);
               }
 
               if(snap.hasData){
-                firestore.collection('drivers').doc(snap.data.toString()).update({
+                FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
                   'online': isOnline,
                 });
                 return StreamBuilder<DocumentSnapshot>(
@@ -61,7 +58,7 @@ class _HomePage extends State<HomePage>{
                     }
 
                     if(!snapshot.hasData){
-                      return LoadingWidget(message: 'Chargement en cours...',);
+                      return const Text('Chargement en cours...',);
                     }
 
                     Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -85,7 +82,6 @@ class _HomePage extends State<HomePage>{
                                 }
                             );
                           });
-                          progresso_dialog(context, snap.data.toString());
                         }
                       }
 
@@ -113,7 +109,7 @@ class _HomePage extends State<HomePage>{
                               _controller = controller;
                               _location.onLocationChanged.listen((l) async {
                                 _initialcameraposition = LatLng(l.latitude!, l.longitude!);
-                                firestore.collection('drivers').doc(snap.data.toString()).update({
+                                FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
                                   'longitude': l.longitude,
                                   'latitude' : l.latitude
                                 });
@@ -163,11 +159,11 @@ class _HomePage extends State<HomePage>{
                                     isOnline = !isOnline;
                                   });
                                   if(isOnline){
-                                    firestore.collection('drivers').doc(snap.data.toString()).update({
+                                    FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
                                       'online': isOnline,
                                     });
                                   } else {
-                                    firestore.collection('drivers').doc(snap.data.toString()).update({
+                                    FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
                                       'online': isOnline,
                                     });
                                   }
@@ -187,7 +183,7 @@ class _HomePage extends State<HomePage>{
                               ),
                               child: IconButton(
                                 onPressed: (){
-                                  deleteToken('token');
+                                  Provider.of<Auth>(context, listen: false).cleanUp();
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
@@ -209,7 +205,7 @@ class _HomePage extends State<HomePage>{
                 );
               }
 
-              return LoadingWidget(message: 'Chargement en cours...',);
+              return const Text('Chargement en cours...',);
             }
           ),
         );

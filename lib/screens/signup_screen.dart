@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/verify_number_screen.dart';
-import 'package:goplus_driver/widget/disable_loader.dart';
-import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_select/smart_select.dart';
 import '../services/auth.dart';
 import '../utils/app_colors.dart';
+import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import '../widget/notification_dialog_auth.dart';
 import 'checkPage.dart';
+import 'package:chips_choice/chips_choice.dart';
 
 class SignupScreen extends StatefulWidget {
 
@@ -33,29 +32,66 @@ class _SignupScreenState extends State<SignupScreen> {
 
   late List input;
 
-  String value = 'h';
-  List<S2Choice<String>> options = [
-    S2Choice<String>(value: 'H', title: 'Homme'),
-    S2Choice<String>(value: 'F', title: 'Femme'),
+  int genreTag = 0;
+  List<Map<String, dynamic>> genreOptions = [
+    {
+      'name': 'Homme',
+      'value' : 'H'
+    },
+    {
+      'name': 'Femme',
+      'value' : 'F'
+    }
   ];
 
-  String carType = '1';
-  List<S2Choice<String>> carTypeoptions = [
-    S2Choice<String>(value: '1', title: 'Mini'),
-    S2Choice<String>(value: '2', title: 'Berline'),
-    S2Choice<String>(value: '3', title: 'Mini Vanne'),
+  int carTypeTag = 0;
+  List<Map<String, dynamic>> carOptions = [
+    {
+      'name': 'Mini',
+      'value' : '1'
+    },
+    {
+      'name': 'Berline VIP',
+      'value' : '2'
+    }
   ];
 
-  String colour = 'Jaune';
-  List<S2Choice<String>> colouroptions = [
-    S2Choice<String>(value: 'Jaune', title: 'Jaune'),
-    S2Choice<String>(value: 'Rouge', title: 'Rouge'),
-    S2Choice<String>(value: 'Bleue', title: 'Bleue'),
-    S2Choice<String>(value: 'Grise', title: 'Grise'),
-    S2Choice<String>(value: 'Noire', title: 'Noire'),
-    S2Choice<String>(value: 'Verte', title: 'Verte'),
-    S2Choice<String>(value: 'Orange', title: 'Orange'),
-    S2Choice<String>(value: 'Blanche', title: 'Blanche'),
+  int colorTag = 0;
+  List<Map<String, dynamic>> colorOptions = [
+    {
+      'name': 'Jaune',
+      'value' : 'Jaune'
+    },
+    {
+      'name': 'Rouge',
+      'value' : 'Rouge'
+    },
+
+    {
+      'name': 'Bleue',
+      'value' : 'Bleue'
+    },
+
+    {
+      'name': 'Grise',
+      'value' : 'Grise'
+    },
+    {
+      'name': 'Noire',
+      'value' : 'Noire'
+    },
+    {
+      'name': 'Verte',
+      'value' : 'Verte'
+    },
+    {
+      'name': 'Orange',
+      'value' : 'Orange'
+    },
+    {
+      'name': 'Blanche',
+      'value' : 'Blanche'
+    }
   ];
 
   @override
@@ -192,25 +228,67 @@ class _SignupScreenState extends State<SignupScreen> {
                           }).toList()
                       ),
 
-                      SmartSelect<String>.single(
-                          title: 'Genre',
-                          value: value,
-                          choiceItems: options,
-                          onChange: (state) => setState(() => value = state.value)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Genre :',
+                              style: TextStyle(
+                                  fontSize: size.width / 25
+                              )
+                          ),
+                          ChipsChoice<int>.single(
+                            value: genreTag,
+                            onChanged: (val) => setState(() => genreTag = val),
+                            choiceItems: C2Choice.listFrom<int, Map<String, dynamic>>(
+                              source: genreOptions,
+                              value: (i, v) => i,
+                              label: (i, v) => v['name'],
+                            ),
+                          ),
+                        ],
                       ),
 
-                      SmartSelect<String>.single(
-                          title: 'Type de voiture',
-                          value: carType,
-                          choiceItems: carTypeoptions,
-                          onChange: (state) => setState(() => carType = state.value)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Car Type :',
+                              style: TextStyle(
+                                  fontSize: size.width / 25
+                              )
+                          ),
+                          ChipsChoice<int>.single(
+                            value: carTypeTag,
+                            onChanged: (val) => setState(() => carTypeTag = val),
+                            choiceItems: C2Choice.listFrom<int, Map<String, dynamic>>(
+                              source: carOptions,
+                              value: (i, v) => i,
+                              label: (i, v) => v['name'],
+                            ),
+                          ),
+                        ],
                       ),
 
-                      SmartSelect<String>.single(
-                          title: 'Couleur',
-                          value: colour,
-                          choiceItems: colouroptions,
-                          onChange: (state) => setState(() => colour = state.value)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Couleur :',
+                              style: TextStyle(
+                                  fontSize: size.width / 25
+                              )
+                          ),
+                          ChipsChoice<int>.single(
+                            value: colorTag,
+                            onChanged: (val) => setState(() => colorTag = val),
+                            choiceItems: C2Choice.listFrom<int, Map<String, dynamic>>(
+                              source: colorOptions,
+                              value: (i, v) => i,
+                              label: (i, v) => v['name'],
+                            ),
+                          ),
+                        ],
                       ),
 
                       SizedBox(height: size.height * 0.07),
@@ -230,24 +308,22 @@ class _SignupScreenState extends State<SignupScreen> {
                                 "password": passwordController.text.trim(),
                                 "city": villeController.text.toString(),
                                 "phone": phoneController.text.toString(),
-                                "gender": value,
-                                "cartype": carType,
+                                "gender": genreOptions[genreTag]['value'],
+                                "cartype": carOptions[genreTag]['value'],
                                 'carplate': carPlaqueController.text.toString(),
-                                "colour": colour,
+                                "colour": colorOptions[genreTag]['value'],
                                 "longitude": 0.5,
                                 "latitude": 0.5,
                                 "online": false
                               };
 
                               Provider.of<Auth>(context, listen: false)
-                                  .register(context: context, cred: data).then((res){
+                                  .request(data: data).then((res){
                                 disableLoader();
                                 if(res['code'] == "OTP"){
                                   FirebaseFirestore.instance.collection('drivers')
                                       .doc(phoneController.text.trim()).set(data);
-                                  Provider.of<Auth>(context, listen: false).sendOtp(context, phoneController.text.trim())
-                                      .then((value){
-                                    Navigator.pushAndRemoveUntil(
+                                  Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => VerifyNumberScreen(
@@ -255,9 +331,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             register: true,
                                           )
                                       ),
-                                            (route)=>false
-                                    );
-                                  });
+                                          (route)=>false
+                                  );
                                 } else if(res['code'] == "NOK"){
                                   notification_dialog_auth(
                                       context,

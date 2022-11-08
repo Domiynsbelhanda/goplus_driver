@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/screens/enter_phone_number_screen.dart';
-import 'package:goplus_driver/screens/signup_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
-import 'package:goplus_driver/widget/disable_loader.dart';
-import 'package:goplus_driver/widget/notification_dialog.dart';
-import 'package:goplus_driver/widget/show_loader.dart';
 import 'package:provider/provider.dart';
 import '../services/auth.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
 import '../widget/notification_dialog_auth.dart';
-import '../widget/notification_loader.dart';
+import '../utils/global_variables.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
   bool register;
@@ -82,7 +78,12 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                 SizedBox(height: size.height * 0.05),
                 GestureDetector(
                   onTap: (){
-                    Provider.of<Auth>(context, listen: false).sendOtp(context, widget.phone);
+                    var data = {
+                      'key': 'check_user',
+                      'action': 'otp',
+                      'phone': widget.phone
+                    };
+                    Provider.of<Auth>(context, listen: false).request(data: data);
                   },
                   child: const Center(
                     child: Text.rich(
@@ -129,13 +130,13 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         };
                       }
 
-                      Provider.of<Auth>(context, listen: false).checkOtp(context, data)
+                      Provider.of<Auth>(context, listen: false).request(data: data)
                           .then((value){
                             disableLoader();
                         if(value['code'] == 'KO'){
                         } else {
-                          storeSID(token: value['sid']);
-                          storeToken(token: data['phone']);
+                          storage.write(key: 'sid', value: value['sid']);
+                          storage.write(key: 'token', value: data['phone']);
                           if(!widget.register){
                             Navigator.pushAndRemoveUntil(
                               context,
