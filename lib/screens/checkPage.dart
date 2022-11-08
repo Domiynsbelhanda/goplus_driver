@@ -16,14 +16,14 @@ class CheckPage extends StatelessWidget{
 
     return FutureBuilder(
           future: Provider.of<Auth>(context, listen: false).getToken(),
-          builder: (context, snap) {
-            if(!snap.hasData){
+          builder: (context, token) {
+            if(!token.hasData){
               return PhoneNumberScreen();
             }
 
             return StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance.collection('drivers')
-                  .doc(snap.data.toString()).snapshots(),
+                  .doc(token.data.toString()).snapshots(),
               builder: (context, snapshot){
 
                 if(!snapshot.hasData){
@@ -32,22 +32,22 @@ class CheckPage extends StatelessWidget{
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-                return HomePage();
+                return HomePage(
+                  token: token.data.toString(),
+                );
 
                 if(data != null){
                   return StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance.collection('drivers')
-                          .doc(snap.data.toString()).collection('courses').doc('courses').snapshots(),
+                          .doc(token.data.toString()).collection('courses').doc('courses').snapshots(),
                       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
                         if(!snapshot.hasData){
-                          return HomePage();
                         }
 
                         Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
                         if(data['status'] == 'pending'){
-                          return HomePage();
                         }
 
                         if(data['status'] == 'accept' || data['status'] == 'start'){
@@ -60,11 +60,9 @@ class CheckPage extends StatelessWidget{
                           // );
                         }
 
-                        return HomePage();
                       }
                   );
                 } else {
-                  return HomePage();
                 }
               },
             );

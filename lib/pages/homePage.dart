@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
-  HomePage({Key? key}) : super(key: key);
+  String token;
+  HomePage({Key? key, required this.token}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/pages/homePage.dart';
+import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/screens/enter_phone_number_screen.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/utils/otp_text_field.dart';
@@ -142,7 +143,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                               context,
                                 MaterialPageRoute(
                                     builder: (context)
-                                    => HomePage()
+                                    => CheckPage()
 
                                 ),
                                 (route)=>false

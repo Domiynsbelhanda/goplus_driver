@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/screens/checkPage.dart';
 
 import '../pages/homePage.dart';
 
@@ -62,7 +63,7 @@ class CloseButtons extends StatelessWidget{
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  HomePage()
+                  CheckPage()
           ),
               (Route<dynamic> route) => false
       ),
