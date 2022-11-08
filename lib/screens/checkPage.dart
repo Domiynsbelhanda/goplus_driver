@@ -17,14 +17,13 @@ class CheckPage extends StatelessWidget{
     return FutureBuilder(
           future: Provider.of<Auth>(context, listen: false).getToken(),
           builder: (context, snap) {
-
             if(!snap.hasData){
               return PhoneNumberScreen();
             }
 
             return StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance.collection('drivers')
-                  .doc(snap.data.toString()).collection('courses').doc('courses').snapshots(),
+                  .doc(snap.data.toString()).snapshots(),
               builder: (context, snapshot){
 
                 if(!snapshot.hasData){
@@ -32,6 +31,8 @@ class CheckPage extends StatelessWidget{
                 }
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+                return HomePage();
 
                 if(data != null){
                   return StreamBuilder<DocumentSnapshot>(
