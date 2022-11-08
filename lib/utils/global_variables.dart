@@ -1,53 +1,100 @@
 import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final storage = new FlutterSecureStorage();
-FirebaseFirestore firestore = FirebaseFirestore.instance;
-bool? online;
+String androidApiKey = 'AIzaSyAFtipYv6W0AWKFWsipPRhrgRdPHF5MOvk';
 
-void storeToken({required String token}) async{
-  await storage.write(key: 'token', value: token);
-}
+LatLng position = const LatLng(-4.4163009, 15.2732314);
+const double zoom = 15;
 
-void storeSID({required String token}) async{
-  await storage.write(key: 'sid', value: token);
-}
+BitmapDescriptor? pinner;
+BitmapDescriptor? car_android;
+BitmapDescriptor? departBitmap;
+BitmapDescriptor? arriveBitmap;
 
-Future<List<BitmapDescriptor>> bitmapicon() async{
-  BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+readBitconMarkerPinner() async {
+  pinner = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(),
-    "assets/images/car_android.png",
+    "assets/icon/pinner.png",
   );
 
-  BitmapDescriptor departBitmap = await BitmapDescriptor.fromAssetImage(
+  departBitmap = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(),
     "assets/images/drapeau-a-damier.png",
   );
 
-  BitmapDescriptor arriveBitmap = await BitmapDescriptor.fromAssetImage(
+  arriveBitmap = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(),
     "assets/images/drapeau.png",
   );
-  return [
-    markerbitmap,
-    departBitmap,
-    arriveBitmap
-  ];
+
+  car_android = await BitmapDescriptor.fromAssetImage(
+    const ImageConfiguration(),
+    "assets/images/car_android.png",
+  );
 }
 
-void deleteToken(String key) async{
-  await storage.delete(key: key);
+
+Future<BitmapDescriptor> bitmap(String url, int width) async{
+  ByteData data = await rootBundle.load(url);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+
+  final Uint8List markerIcon = (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+
+  return BitmapDescriptor.fromBytes(markerIcon);
 }
 
-double calculateDistance(LatLng latLng1, LatLng latLng2){
+double coordinateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
   var c = cos;
-  var a = 0.5 - c((latLng2.latitude - latLng1.latitude) * p)/2 +
-      c(latLng1.latitude * p) * c(latLng2.latitude * p) *
-          (1 - c((latLng2.longitude - latLng1.longitude) * p))/2;
-  return 1000 * 12742 * asin(sqrt(a));
+  var a = 0.5 -
+      c((lat2 - lat1) * p) / 2 +
+      c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+  return 12742 * asin(sqrt(a));
+}
+
+String distanceDeuxPoint(polylineCoordinates){
+  double totalDistance = 0.0;
+  for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+    totalDistance += coordinateDistance(
+      polylineCoordinates[i].latitude,
+      polylineCoordinates[i].longitude,
+      polylineCoordinates[i + 1].latitude,
+      polylineCoordinates[i + 1].longitude,
+    );
+  }
+  if(totalDistance < 1){
+    return '${(totalDistance * 1000).toStringAsFixed(2)} mètre (s)';
+  }
+  return '${totalDistance.toStringAsFixed(2)} Km';
+}
+
+
+void logOut() async{
+  await storage.delete(key: 'token');
+  await storage.delete(key: 'sid');
+}
+
+void showLoader(String message)async{
+  await EasyLoading.show(
+    status: '$message',
+    maskType: EasyLoadingMaskType.black,
+  );
+}
+
+void disableLoader()async{
+  await EasyLoading.dismiss();
+}
+
+Future<void> makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launchUrl(launchUri);
 }
