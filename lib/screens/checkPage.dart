@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/pages/homePage.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:provider/provider.dart';
+import '../utils/global_variables.dart';
 import 'enter_phone_number_screen.dart';
 
 class CheckPage extends StatelessWidget{
@@ -13,57 +14,23 @@ class CheckPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
           future: Provider.of<Auth>(context, listen: false).getToken(),
           builder: (context, token) {
             if(!token.hasData){
               return PhoneNumberScreen();
             }
-
             return StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance.collection('drivers')
                   .doc(token.data.toString()).snapshots(),
               builder: (context, snapshot){
-
                 if(!snapshot.hasData){
                   return const Text('En cours de chargement ...');
                 }
-
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
                 return HomePage(
                   token: token.data.toString(),
                 );
-
-                if(data != null){
-                  return StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance.collection('drivers')
-                          .doc(token.data.toString()).collection('courses').doc('courses').snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-                        if(!snapshot.hasData){
-                        }
-
-                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-                        if(data['status'] == 'pending'){
-                        }
-
-                        if(data['status'] == 'accept' || data['status'] == 'start'){
-                          // return GoogleMapsPolylines(
-                          //   destination: LatLng(data['destination_latitude'], data['destination_longitude']),
-                          //   origine: LatLng(data['depart_latitude'], data['depart_longitude']),
-                          //   id: snap.data.toString(),
-                          //   phone: data['user_id'],
-                          //   key: _mapKey,
-                          // );
-                        }
-
-                      }
-                  );
-                } else {
-                }
               },
             );
           }
