@@ -102,7 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
   /// Get from gallery
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
+      source: ImageSource.camera,
       maxWidth: 1800,
       maxHeight: 1800,
     );
@@ -209,24 +209,52 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                   Container(
                   child: imageFile == null
-                              ? Container(
-                                alignment: Alignment.center,
-                                child: IconButton(
-                                  color: const Color(0XFF307777),
-                                  onPressed: () {
-                                    _getFromGallery();
-                                  },
-                                  icon: const Text(
-                                    "PICK FROM GALLERY"
-                                  ),
-                                ),
-                              )
-                                  : SizedBox(
-                              child: Image.file(
-                              imageFile!,
-                              fit: BoxFit.cover,
-                            ),
-                      )),
+                  ? Row(
+                    children: [
+                      Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(25.0)
+                        ),
+                        child: IconButton(
+                          color: Colors.white,
+                          onPressed: () {
+                            _getFromGallery();
+                          },
+                          icon: const Icon(
+                            Icons.camera
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 16.0,),
+
+                      const Text(
+                          "Photo de profil"
+                      )
+                    ],
+                  )
+                  : GestureDetector(
+                    onTap: (){
+                      _getFromGallery();
+                    },
+                    child: Container(
+                      height: size.width / 3,
+                      width: size.width / 3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(size.width / 5),
+                        image: DecorationImage(
+                          image: FileImage(
+                            imageFile!,
+                          ),
+                            fit: BoxFit.cover
+                        )
+                      ),
+                    ),
+                  )
+                  ),
                       Column(
                           children: input.map((e){
                             if(e['max'] != null){
