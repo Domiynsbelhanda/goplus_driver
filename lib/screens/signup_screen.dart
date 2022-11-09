@@ -398,6 +398,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: (){
                             if(formkey.currentState!.validate()){
                               showLoader("Inscription en cours\nVeuillez patienter...");
+                              if(imageFile == null){
+                                return;
+                              }
                               uploadFile(phoneController.text.trim()).then((image){
                                 var data = {
                                   "key": "create_user",
