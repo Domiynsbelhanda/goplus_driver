@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/verify_number_screen.dart';
 import 'package:provider/provider.dart';
@@ -140,6 +141,12 @@ class _SignupScreenState extends State<SignupScreen> {
       imageFile = File(croppedFile.path) ;
       setState(() {});
     }
+  }
+
+  Future<String>uploadFile(String phone) async{
+    final ref = FirebaseStorage.instance.ref('drivers/${phone}.png');
+    await ref.putFile(imageFile!);
+    return await ref.getDownloadURL();
   }
 
   @override
@@ -391,82 +398,85 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: (){
                             if(formkey.currentState!.validate()){
                               showLoader("Inscription en cours\nVeuillez patienter...");
-                              var data = {
-                                "key": "create_user",
-                                "action": "driver",
-                                "lastn": prenomController.text.toString(),
-                                "midn": postNomController.text.toString(),
-                                "firstn": nameController.text.toString(),
-                                "address": adresseController.text.toString(),
-                                "password": passwordController.text.trim(),
-                                "city": villeController.text.toString(),
-                                "phone": phoneController.text.toString(),
-                                "gender": genreOptions[genreTag]['value'],
-                                "cartype": carOptions[genreTag]['value'],
-                                'carplate': carPlaqueController.text.toString(),
-                                "colour": colorOptions[genreTag]['value'],
-                                "longitude": 0.5,
-                                "latitude": 0.5,
-                                "online": false
-                              };
+                              uploadFile(phoneController.text.trim()).then((image){
+                                var data = {
+                                  "key": "create_user",
+                                  "action": "driver",
+                                  "lastn": prenomController.text.toString(),
+                                  "midn": postNomController.text.toString(),
+                                  "firstn": nameController.text.toString(),
+                                  "address": adresseController.text.toString(),
+                                  "password": passwordController.text.trim(),
+                                  "city": villeController.text.toString(),
+                                  "phone": phoneController.text.toString(),
+                                  "gender": genreOptions[genreTag]['value'],
+                                  "cartype": carOptions[genreTag]['value'],
+                                  'carplate': carPlaqueController.text.toString(),
+                                  "colour": colorOptions[genreTag]['value'],
+                                  "longitude": 0.5,
+                                  "latitude": 0.5,
+                                  "online": false,
+                                  'image': image
+                                };
 
-                              Provider.of<Auth>(context, listen: false)
-                                  .request(data: data).then((res){
-                                disableLoader();
-                                if(res['code'] == "OTP"){
-                                  FirebaseFirestore.instance.collection('drivers')
-                                      .doc(phoneController.text.trim()).set(data);
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => VerifyNumberScreen(
-                                            phone: phoneController.text.trim(),
-                                            register: true,
-                                          )
-                                      ),
-                                          (route)=>false
-                                  );
-                                } else if(res['code'] == "NOK"){
-                                  notification_dialog_auth(
-                                      context,
-                                      '${res['message']}',
-                                      Icons.warning,
-                                      Colors.yellow,
-                                      {'label': 'FERMER', "onTap": (){
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => CheckPage()
-                                          ),
-                                                (route)=>false
-                                        );
-                                      }},
-                                      20,
-                                      false);
+                                Provider.of<Auth>(context, listen: false)
+                                    .request(data: data).then((res){
+                                  disableLoader();
+                                  if(res['code'] == "OTP"){
+                                    FirebaseFirestore.instance.collection('drivers')
+                                        .doc(phoneController.text.trim()).set(data);
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => VerifyNumberScreen(
+                                              phone: phoneController.text.trim(),
+                                              register: true,
+                                            )
+                                        ),
+                                            (route)=>false
+                                    );
+                                  } else if(res['code'] == "NOK"){
+                                    notification_dialog_auth(
+                                        context,
+                                        '${res['message']}',
+                                        Icons.warning,
+                                        Colors.yellow,
+                                        {'label': 'FERMER', "onTap": (){
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => CheckPage()
+                                              ),
+                                                  (route)=>false
+                                          );
+                                        }},
+                                        20,
+                                        false);
 
-                                } else if (res['code'] == "KO"){
-                                  notification_dialog_auth(
-                                      context,
-                                      '${res['message']}',
-                                      Icons.warning,
-                                      Colors.yellow,
-                                      {'label': 'FERMER', "onTap": (){
-                                        Navigator.pop(context);
-                                      }},
-                                      20,
-                                      false);
-                                } else {
-                                  notification_dialog_auth(
-                                      context,
-                                      'Une erreur s\'est produite.',
-                                      Icons.warning,
-                                      Colors.yellow,
-                                      {'label': 'REESAYEZ', "onTap": (){
-                                        Navigator.pop(context);
-                                      }},
-                                      20,
-                                      false);
-                                }
+                                  } else if (res['code'] == "KO"){
+                                    notification_dialog_auth(
+                                        context,
+                                        '${res['message']}',
+                                        Icons.warning,
+                                        Colors.yellow,
+                                        {'label': 'FERMER', "onTap": (){
+                                          Navigator.pop(context);
+                                        }},
+                                        20,
+                                        false);
+                                  } else {
+                                    notification_dialog_auth(
+                                        context,
+                                        'Une erreur s\'est produite.',
+                                        Icons.warning,
+                                        Colors.yellow,
+                                        {'label': 'REESAYEZ', "onTap": (){
+                                          Navigator.pop(context);
+                                        }},
+                                        20,
+                                        false);
+                                  }
+                                });
                               });
                             }
                           }),
