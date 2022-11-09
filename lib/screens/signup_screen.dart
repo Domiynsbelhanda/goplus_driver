@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goplus_driver/screens/verify_number_screen.dart';
@@ -10,6 +12,8 @@ import '../widget/app_widgets/app_bar.dart';
 import '../widget/notification_dialog_auth.dart';
 import 'checkPage.dart';
 import 'package:chips_choice/chips_choice.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupScreen extends StatefulWidget {
 
@@ -20,6 +24,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   late Size size;
   final formkey = GlobalKey<FormState>();
+  File? imageFile;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController postNomController = TextEditingController();
@@ -94,9 +99,47 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   ];
 
-  @override
-  void initState() {
-    super.initState();
+  /// Get from gallery
+  _getFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    _cropImage(pickedFile?.path);
+  }
+
+  /// Crop Image
+  _cropImage(filePath) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: filePath,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+
+    if (croppedFile  != null) {
+      imageFile = File(croppedFile.path) ;
+      setState(() {});
+    }
   }
 
   @override
@@ -141,10 +184,6 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                APPBAR(),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
                 SizedBox(
                   width: size.width,
                   child: const Text(
@@ -168,6 +207,32 @@ class _SignupScreenState extends State<SignupScreen> {
                   key: formkey,
                   child: Column(
                     children: [
+                  Container(
+                  child: imageFile == null
+                              ? Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    IconButton(
+                                      color: const Color(0XFF307777),
+                                      onPressed: () {
+                                        _getFromGallery();
+                                      },
+                                      icon: const Text(
+                                        "PICK FROM GALLERY",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                                  : SizedBox(
+                              child: Image.file(
+                              imageFile!,
+                              fit: BoxFit.cover,
+                            ),
+                      )),
                       Column(
                           children: input.map((e){
                             if(e['max'] != null){
@@ -199,7 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         return null;
                                       },
                                       cursorColor: AppColors.primaryColor,
-                                      maxLength: e['max'] == null ? null : e['max'],
+                                      maxLength: e['max'] ?? null,
                                       keyboardType: e['input'] == null ? TextInputType.name : e['input'],
                                       controller: e['controller'],
                                       decoration: InputDecoration(
@@ -279,13 +344,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                   fontSize: size.width / 25
                               )
                           ),
-                          ChipsChoice<int>.single(
-                            value: colorTag,
-                            onChanged: (val) => setState(() => colorTag = val),
-                            choiceItems: C2Choice.listFrom<int, Map<String, dynamic>>(
-                              source: colorOptions,
-                              value: (i, v) => i,
-                              label: (i, v) => v['name'],
+                          SizedBox(
+                            width: size.width / 1.4,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: ChipsChoice<int>.single(
+                                value: colorTag,
+                                onChanged: (val) => setState(() => colorTag = val),
+                                choiceItems: C2Choice.listFrom<int, Map<String, dynamic>>(
+                                  source: colorOptions,
+                                  value: (i, v) => i,
+                                  label: (i, v) => v['name'],
+                                ),
+                              ),
                             ),
                           ),
                         ],
