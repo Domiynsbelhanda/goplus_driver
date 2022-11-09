@@ -211,20 +211,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: imageFile == null
                               ? Container(
                                 alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    IconButton(
-                                      color: const Color(0XFF307777),
-                                      onPressed: () {
-                                        _getFromGallery();
-                                      },
-                                      icon: const Text(
-                                        "PICK FROM GALLERY",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
+                                child: IconButton(
+                                  color: const Color(0XFF307777),
+                                  onPressed: () {
+                                    _getFromGallery();
+                                  },
+                                  icon: const Text(
+                                    "PICK FROM GALLERY"
+                                  ),
                                 ),
                               )
                                   : SizedBox(
