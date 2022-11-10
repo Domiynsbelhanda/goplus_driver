@@ -176,6 +176,7 @@ class _HomePage extends State<HomePage>{
                   ),
                 ),
 
+                ride ?
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -184,90 +185,80 @@ class _HomePage extends State<HomePage>{
                     ),
                     width: size.width / 1,
                     height: size.width /1.3,
-                    child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children : [
-                              const Text(
-                                'En attente de la réponse',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("courses").doc(widget.data['uuid']).snapshots(),
+                      builder: (context, courseSnapshot) {
 
-                              TimerCountdown(
-                                secondsDescription: 'Secondes',
-                                minutesDescription: 'Minutes',
-                                timeTextStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold
-                                ),
-                                format: CountDownTimerFormat.minutesSeconds,
-                                endTime: DateTime.now().add(
-                                  const Duration(
-                                    minutes: 105,
-                                    seconds: 30,
-                                  ),
-                                ),
-                                onEnd: () {
-                                  // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                  //   'status': "no"
-                                  // }).then((value){
-                                  //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
-                                  //     'status': 'no',
-                                  //   });
-                                  //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
-                                  //     'online': true,
-                                  //     'ride': false,
-                                  //     'uuid': null,
-                                  //   });
-                                  // });
-                                  // setState(() {
-                                  //   ride = false;
-                                  // });
-                                },
-                              ),
-
-                              TextButton(
-                                child: Container(
-                                    padding: const EdgeInsets.all(16.0),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.primaryColor,
-                                        borderRadius: BorderRadius.circular(8.0)
-                                    ),
-                                    child: const Text(
-                                      'ANNULER VOTRE COMMANDE',
+                        if(courseSnapshot.hasData){
+                          var coursesdata = courseSnapshot.data! as DocumentSnapshot;
+                          Map<String, dynamic> courses = coursesdata.data() as Map<String, dynamic>;
+                          return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children : [
+                                    const Text(
+                                      'En attente de la réponse',
                                       style: TextStyle(
-                                          color: Colors.black
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold
                                       ),
-                                    )
-                                ),
-                                onPressed: (){
-                                  FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                    'status': "cancel"
-                                  }).then((value){
-                                    FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
-                                      'status': 'cancel',
-                                    });
+                                    ),
 
-                                    FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
-                                      'online': true,
-                                      'ride': false,
-                                      'uuid': null,
-                                    });
-                                  });
-                                  setState(() {
-                                    ride = false;
-                                  });
-                                },
-                              ),
-                            ]
-                        )
+                                    TimerCountdown(
+                                      secondsDescription: 'Secondes',
+                                      minutesDescription: 'Minutes',
+                                      timeTextStyle: const TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                      format: CountDownTimerFormat.minutesSeconds,
+                                      endTime: DateTime.now().add(
+                                        const Duration(
+                                          minutes: 5,
+                                          seconds: 30,
+                                        ),
+                                      ),
+                                      onEnd: () {
+                                        // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                        //   'status': "no"
+                                        // }).then((value){
+                                        //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
+                                        //     'status': 'no',
+                                        //   });
+                                        //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
+                                        //     'online': true,
+                                        //     'ride': false,
+                                        //     'uuid': null,
+                                        //   });
+                                        // });
+                                        // setState(() {
+                                        //   ride = false;
+                                        // });
+                                      },
+                                    ),
+
+                                    const SizedBox(height: 16.0,),
+
+                                    AppButton(
+                                      name: "Voir",
+                                      color: Colors.black,
+                                      onTap: (){
+                                        FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                          'status': "view"
+                                        });
+                                      },
+                                    ),
+                                  ]
+                              )
+                          );
+                        }
+
+                        return const Text('');
+                      }
                     ),
                   ),
-                )
+                ) : const SizedBox()
               ],
             ),
           ),
