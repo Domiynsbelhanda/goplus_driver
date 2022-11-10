@@ -30,6 +30,7 @@ class CheckPage extends StatelessWidget{
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                 return HomePage(
                   token: token.data.toString(),
+                  data: data,
                 );
               },
             );

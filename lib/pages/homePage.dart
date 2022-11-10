@@ -10,7 +10,8 @@ import '../utils/app_colors.dart';
 
 class HomePage extends StatefulWidget{
   String token;
-  HomePage({Key? key, required this.token}) : super(key: key);
+  Map<String, dynamic> data;
+  HomePage({Key? key, required this.token, required this.data}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -34,180 +35,144 @@ class _HomePage extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
 
-    CollectionReference users = FirebaseFirestore.instance.collection('drivers');
+    if(widget.data['ride'] != null){
+      if(widget.data['ride']){
+        if(!widget.data['ride_view'] && nb == 0){
+          FirebaseFirestore.instance.collection('drivers').doc(widget.token.toString())
+              .update({
+            'ride': false,
+            'ride_view': false
+          });
+          nb++;
+          Provider.of<Auth>(context, listen: false).getSid()
+              .then((sid){
+            FirebaseFirestore.instance.collection('drivers')
+                .doc(widget.token.toString()).collection('courses')
+                .doc('courses').update(
+                {
+                  'sid_driver': sid
+                }
+            );
+          });
+        }
+      }
+
+      if(!widget.data['ride']){
+        nb = 0;
+      }
+    }
+
+    if(widget.data['latitude'] != null){
+      _initialcameraposition = LatLng(widget.data['latitude'], widget.data['longitude']);
+    }
 
     return Scaffold(
-          body: FutureBuilder(
-            future: Provider.of<Auth>(context, listen: false).getToken(),
-            builder: (context, snap) {
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                      target: _initialcameraposition,
+                      zoom: 15
+                  ),
+                  mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller){
+                    _controller = controller;
+                    _location.onLocationChanged.listen((l) async {
+                      _initialcameraposition = LatLng(l.latitude!, l.longitude!);
+                      FirebaseFirestore.instance.collection('drivers').doc(widget.token.toString()).update({
+                        'longitude': l.longitude,
+                        'latitude' : l.latitude
+                      });
+                      BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+                        const ImageConfiguration(),
+                        "assets/images/car_android.png",
+                      );
 
-              if(!snap.hasData){
-                return const Text('Chargement en cours...',);
-              }
+                      setState(() {
+                        markers.add(
+                            Marker( //add start location marker
+                              markerId: const MarkerId('Ma Position'),
+                              position: LatLng(l.latitude!, l.longitude!), //position of marker
+                              infoWindow: const InfoWindow( //popup info
+                                title: 'Ma Position',
+                                snippet: 'Moi',
+                              ),
+                              icon: markerbitmap, //Icon for Marker
+                            )
+                        );
 
-              if(snap.hasData){
-                FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
-                  'online': isOnline,
-                });
-                return StreamBuilder<DocumentSnapshot>(
-                  stream: users.doc(snap.data.toString()).snapshots(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        position = LatLng(l.latitude!, l.longitude!);
 
-                    if (snapshot.hasError) {
-                      return Text("Something went wrong");
-                    }
+                        _controller!.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+                          ),
+                        );
+                      });
 
-                    if(!snapshot.hasData){
-                      return const Text('Chargement en cours...',);
-                    }
+                    });
+                  },
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  markers: markers,
+                ),
 
-                    Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-                    if(data['ride'] != null){
-                      if(data['ride']){
-                        if(!data['ride_view'] && nb == 0){
-                          FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString())
-                              .update({
-                            'ride': false,
-                            'ride_view': false
+                Positioned(
+                    bottom: 16.0,
+                    left: 0,
+                    right: 0,
+                    child: AppButton(
+                      name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
+                      color: isOnline ? AppColors.primaryColor : Colors.black,
+                      onTap: (){
+                        setState(() {
+                          isOnline = !isOnline;
+                        });
+                        if(isOnline){
+                          FirebaseFirestore.instance.collection('drivers').doc(widget.token.toString()).update({
+                            'online': isOnline,
                           });
-                          nb++;
-                          Provider.of<Auth>(context, listen: false).getSid()
-                              .then((sid){
-                            FirebaseFirestore.instance.collection('drivers')
-                                .doc(snap.data.toString()).collection('courses')
-                                .doc('courses').update(
-                                {
-                                  'sid_driver': sid
-                                }
-                            );
+                        } else {
+                          FirebaseFirestore.instance.collection('drivers').doc(widget.token.toString()).update({
+                            'online': isOnline,
                           });
                         }
-                      }
+                      },
+                    )
+                ),
 
-                      if(!data['ride']){
-                        nb = 0;
-                      }
-                    }
-
-                    if(data['latitude'] != null){
-                      _initialcameraposition = LatLng(data['latitude'], data['longitude']);
-                    }
-
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Stack(
-                        children: [
-                          GoogleMap(
-                            initialCameraPosition: CameraPosition(
-                                target: _initialcameraposition,
-                                zoom: 15
+                Positioned(
+                  top: 16.0,
+                  right: 16.0,
+                  child: Container(
+                    height: 48,
+                    width: 48,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(48.0)
+                    ),
+                    child: IconButton(
+                      onPressed: (){
+                        Provider.of<Auth>(context, listen: false).cleanUp();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => MyApp()
                             ),
-                            mapType: MapType.normal,
-                            onMapCreated: (GoogleMapController controller){
-                              _controller = controller;
-                              _location.onLocationChanged.listen((l) async {
-                                _initialcameraposition = LatLng(l.latitude!, l.longitude!);
-                                FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
-                                  'longitude': l.longitude,
-                                  'latitude' : l.latitude
-                                });
-                                BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-                                  const ImageConfiguration(),
-                                  "assets/images/car_android.png",
-                                );
-
-                                setState(() {
-                                  markers.add(
-                                      Marker( //add start location marker
-                                        markerId: const MarkerId('Ma Position'),
-                                        position: LatLng(l.latitude!, l.longitude!), //position of marker
-                                        infoWindow: const InfoWindow( //popup info
-                                          title: 'Ma Position',
-                                          snippet: 'Moi',
-                                        ),
-                                        icon: markerbitmap, //Icon for Marker
-                                      )
-                                  );
-
-                                  position = LatLng(l.latitude!, l.longitude!);
-
-                                  _controller!.animateCamera(
-                                    CameraUpdate.newCameraPosition(
-                                      CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-                                    ),
-                                  );
-                                });
-
-                              });
-                            },
-                            myLocationEnabled: true,
-                            myLocationButtonEnabled: true,
-                            markers: markers,
-                          ),
-
-                          Positioned(
-                              bottom: 16.0,
-                              left: 0,
-                              right: 0,
-                              child: AppButton(
-                                name: isOnline ? 'DESACTIVER VOTRE POSITION' : 'ACTIVER VOTRE POSITION',
-                                color: isOnline ? AppColors.primaryColor : Colors.black,
-                                onTap: (){
-                                  setState(() {
-                                    isOnline = !isOnline;
-                                  });
-                                  if(isOnline){
-                                    FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
-                                      'online': isOnline,
-                                    });
-                                  } else {
-                                    FirebaseFirestore.instance.collection('drivers').doc(snap.data.toString()).update({
-                                      'online': isOnline,
-                                    });
-                                  }
-                                },
-                              )
-                          ),
-
-                          Positioned(
-                            top: 16.0,
-                            right: 16.0,
-                            child: Container(
-                              height: 48,
-                              width: 48,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(48.0)
-                              ),
-                              child: IconButton(
-                                onPressed: (){
-                                  Provider.of<Auth>(context, listen: false).cleanUp();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) => MyApp()
-                                      ),
-                                          (Route<dynamic> route) => false
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.logout,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                                (Route<dynamic> route) => false
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.logout,
                       ),
-                    );
-                  },
-                );
-              }
-
-              return const Text('Chargement en cours...',);
-            }
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
   }
