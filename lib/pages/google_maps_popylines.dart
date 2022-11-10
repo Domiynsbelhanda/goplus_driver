@@ -16,9 +16,9 @@ import 'homePage.dart';
 import '../widget/app_button.dart';
 
 class GoogleMapsPolylines extends StatefulWidget {
-  String uuid;
+  String? uuid;
 
-  GoogleMapsPolylines({Key? key, required this.uuid}) : super(key: key);
+  GoogleMapsPolylines({Key? key, this.uuid}) : super(key: key);
 
   @override
   _Poly createState() => _Poly();
@@ -34,22 +34,11 @@ class _Poly extends State<GoogleMapsPolylines> {
   CameraPosition? cam;
   late Size size;
 
-  addPolyLine(List<LatLng> polylineCoordinates, String ids) {
-    PolylineId id = PolylineId(ids);
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
-      points: polylineCoordinates,
-      width: 8,
-    );
-    polylines[id] = polyline;
-  }
-
   addDestinationPolyLine(List<LatLng> polylineCoordinates, String ids) {
     PolylineId id = PolylineId(ids);
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.green,
+      color: Colors.black,
       points: polylineCoordinates,
       width: 8,
     );
@@ -57,27 +46,13 @@ class _Poly extends State<GoogleMapsPolylines> {
   }
 
   addPoly(LatLng driver, LatLng depart, LatLng destination) async{
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        androidApiKey,
-        PointLatLng(driver.latitude, driver.longitude),
-        PointLatLng(depart.latitude, depart.longitude)
-    );
-
     PolylineResult destinations = await polylinePoints.getRouteBetweenCoordinates(
         androidApiKey,
-        PointLatLng(depart.latitude, depart.longitude),
+        PointLatLng(driver.latitude, driver.longitude),
         PointLatLng(destination.latitude, destination.longitude)
     );
 
-    polylineCoordinates.clear();
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      }
-      setState(() {
-        addPolyLine(polylineCoordinates, 'frist');
-      });
-    }
+    destinationPolylineCoordinates.clear();
 
     if (destinations.points.isNotEmpty) {
       for (var points in destinations.points) {
@@ -91,6 +66,9 @@ class _Poly extends State<GoogleMapsPolylines> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.uuid == null){
+      Navigator.pop(context);
+    }
     size = MediaQuery.of(context).size;
     ToastContext().init(context);
     readBitconMarkerPinner();
@@ -215,7 +193,7 @@ class _Poly extends State<GoogleMapsPolylines> {
               name: data['status'] == 'view'
                   ? 'ACCEPTER'
                   : data['status'] == 'confirm' ?
-              'DEMARRER COURSE' : data['status'] == 'start' ? 'TERMINER COURSE' : 'COURSE FINI.',
+              'DEMARRER COURSE' : data['status'] == 'start' ? 'TERMINER COURSE' : 'COURSE ANNULEE.',
               onTap: (){
                 showLoader('Veuillez patiener');
                 if(data['status'] == 'view'){

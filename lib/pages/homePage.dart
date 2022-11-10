@@ -247,14 +247,17 @@ class _HomePage extends State<HomePage>{
                                         name: "Voir",
                                         color: Colors.black,
                                         onTap: (){
-                                          FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                            'status': "view",
-                                            'driver': widget.token,
-                                            'driver_latitude': widget.data['latitude'],
-                                            'driver_longitude': widget.data['longitude']
-                                          }).then(
-                                              (value){
-                                                Navigator.push(
+                                          if(widget.data['status'] == 'cancel'){
+
+                                          } else {
+                                            FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                              'status': "view",
+                                              'driver': widget.token,
+                                              'driver_latitude': widget.data['latitude'],
+                                              'driver_longitude': widget.data['longitude']
+                                            }).then(
+                                                    (value){
+                                                  Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (BuildContext context) =>
@@ -262,9 +265,10 @@ class _HomePage extends State<HomePage>{
                                                                 uuid: widget.data['uuid']
                                                             )
                                                     ),
-                                                );
-                                              }
-                                          );
+                                                  );
+                                                }
+                                            );
+                                          }
                                         },
                                       ),
                                     ]
