@@ -243,7 +243,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                   if(data['carType'] == "1"){
                     price = ((end.difference(start).inMinutes / 30) +1) * 10;
                   } else if(data['carType'] == "2") {
-                    price = ((end.difference(start).inMinutes / 30) +1) * 12;
+                    price = ((end.difference(start).inMinutes / 30) +1) * 15;
                   } else if (data['carType'] == "3"){
                     price = ((end.difference(start).inMinutes / 30) +1) * 14;
                   }
@@ -360,7 +360,7 @@ class _Poly extends State<GoogleMapsPolylines> {
               onTap: ()=>Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => HomePage(token: '', data: {},)
+                    builder: (BuildContext context) => CheckPage()
                 ),
               ),
             ),
