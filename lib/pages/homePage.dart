@@ -124,7 +124,7 @@ class _HomePage extends State<HomePage>{
                   markers: markers,
                 ),
 
-                Positioned(
+                ride ? const SizedBox() : Positioned(
                     bottom: 16.0,
                     left: 0,
                     right: 0,
@@ -179,83 +179,86 @@ class _HomePage extends State<HomePage>{
                 ride ?
                 Align(
                   alignment: Alignment.center,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white
-                    ),
-                    width: size.width / 1,
-                    height: size.width /1.3,
-                    child: StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection("courses").doc(widget.data['uuid']).snapshots(),
-                      builder: (context, courseSnapshot) {
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white
+                      ),
+                      width: size.width / 1,
+                      height: size.width /1.3,
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("courses").doc(widget.data['uuid']).snapshots(),
+                        builder: (context, courseSnapshot) {
 
-                        if(courseSnapshot.hasData){
-                          var coursesdata = courseSnapshot.data! as DocumentSnapshot;
-                          Map<String, dynamic> courses = coursesdata.data() as Map<String, dynamic>;
-                          return Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children : [
-                                    const Text(
-                                      'En attente de la réponse',
-                                      style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-
-                                    TimerCountdown(
-                                      secondsDescription: 'Secondes',
-                                      minutesDescription: 'Minutes',
-                                      timeTextStyle: const TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                      format: CountDownTimerFormat.minutesSeconds,
-                                      endTime: DateTime.now().add(
-                                        const Duration(
-                                          minutes: 5,
-                                          seconds: 30,
+                          if(courseSnapshot.hasData){
+                            var coursesdata = courseSnapshot.data! as DocumentSnapshot;
+                            Map<String, dynamic> courses = coursesdata.data() as Map<String, dynamic>;
+                            return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children : [
+                                      const Text(
+                                        'En attente de la réponse',
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold
                                         ),
                                       ),
-                                      onEnd: () {
-                                        // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                        //   'status': "no"
-                                        // }).then((value){
-                                        //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
-                                        //     'status': 'no',
-                                        //   });
-                                        //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
-                                        //     'online': true,
-                                        //     'ride': false,
-                                        //     'uuid': null,
-                                        //   });
-                                        // });
-                                        // setState(() {
-                                        //   ride = false;
-                                        // });
-                                      },
-                                    ),
 
-                                    const SizedBox(height: 16.0,),
+                                      TimerCountdown(
+                                        secondsDescription: 'Secondes',
+                                        minutesDescription: 'Minutes',
+                                        timeTextStyle: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                        format: CountDownTimerFormat.minutesSeconds,
+                                        endTime: DateTime.now().add(
+                                          const Duration(
+                                            minutes: 5,
+                                            seconds: 30,
+                                          ),
+                                        ),
+                                        onEnd: () {
+                                          // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                          //   'status': "no"
+                                          // }).then((value){
+                                          //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
+                                          //     'status': 'no',
+                                          //   });
+                                          //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
+                                          //     'online': true,
+                                          //     'ride': false,
+                                          //     'uuid': null,
+                                          //   });
+                                          // });
+                                          // setState(() {
+                                          //   ride = false;
+                                          // });
+                                        },
+                                      ),
 
-                                    AppButton(
-                                      name: "Voir",
-                                      color: Colors.black,
-                                      onTap: (){
-                                        FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                          'status': "view"
-                                        });
-                                      },
-                                    ),
-                                  ]
-                              )
-                          );
+                                      const SizedBox(height: 16.0,),
+
+                                      AppButton(
+                                        name: "Voir",
+                                        color: Colors.black,
+                                        onTap: (){
+                                          FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                            'status': "view"
+                                          });
+                                        },
+                                      ),
+                                    ]
+                                )
+                            );
+                          }
+
+                          return const Text('');
                         }
-
-                        return const Text('');
-                      }
+                      ),
                     ),
                   ),
                 ) : const SizedBox()
