@@ -291,17 +291,26 @@ class _Poly extends State<GoogleMapsPolylines> {
               name: data['status'] == 'view' ? 'ANNULER' : 'FERMER',
               onTap: (){
                 if(data['status'] == 'view'){
+                  FirebaseFirestore.instance.collection('drivers').doc('${data['driver']}').update({
+                    'online': true,
+                    'ride': false,
+                    'uuid': null,
+                  });
+
                   FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
                     'status': "cancel"
                   }).then((value){
                     FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
                       'status': 'cancel',
                     });
-                    FirebaseFirestore.instance.collection('drivers').doc('${data['drivers']}').update({
-                      'online': true,
-                      'ride': false,
-                      'uuid': null,
-                    });
+
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => CheckPage()
+                        ),
+                            (Route<dynamic> route) => false
+                    );
                   });
                 } else {
                   Navigator.pushAndRemoveUntil(

@@ -38,6 +38,7 @@ class _HomePage extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+
     if(widget.data['ride'] != null){
       if(widget.data['ride']){
         if(widget.data['uuid'] != null){
@@ -59,7 +60,9 @@ class _HomePage extends State<HomePage>{
           });
         }
       } else {
-        ride = false;
+        setState(() {
+          ride = false;
+        });
       }
     } else {
       setState(() {
