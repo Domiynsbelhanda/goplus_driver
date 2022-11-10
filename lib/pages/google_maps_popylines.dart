@@ -360,7 +360,7 @@ class _Poly extends State<GoogleMapsPolylines> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'La course viens de prendre fin.',
+              'La course vient de prendre fin.',
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
