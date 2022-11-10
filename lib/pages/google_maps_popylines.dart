@@ -210,7 +210,10 @@ class _Poly extends State<GoogleMapsPolylines> {
           children: [
             AppButton(
               color: AppColors.primaryColor,
-              name: data['status'] == 'view' ? 'ACCEPTER' : 'CONFIRMER',
+              name: data['status'] == 'view'
+                  ? 'ACCEPTER'
+                  : data['status'] == 'confirm' ?
+              'DEMARRER COURSE' : data['status'] == 'start' ? 'TERMINER COURSE' : 'COURSE FINI.',
               onTap: (){
                 if(data['status'] == 'view'){
                   FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
@@ -220,8 +223,24 @@ class _Poly extends State<GoogleMapsPolylines> {
                     'status': 'confirm',
                     });
                 });
-              };
-                },
+              } else if(data['status'] == 'confirm'){
+                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                    'status': "start"
+                  }).then((value){
+                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                      'status': 'start',
+                    });
+                  });
+                } else if(data['status'] == 'start'){
+                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                    'status': "end"
+                  }).then((value){
+                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                      'status': 'end',
+                    });
+                  });
+                }
+            },
             ),
 
             const SizedBox(height: 8.0),
