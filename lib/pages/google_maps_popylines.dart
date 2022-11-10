@@ -179,7 +179,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        height: MediaQuery.of(context).size.width / 2.2,
+        height: MediaQuery.of(context).size.width / 2.0,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: Colors.white,
