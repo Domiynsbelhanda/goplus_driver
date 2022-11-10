@@ -301,6 +301,11 @@ class _Poly extends State<GoogleMapsPolylines> {
                       FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
                         'status': 'end',
                       });
+                      FirebaseFirestore.instance.collection('drivers').doc('${data['driver']}').update({
+                        'online': true,
+                        'ride': false,
+                        'uuid': null,
+                      });
                     });
                   });
                 }
