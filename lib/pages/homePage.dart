@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/services/auth.dart';
@@ -31,15 +32,16 @@ class _HomePage extends State<HomePage>{
   LatLng? position;
   bool ride = false;
   int nb = 0;
+  late Size size;
 
   @override
   Widget build(BuildContext context) {
-
+    size = MediaQuery.of(context).size;
     if(widget.data['ride'] != null){
       if(widget.data['ride']){
         if(widget.data['uuid'] != null){
           setState(() {
-
+            ride = true;
           });
           // Provider.of<Auth>(context, listen: false).getSid()
           //     .then((sid){
@@ -50,8 +52,18 @@ class _HomePage extends State<HomePage>{
           //       }
           //   );
           // });
+        } else {
+          setState(() {
+            ride = false;
+          });
         }
+      } else {
+        ride = false;
       }
+    } else {
+      setState(() {
+        ride = false;
+      });
     }
 
     if(widget.data['latitude'] != null){
@@ -160,6 +172,99 @@ class _HomePage extends State<HomePage>{
                       icon: const Icon(
                         Icons.logout,
                       ),
+                    ),
+                  ),
+                ),
+
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white
+                    ),
+                    width: size.width / 1,
+                    height: size.width /1.3,
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children : [
+                              const Text(
+                                'En attente de la réponse',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+
+                              TimerCountdown(
+                                secondsDescription: 'Secondes',
+                                minutesDescription: 'Minutes',
+                                timeTextStyle: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold
+                                ),
+                                format: CountDownTimerFormat.minutesSeconds,
+                                endTime: DateTime.now().add(
+                                  const Duration(
+                                    minutes: 105,
+                                    seconds: 30,
+                                  ),
+                                ),
+                                onEnd: () {
+                                  // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                  //   'status': "no"
+                                  // }).then((value){
+                                  //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
+                                  //     'status': 'no',
+                                  //   });
+                                  //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
+                                  //     'online': true,
+                                  //     'ride': false,
+                                  //     'uuid': null,
+                                  //   });
+                                  // });
+                                  // setState(() {
+                                  //   ride = false;
+                                  // });
+                                },
+                              ),
+
+                              TextButton(
+                                child: Container(
+                                    padding: const EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primaryColor,
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                    child: const Text(
+                                      'ANNULER VOTRE COMMANDE',
+                                      style: TextStyle(
+                                          color: Colors.black
+                                      ),
+                                    )
+                                ),
+                                onPressed: (){
+                                  FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                    'status': "cancel"
+                                  }).then((value){
+                                    FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
+                                      'status': 'cancel',
+                                    });
+
+                                    FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
+                                      'online': true,
+                                      'ride': false,
+                                      'uuid': null,
+                                    });
+                                  });
+                                  setState(() {
+                                    ride = false;
+                                  });
+                                },
+                              ),
+                            ]
+                        )
                     ),
                   ),
                 )
