@@ -294,7 +294,7 @@ class _Poly extends State<GoogleMapsPolylines> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'La course viens de prendre fin.\n Vous devez payez',
+              'La course viens de prendre fin.',
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -302,15 +302,6 @@ class _Poly extends State<GoogleMapsPolylines> {
               ),
             ),
 
-            Text(
-              '${data['prix']} \$',
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: MediaQuery.of(context).size.width / 25
-              ),
-            ),
 
             const SizedBox(height: 16.0,),
             AppButton(
