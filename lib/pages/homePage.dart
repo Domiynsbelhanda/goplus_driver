@@ -8,6 +8,7 @@ import 'package:goplus_driver/widget/app_button.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
+import 'google_maps_popylines.dart';
 
 class HomePage extends StatefulWidget{
   String token;
@@ -222,21 +223,21 @@ class _HomePage extends State<HomePage>{
                                           ),
                                         ),
                                         onEnd: () {
-                                          // FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                          //   'status': "no"
-                                          // }).then((value){
-                                          //   FirebaseFirestore.instance.collection('clients').doc('${widget.data['uuid']}').update({
-                                          //     'status': 'no',
-                                          //   });
-                                          //   FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
-                                          //     'online': true,
-                                          //     'ride': false,
-                                          //     'uuid': null,
-                                          //   });
-                                          // });
-                                          // setState(() {
-                                          //   ride = false;
-                                          // });
+                                          FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
+                                            'status': "cancel"
+                                          }).then((value){
+                                            FirebaseFirestore.instance.collection('clients').doc('${courses['users']}').update({
+                                              'status': 'cancel',
+                                            });
+                                            FirebaseFirestore.instance.collection('drivers').doc(widget.token).update({
+                                              'online': true,
+                                              'ride': false,
+                                              'uuid': null,
+                                            });
+                                          });
+                                          setState(() {
+                                            ride = false;
+                                          });
                                         },
                                       ),
 
@@ -247,8 +248,22 @@ class _HomePage extends State<HomePage>{
                                         color: Colors.black,
                                         onTap: (){
                                           FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
-                                            'status': "view"
-                                          });
+                                            'status': "view",
+                                            'driver_latitude': widget.data['latitude'],
+                                            'driver_longitude': widget.data['longitude']
+                                          }).then(
+                                              (value){
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext context) =>
+                                                            GoogleMapsPolylines(
+                                                                uuid: widget.data['uuid']
+                                                            )
+                                                    ),
+                                                );
+                                              }
+                                          );
                                         },
                                       ),
                                     ]
