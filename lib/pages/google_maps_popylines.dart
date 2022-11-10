@@ -7,8 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/auth.dart';
 import '../utils/global_variables.dart';
 import 'homePage.dart';
 import '../widget/app_button.dart';
@@ -224,19 +226,81 @@ class _Poly extends State<GoogleMapsPolylines> {
                     });
                 });
               } else if(data['status'] == 'confirm'){
-                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
-                    'status': "start"
-                  }).then((value){
-                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
-                      'status': 'start',
+                  DateTime start = DateTime.parse(DateTime.now().toString());
+                  var datas = {
+                    "key": "ride",
+                    "action": "create",
+                    "driversid": data['sid_driver'],
+                    "clientsid": data['sid_user'],
+                    "latinit": data['depart_latitude'],
+                    "longinit": data['depart_longitude'],
+                    "latend": data['destination_latitude'],
+                    "longend": data['destination_longitude'],
+                    "ridedate": "${start.day}-${start.month}-${start.year}",
+                    "starthour": "${start.hour}:${start.minute}",
+                    "type": "1"
+                  };
+
+                  Provider.of<Auth>(context, listen: false)
+                      .request(data: datas).then((value)
+                  {
+                    FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                      'status': "start",
+                      'rideref': value['rideref'],
+                      'start_time': FieldValue.serverTimestamp()
+                    }).then((value){
+                      FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                        'status': 'start',
+                      });
                     });
                   });
                 } else if(data['status'] == 'start'){
-                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
-                    'status': "end"
-                  }).then((value){
-                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
-                      'status': 'end',
+                  DateTime start = DateTime.parse(data['start_time'].toDate().toString());
+                  DateTime end = DateTime.parse(DateTime.now().toString());
+
+                  var price = 0.0;
+                  if(!data['airport']){
+                    if(data['carType'] == "1"){
+                      price = ((end.difference(start).inMinutes / 30) +1) * 10;
+                    } else if(data['carType'] == "2") {
+                      price = ((end.difference(start).inMinutes / 30) +1) * 12;
+                    } else if (data['carType'] == "3"){
+                      price = ((end.difference(start).inMinutes / 30) +1) * 14;
+                    }
+                  } else {
+                    if(data['carType'] == "1"){
+                      price = 40;
+                    } else if(data['carType'] == "2") {
+                      price = 55;
+                    } else if (data['carType'] == "3"){
+                      price = 95;
+                    }
+                  }
+
+                  var datas = {
+                    "key": "ride",
+                    "action": "update",
+                    "driversid": data['sid_driver'],
+                    "clientsid": data['sid_user'],
+                    "endhour": "${end.hour}:${end.minute}",
+                    "rideref": data['rideref'],
+                    "type": "1",
+                    "service" : "4",
+                    "price": price
+                  };
+
+                  Provider.of<Auth>(context, listen: false)
+                      .request(data: datas).then((value)
+                  {
+                    FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                      'status': "end",
+                      'rideref': value['rideref'],
+                      "endhour": "${end.hour}:${end.minute}",
+                      "prix": price
+                    }).then((value){
+                      FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                        'status': 'end',
+                      });
                     });
                   });
                 }

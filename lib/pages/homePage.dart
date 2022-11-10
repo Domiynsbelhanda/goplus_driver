@@ -44,15 +44,15 @@ class _HomePage extends State<HomePage>{
           setState(() {
             ride = true;
           });
-          // Provider.of<Auth>(context, listen: false).getSid()
-          //     .then((sid){
-          //   FirebaseFirestore.instance.collection('courses')
-          //       .doc(widget.data['uuid']).update(
-          //       {
-          //         'sid_driver': sid
-          //       }
-          //   );
-          // });
+          Provider.of<Auth>(context, listen: false).getSid()
+              .then((sid){
+            FirebaseFirestore.instance.collection('courses')
+                .doc(widget.data['uuid']).update(
+                {
+                  'sid_driver': sid
+                }
+            );
+          });
         } else {
           setState(() {
             ride = false;
