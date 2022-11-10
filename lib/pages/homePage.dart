@@ -29,7 +29,7 @@ class _HomePage extends State<HomePage>{
   bool isOnline = false;
   Map<String, dynamic>? datas;
   LatLng? position;
-
+  bool ride = false;
   int nb = 0;
 
   @override
@@ -37,28 +37,20 @@ class _HomePage extends State<HomePage>{
 
     if(widget.data['ride'] != null){
       if(widget.data['ride']){
-        if(!widget.data['ride_view'] && nb == 0){
-          FirebaseFirestore.instance.collection('drivers').doc(widget.token.toString())
-              .update({
-            'ride': false,
-            'ride_view': false
-          });
-          nb++;
-          Provider.of<Auth>(context, listen: false).getSid()
-              .then((sid){
-            FirebaseFirestore.instance.collection('drivers')
-                .doc(widget.token.toString()).collection('courses')
-                .doc('courses').update(
-                {
-                  'sid_driver': sid
-                }
-            );
-          });
-        }
-      }
+        if(widget.data['uuid'] != null){
+          setState(() {
 
-      if(!widget.data['ride']){
-        nb = 0;
+          });
+          // Provider.of<Auth>(context, listen: false).getSid()
+          //     .then((sid){
+          //   FirebaseFirestore.instance.collection('courses')
+          //       .doc(widget.data['uuid']).update(
+          //       {
+          //         'sid_driver': sid
+          //       }
+          //   );
+          // });
+        }
       }
     }
 
