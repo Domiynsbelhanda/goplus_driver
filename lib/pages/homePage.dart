@@ -249,6 +249,7 @@ class _HomePage extends State<HomePage>{
                                         onTap: (){
                                           FirebaseFirestore.instance.collection('courses').doc(widget.data['uuid']).update({
                                             'status': "view",
+                                            'driver': widget.token,
                                             'driver_latitude': widget.data['latitude'],
                                             'driver_longitude': widget.data['longitude']
                                           }).then(

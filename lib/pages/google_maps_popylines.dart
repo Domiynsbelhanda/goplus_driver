@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
 import 'package:location/location.dart';
 import 'package:toast/toast.dart';
@@ -98,7 +99,7 @@ class _Poly extends State<GoogleMapsPolylines> {
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
 
                 if(!snapshot.hasData){
-                  return Text("Chargement en cours...");
+                  return const Text("Chargement en cours...");
                 }
 
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -198,7 +199,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        height: MediaQuery.of(context).size.width / 2.8,
+        height: MediaQuery.of(context).size.width / 2.2,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: Colors.white,
@@ -207,23 +208,51 @@ class _Poly extends State<GoogleMapsPolylines> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            Text(
-              polylineCoordinates.length != 0 ? 'est à ${distanceDeuxPoint(polylineCoordinates)} de votre position.' : "Distance",
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: MediaQuery.of(context).size.width / 25
-              ),
-            ),
-
-            const SizedBox(height: 16.0,),
-
             AppButton(
               color: AppColors.primaryColor,
-              name: 'APPELER ',
-              onTap: ()=>makePhoneCall('+243${data['phone']}'),
+              name: data['status'] == 'view' ? 'ACCEPTER' : 'CONFIRMER',
+              onTap: (){
+                if(data['status'] == 'view'){
+                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                    'status': "confirm"
+                  }).then((value){
+                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                    'status': 'confirm',
+                    });
+                });
+              };
+                },
+            ),
+
+            const SizedBox(height: 8.0),
+
+            AppButton(
+              color: Colors.black,
+              name: data['status'] == 'view' ? 'ANNULER' : 'FERMER',
+              onTap: (){
+                if(data['status'] == 'view'){
+                  FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
+                    'status': "cancel"
+                  }).then((value){
+                    FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
+                      'status': 'cancel',
+                    });
+                    FirebaseFirestore.instance.collection('drivers').doc('${data['drivers']}').update({
+                      'online': true,
+                      'ride': false,
+                      'uuid': null,
+                    });
+                  });
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => CheckPage()
+                      ),
+                          (Route<dynamic> route) => false
+                  );
+                };
+              },
             ),
           ],
         ),
