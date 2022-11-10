@@ -103,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
   /// Get from gallery
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.gallery,
       maxWidth: 1800,
       maxHeight: 1800,
     );
@@ -399,6 +399,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if(formkey.currentState!.validate()){
                               showLoader("Inscription en cours\nVeuillez patienter...");
                               if(imageFile == null){
+                                disableLoader();
                                 return;
                               }
                               uploadFile(phoneController.text.trim()).then((image){

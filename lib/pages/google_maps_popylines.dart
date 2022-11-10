@@ -217,6 +217,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                   : data['status'] == 'confirm' ?
               'DEMARRER COURSE' : data['status'] == 'start' ? 'TERMINER COURSE' : 'COURSE FINI.',
               onTap: (){
+                showLoader('Veuillez patiener');
                 if(data['status'] == 'view'){
                   FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
                     'status': "confirm"
@@ -224,6 +225,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                     FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
                     'status': 'confirm',
                     });
+                    disableLoader();
                 });
               } else if(data['status'] == 'confirm'){
                   DateTime start = DateTime.parse(DateTime.now().toString());
@@ -252,6 +254,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                       FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
                         'status': 'start',
                       });
+                      disableLoader();
                     });
                   });
                 } else if(data['status'] == 'start'){
@@ -259,22 +262,12 @@ class _Poly extends State<GoogleMapsPolylines> {
                   DateTime end = DateTime.parse(DateTime.now().toString());
 
                   var price = 0.0;
-                  if(!data['airport']){
-                    if(data['carType'] == "1"){
-                      price = ((end.difference(start).inMinutes / 30) +1) * 10;
-                    } else if(data['carType'] == "2") {
-                      price = ((end.difference(start).inMinutes / 30) +1) * 12;
-                    } else if (data['carType'] == "3"){
-                      price = ((end.difference(start).inMinutes / 30) +1) * 14;
-                    }
-                  } else {
-                    if(data['carType'] == "1"){
-                      price = 40;
-                    } else if(data['carType'] == "2") {
-                      price = 55;
-                    } else if (data['carType'] == "3"){
-                      price = 95;
-                    }
+                  if(data['carType'] == "1"){
+                    price = ((end.difference(start).inMinutes / 30) +1) * 10;
+                  } else if(data['carType'] == "2") {
+                    price = ((end.difference(start).inMinutes / 30) +1) * 12;
+                  } else if (data['carType'] == "3"){
+                    price = ((end.difference(start).inMinutes / 30) +1) * 14;
                   }
 
                   var datas = {
@@ -306,6 +299,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                         'ride': false,
                         'uuid': null,
                       });
+                      disableLoader();
                     });
                   });
                 }
