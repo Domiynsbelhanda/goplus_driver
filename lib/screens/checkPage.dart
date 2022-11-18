@@ -23,12 +23,12 @@ class CheckPage extends StatelessWidget{
               stream: FirebaseFirestore.instance.collection('drivers')
                   .doc(tokens.data.toString()).snapshots(),
               builder: (context, snapshot){
-                driver_token = tokens.data.toString();
                 if(!snapshot.hasData){
                   return const Text('En cours de chargement ...');
                 }
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
+                driver_token = tokens.data.toString();
+                driver_data = data;
                 return HomePage(
                   token: tokens.data.toString(),
                   data: data,
