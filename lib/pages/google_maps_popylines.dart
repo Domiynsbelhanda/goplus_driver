@@ -6,18 +6,14 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/utils/app_colors.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../services/auth.dart';
 import '../utils/global_variables.dart';
-import 'homePage.dart';
 import '../widget/app_button.dart';
 
 class GoogleMapsPolylines extends StatefulWidget {
   String? uuid;
-
   GoogleMapsPolylines({Key? key, this.uuid}) : super(key: key);
 
   @override
@@ -29,7 +25,6 @@ class _Poly extends State<GoogleMapsPolylines> {
   Set<Marker> markers = {};
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
-  List<LatLng> polylineCoordinates = [];
   List<LatLng> destinationPolylineCoordinates = [];
   CameraPosition? cam;
   late Size size;
@@ -38,7 +33,7 @@ class _Poly extends State<GoogleMapsPolylines> {
     PolylineId id = PolylineId(ids);
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.black,
+      color: Colors.deepOrange,
       points: polylineCoordinates,
       width: 8,
     );
@@ -46,22 +41,12 @@ class _Poly extends State<GoogleMapsPolylines> {
   }
 
   addPoly(LatLng driver, LatLng depart, LatLng destination) async{
-    PolylineResult destinations = await polylinePoints.getRouteBetweenCoordinates(
-        androidApiKey,
-        PointLatLng(driver.latitude, driver.longitude),
-        PointLatLng(destination.latitude, destination.longitude)
-    );
-
     destinationPolylineCoordinates.clear();
-
-    if (destinations.points.isNotEmpty) {
-      for (var points in destinations.points) {
-        destinationPolylineCoordinates.add(LatLng(points.latitude, points.longitude));
-      }
-      setState(() {
-        addDestinationPolyLine(destinationPolylineCoordinates, 'second');
-      });
-    }
+    destinationPolylineCoordinates.add(LatLng(driver.latitude, driver.longitude));
+    destinationPolylineCoordinates.add(LatLng(destination.latitude, destination.longitude));
+    setState(() {
+      addDestinationPolyLine(destinationPolylineCoordinates, 'second');
+    });
   }
 
   @override
@@ -179,7 +164,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        height: MediaQuery.of(context).size.width / 2.0,
+        height: MediaQuery.of(context).size.width / 1.5,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: Colors.white,
@@ -331,6 +316,15 @@ class _Poly extends State<GoogleMapsPolylines> {
                 };
               },
             ),
+
+            const SizedBox(height: 8.0),
+
+            data['status'] == "confirm" ?
+            AppButton(
+              color: AppColors.primaryColor,
+              name: 'APPELER ',
+              onTap: ()=>makePhoneCall('+243${data['users']}'),
+            ) : const SizedBox(),
           ],
         ),
       ),
