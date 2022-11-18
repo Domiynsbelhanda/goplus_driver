@@ -9,7 +9,7 @@ import 'dart:ui' as ui;
 
 final storage = new FlutterSecureStorage();
 String androidApiKey = 'AIzaSyCtB2P_ByBV1I5o5BNRK7J4_GK75FvJpvs';
-
+String? token;
 LatLng position = const LatLng(-4.4163009, 15.2732314);
 const double zoom = 15;
 
