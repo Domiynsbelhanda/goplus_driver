@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/services/auth.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
 import 'package:provider/provider.dart';
 
@@ -49,11 +50,6 @@ class MyApp extends StatefulWidget {
 
 class _MyApp extends State<MyApp> {
   // This widget is the root of your application.
-
-  @override
-  void initState(){
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
