@@ -29,10 +29,7 @@ class CheckPage extends StatelessWidget{
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                 driver_token = tokens.data.toString();
                 driver_data = data;
-                return HomePage(
-                  token: tokens.data.toString(),
-                  data: data,
-                );
+                return HomePage();
               },
             );
           }

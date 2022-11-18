@@ -5,14 +5,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/global_variables.dart';
 import 'google_maps_popylines.dart';
 
-class BodyPage extends StatefulWidget{
-  BodyPage({Key? key}) : super(key: key);
+class BodyPage extends KFDrawerContent{
+  BodyPage({Key? key});
 
   @override
   State<StatefulWidget> createState() {
@@ -46,7 +47,7 @@ class _BodyPage extends State<BodyPage>{
           Provider.of<Auth>(context, listen: false).getSid()
               .then((sid){
             FirebaseFirestore.instance.collection('courses')
-                .doc(driver_data['uuid']).update(
+                .doc(driver_data!['uuid']).update(
                 {
                   'sid_driver': sid
                 }
@@ -68,8 +69,8 @@ class _BodyPage extends State<BodyPage>{
       });
     }
 
-    if(driver_data['latitude'] != null){
-      _initialcameraposition = LatLng(driver_data['latitude'], driver_data['longitude']);
+    if(driver_data!['latitude'] != null){
+      _initialcameraposition = LatLng(driver_data!['latitude'], driver_data!['longitude']);
     }
 
     return Scaffold(
@@ -190,7 +191,7 @@ class _BodyPage extends State<BodyPage>{
                   width: size.width / 1,
                   height: size.width /1.3,
                   child: StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection("courses").doc(driver_data['uuid']).snapshots(),
+                      stream: FirebaseFirestore.instance.collection("courses").doc(driver_data!['uuid']).snapshots(),
                       builder: (context, courseSnapshot) {
 
                         if(courseSnapshot.hasData){
@@ -224,7 +225,7 @@ class _BodyPage extends State<BodyPage>{
                                         ),
                                       ),
                                       onEnd: () {
-                                        FirebaseFirestore.instance.collection('courses').doc(driver_data['uuid']).update({
+                                        FirebaseFirestore.instance.collection('courses').doc(driver_data!['uuid']).update({
                                           'status': "cancel"
                                         }).then((value){
                                           FirebaseFirestore.instance.collection('clients').doc('${courses['users']}').update({
@@ -248,14 +249,14 @@ class _BodyPage extends State<BodyPage>{
                                       name: "Voir",
                                       color: Colors.black,
                                       onTap: (){
-                                        if(driver_data['status'] == 'cancel'){
+                                        if(driver_data!['status'] == 'cancel'){
 
                                         } else {
-                                          FirebaseFirestore.instance.collection('courses').doc(driver_data['uuid']).update({
+                                          FirebaseFirestore.instance.collection('courses').doc(driver_data!['uuid']).update({
                                             'status': "view",
                                             'driver': driver_token,
-                                            'driver_latitude': driver_data['latitude'],
-                                            'driver_longitude': driver_data['longitude']
+                                            'driver_latitude': driver_data!['latitude'],
+                                            'driver_longitude': driver_data!['longitude']
                                           }).then(
                                                   (value){
                                                 Navigator.push(
@@ -263,7 +264,7 @@ class _BodyPage extends State<BodyPage>{
                                                   MaterialPageRoute(
                                                       builder: (BuildContext context) =>
                                                           GoogleMapsPolylines(
-                                                              uuid: driver_data['uuid']
+                                                              uuid: driver_data!['uuid']
                                                           )
                                                   ),
                                                 );
