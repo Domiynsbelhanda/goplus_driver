@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goplus_driver/screens/checkPage.dart';
 import 'package:goplus_driver/services/auth.dart';
+import 'package:goplus_driver/utils/class_builder.dart';
 import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:goplus_driver/widget/theme_data.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  ClassBuilder.registerClasses();
   runApp(
       MultiProvider(
         providers: [
