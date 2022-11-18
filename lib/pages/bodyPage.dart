@@ -153,27 +153,18 @@ class _BodyPage extends State<BodyPage>{
 
             Positioned(
               top: 16.0,
-              right: 16.0,
+              left: 16.0,
               child: Container(
                 height: 48,
                 width: 48,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(48.0)
                 ),
                 child: IconButton(
-                  onPressed: (){
-                    Provider.of<Auth>(context, listen: false).cleanUp();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MyApp()
-                        ),
-                            (Route<dynamic> route) => false
-                    );
-                  },
+                  onPressed: widget.onMenuPressed,
                   icon: const Icon(
-                    Icons.logout,
+                    Icons.menu,
                   ),
                 ),
               ),
