@@ -151,7 +151,7 @@ class _HistoryPage extends State<HistoryPage>{
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                    'Course du ${DateFormat('d MMM y, à hh:mm a').format(DateTime.parse(data['start_time'].toDate().toString()))}',
+                                                    'Course du ${DateFormat('d MMM y, à HH:mm').format(DateTime.parse(data['start_time'].toDate().toString()))}',
                                                 ),
 
                                                 Text(
