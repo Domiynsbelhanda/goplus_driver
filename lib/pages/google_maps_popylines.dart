@@ -361,7 +361,16 @@ class _Poly extends State<GoogleMapsPolylines> {
               ),
             ),
 
+            const SizedBox(height: 8.0,),
 
+            Text(
+              'Prix : ${data['prix']}',
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width / 25
+              ),
+            ),
             const SizedBox(height: 16.0,),
             AppButton(
               color: AppColors.primaryColor,
