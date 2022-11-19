@@ -21,7 +21,8 @@ class HistoryPage extends KFDrawerContent {
 class _HistoryPage extends State<HistoryPage>{
 
   late Size size;
-  final Stream<QuerySnapshot> _coursesStream = FirebaseFirestore.instance.collection('courses').snapshots();
+  final Stream<QuerySnapshot> _coursesStream = FirebaseFirestore.instance
+      .collection('courses').orderBy('uuid', descending: false).snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +155,7 @@ class _HistoryPage extends State<HistoryPage>{
                                                 ),
 
                                                 Text(
-                                                  'Id du chauffeur : ${clients['firstn']} ${clients['lastn']}',
+                                                  'Client : ${clients['firstn']} ${clients['lastn']}',
                                                 ),
 
                                                 Text(
