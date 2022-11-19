@@ -44,9 +44,7 @@ class _Poly extends State<GoogleMapsPolylines> {
     destinationPolylineCoordinates.clear();
     destinationPolylineCoordinates.add(LatLng(driver.latitude, driver.longitude));
     destinationPolylineCoordinates.add(LatLng(destination.latitude, destination.longitude));
-    setState(() {
-      addDestinationPolyLine(destinationPolylineCoordinates, 'second');
-    });
+    addDestinationPolyLine(destinationPolylineCoordinates, 'second');
   }
 
   @override
@@ -164,7 +162,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        height: MediaQuery.of(context).size.width / 1.5,
+        height: data['status'] == 'confirm' ? MediaQuery.of(context).size.width / 1.5 : MediaQuery.of(context).size.width / 2.1,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: Colors.white,
