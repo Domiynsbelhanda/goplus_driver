@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../utils/global_variables.dart';
 import '../utils/app_colors.dart';
 
 class AboutPage extends KFDrawerContent {
