@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goplus_driver/utils/global_variables.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:toast/toast.dart';
 import '../utils/app_colors.dart';
@@ -48,10 +49,34 @@ class _AboutPage extends State<AboutPage>{
               ),
             ),
 
-            const Align(
+            Align(
               alignment: Alignment.center,
-              child: Text(
-                'About page'
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 24,
+                    child: const Text(
+                      'GO+, une application de location de VTC proposée par la société GO FLY.',
+                      style: TextStyle(
+                        fontSize: 24.0
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16.0,),
+
+                  GestureDetector(
+                    onTap: ()=>makeWebsite('https://www.gofly-world.com'),
+                    child: const Text(
+                      'www.gofly-world.com',
+                      style: TextStyle(
+                        color: Colors.blueAccent
+                      ),
+                    ),
+                  )
+                ],
               ),
             )
           ],

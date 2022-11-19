@@ -101,3 +101,9 @@ Future<void> makePhoneCall(String phoneNumber) async {
   );
   await launchUrl(launchUri);
 }
+
+Future<void> makeWebsite(String url) async {
+  if (!await launchUrl(Uri.parse(url))) {
+    throw 'Could not launch $url';
+  }
+}
