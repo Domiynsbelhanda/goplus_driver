@@ -83,7 +83,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                     showLoader("Renvoie OTP en cours...");
                     var data = {
                       "key": "check_user",
-                      "action": "client",
+                      "action": "driver",
                       "phone": widget.phone,
                       "password": widget.password
                     };
