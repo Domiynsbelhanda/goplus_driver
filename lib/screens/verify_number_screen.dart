@@ -15,7 +15,8 @@ import '../utils/global_variables.dart';
 class VerifyNumberScreen extends StatefulWidget {
   bool register;
   String phone;
-  VerifyNumberScreen({Key? key, required this.phone, required this.register}) : super(key: key);
+  String password;
+  VerifyNumberScreen({Key? key, required this.phone, required this.register, required this.password}) : super(key: key);
 
   @override
   _VerifyNumberState createState() => _VerifyNumberState();
@@ -26,11 +27,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
   late String code;
   late bool onEditing = false;
   String? otp;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  bool message = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +51,10 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   ),
                 ),
                 const SizedBox(height: 8.0,),
+
+                message ? const Text(
+                    'Requête envoyée, veuillez patienter.'
+                ) : const SizedBox(),
 
                 SizedBox(height: size.height * 0.02),
                 SizedBox(
@@ -79,12 +80,19 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                 SizedBox(height: size.height * 0.05),
                 GestureDetector(
                   onTap: (){
+                    showLoader("Renvoie OTP enc cours...");
                     var data = {
-                      'key': 'check_user',
-                      'action': 'otp',
-                      'phone': widget.phone
+                      "key": "check_user",
+                      "action": "client",
+                      "phone": widget.phone,
+                      "password": widget.password
                     };
-                    Provider.of<Auth>(context, listen: false).request(data: data);
+                    Provider.of<Auth>(context, listen: false).request(data: data).then((value){
+                      disableLoader();
+                      setState(() {
+                        message = true;
+                      });
+                    });
                   },
                   child: const Center(
                     child: Text.rich(
@@ -95,7 +103,7 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'RENVOYEZ',
+                            text: ' RENVOYEZ',
                             style: TextStyle(
                               color: AppColors.primaryColor,
                             ),

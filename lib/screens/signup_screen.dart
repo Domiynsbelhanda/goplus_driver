@@ -9,7 +9,6 @@ import '../services/auth.dart';
 import '../utils/app_colors.dart';
 import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
-import '../widget/app_widgets/app_bar.dart';
 import '../widget/notification_dialog_auth.dart';
 import 'checkPage.dart';
 import 'package:chips_choice/chips_choice.dart';
@@ -17,6 +16,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -293,12 +293,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                         return null;
                                       },
                                       cursorColor: AppColors.primaryColor,
-                                      maxLength: e['max'] ?? null,
-                                      keyboardType: e['input'] == null ? TextInputType.name : e['input'],
+                                      maxLength: e['max'],
+                                      keyboardType: e['input'] ?? TextInputType.name,
                                       controller: e['controller'],
                                       decoration: InputDecoration(
                                           hintText: '${e['label']}',
-                                          contentPadding: EdgeInsets.all(15.0)),
+                                          contentPadding: const EdgeInsets.all(15.0)),
                                     ),
                                   )
                                 ],
@@ -312,8 +312,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 return null;
                               },
                               cursorColor: AppColors.primaryColor,
-                              maxLength: e['max'] == null ? null : e['max'],
-                              keyboardType: e['input'] == null ? TextInputType.name : e['input'],
+                              maxLength: e['max'] ?? null,
+                              keyboardType: e['input'] ?? TextInputType.name,
                               controller: e['controller'],
                               decoration: InputDecoration(
                                   hintText: '${e['label']}',
@@ -433,6 +433,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) => VerifyNumberScreen(
+                                              password: passwordController.text.trim(),
                                               phone: phoneController.text.trim(),
                                               register: true,
                                             )
