@@ -93,32 +93,26 @@ class _BodyPage extends State<BodyPage>{
                     'longitude': l.longitude,
                     'latitude' : l.latitude
                   });
-                  BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-                    const ImageConfiguration(),
-                    "assets/images/car_android.png",
+
+                  markers.add(
+                      Marker( //add start location marker
+                        markerId: const MarkerId('Ma Position'),
+                        position: LatLng(l.latitude!, l.longitude!), //position of marker
+                        infoWindow: const InfoWindow( //popup info
+                          title: 'Ma Position',
+                          snippet: 'Moi',
+                        ),
+                        icon: car_android!, //Icon for Marker
+                      )
                   );
 
-                  setState(() {
-                    markers.add(
-                        Marker( //add start location marker
-                          markerId: const MarkerId('Ma Position'),
-                          position: LatLng(l.latitude!, l.longitude!), //position of marker
-                          infoWindow: const InfoWindow( //popup info
-                            title: 'Ma Position',
-                            snippet: 'Moi',
-                          ),
-                          icon: markerbitmap, //Icon for Marker
-                        )
-                    );
+                  position = LatLng(l.latitude!, l.longitude!);
 
-                    position = LatLng(l.latitude!, l.longitude!);
-
-                    _controller!.animateCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-                      ),
-                    );
-                  });
+                  _controller!.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
+                    ),
+                  );
 
                 });
               },

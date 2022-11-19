@@ -78,7 +78,7 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin{
           text: const Padding(
             padding: EdgeInsets.only(bottom: 16.0),
             child: Text(
-                'APropos',
+                'A Propos',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.0
