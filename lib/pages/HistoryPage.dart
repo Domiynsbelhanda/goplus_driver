@@ -90,57 +90,93 @@ class _HistoryPage extends State<HistoryPage>{
                       return ListView(
                         children: snapshot.data!.docs.map((DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+                          CollectionReference clients = FirebaseFirestore.instance.collection('clients');
                           if((data['driver'] == driver_token)){
                             if(data['status'] != 'create'){
                               if(data['status'] == 'end'){
-                                return Container(
-                                  margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 1,
-                                        offset: const Offset(0, 1), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                                'Course du ${DateFormat('d MMM y, à hh:mm a').format(DateTime.parse(data['start_time'].toDate().toString()))}',
-                                            ),
+                                return FutureBuilder(
+                                  future : clients.doc(data['users']).get(),
+                                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotClient) {
 
-                                            Text(
-                                              'Id du chauffeur : ${data['sid_driver']}',
-                                            ),
+                                    if(snapshotClient.hasError){
+                                      return const Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                            'Something went wrong'
+                                        ),
+                                      );
+                                    }
 
+                                    if(snapshotClient.connectionState == ConnectionState.waiting){
+                                      return Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: const [
+                                            CircularProgressIndicator(),
+                                            SizedBox(height: 16.0,),
                                             Text(
-                                              'Prix : \$ ${data['prix']}',
+                                                'Chargement de vos courses...'
                                             )
                                           ],
                                         ),
-                                        // ListTile(
-                                        //   title: Text(data['users']),
-                                        //   subtitle: Text(data['status']),
-                                        // ),
+                                      );
+                                    }
 
-                                        const Icon(
-                                          Icons.verified_outlined,
-                                          color: Colors.green,
-                                          size: 24.0,
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                    Map<String, dynamic> clients = snapshotClient.data!.data() as Map<String, dynamic>;
+
+                                    return Container(
+                                      margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 1,
+                                            blurRadius: 1,
+                                            offset: const Offset(0, 1), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    'Course du ${DateFormat('d MMM y, à hh:mm a').format(DateTime.parse(data['start_time'].toDate().toString()))}',
+                                                ),
+
+                                                Text(
+                                                  'Id du chauffeur : ${clients['firstn']} ${clients['lastn']}',
+                                                ),
+
+                                                Text(
+                                                  'Prix : \$ ${data['prix']}',
+                                                )
+                                              ],
+                                            ),
+                                            // ListTile(
+                                            //   title: Text(data['users']),
+                                            //   subtitle: Text(data['status']),
+                                            // ),
+
+                                            const Icon(
+                                              Icons.verified_outlined,
+                                              color: Colors.green,
+                                              size: 24.0,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 );
                               }
                               return const SizedBox();
