@@ -41,6 +41,8 @@ void configLoading() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -51,10 +53,10 @@ class MyApp extends StatefulWidget {
 
 
 class _MyApp extends State<MyApp> {
-  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
+    readBitconMarkerPinner();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData,

@@ -19,7 +19,7 @@ BitmapDescriptor? car_android;
 BitmapDescriptor? departBitmap;
 BitmapDescriptor? arriveBitmap;
 
-readBitconMarkerPinner() async {
+Future<String> readBitconMarkerPinner() async {
   pinner = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(),
     "assets/icon/pinner.png",
@@ -39,6 +39,8 @@ readBitconMarkerPinner() async {
     const ImageConfiguration(),
     "assets/images/car_android.png",
   );
+
+  return "ok";
 }
 
 

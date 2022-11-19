@@ -71,6 +71,17 @@ class _BodyPage extends State<BodyPage>{
 
     if(driver_data!['latitude'] != null){
       _initialcameraposition = LatLng(driver_data!['latitude'], driver_data!['longitude']);
+      markers.add(
+          Marker( //add start location marker
+            markerId: const MarkerId('Ma Position'),
+            position: LatLng(driver_data!['latitude'], driver_data!['longitude']), //position of marker
+            infoWindow: const InfoWindow( //popup info
+              title: 'Ma Position',
+              snippet: 'Moi',
+            ),
+            icon: car_android!, //Icon for Marker
+          )
+      );
     }
 
     return Scaffold(
@@ -93,7 +104,7 @@ class _BodyPage extends State<BodyPage>{
                     'longitude': l.longitude,
                     'latitude' : l.latitude
                   });
-
+                  markers.clear();
                   markers.add(
                       Marker( //add start location marker
                         markerId: const MarkerId('Ma Position'),
