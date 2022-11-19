@@ -48,6 +48,7 @@ class _Poly extends State<GoogleMapsPolylines> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     if(widget.uuid == null){
       Navigator.pop(context);
@@ -186,7 +187,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                   : data['status'] == 'confirm' ?
               'DEMARRER COURSE' : data['status'] == 'start' ? 'TERMINER COURSE' : 'COURSE ANNULEE.',
               onTap: (){
-                showLoader('Veuillez patiener');
+                showLoader('Veuillez patienter');
                 if(data['status'] == 'view'){
                   FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
                     'status': "confirm"
