@@ -58,9 +58,10 @@ class _AboutPage extends State<AboutPage>{
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width - 24,
+                    width: MediaQuery.of(context).size.width - 36,
                     child: const Text(
                       'GO+, une application de location de VTC proposée par la société GO FLY.',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24.0
                       ),
@@ -74,7 +75,8 @@ class _AboutPage extends State<AboutPage>{
                     child: const Text(
                       'www.gofly-world.com',
                       style: TextStyle(
-                        color: Colors.blueAccent
+                        color: Colors.blueAccent,
+                        fontSize: 20
                       ),
                     ),
                   )
