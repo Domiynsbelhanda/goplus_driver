@@ -166,7 +166,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 } else if(value['code'].toString() == '401'){
                                   notification_dialog_auth(
                                       context,
-                                      '${value['message']}',
+                                      'Compte en attente d\'activation',
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
