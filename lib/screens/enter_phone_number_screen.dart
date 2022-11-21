@@ -159,7 +159,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
-                                        Navigator.pushAndRemoveUntil(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context)
@@ -168,8 +168,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                                     register: false,
                                                     phone: phoneController.text.trim())
 
-                                            ),
-                                                (route)=> false
+                                            )
                                         );
                                       }},
                                       20,
@@ -187,7 +186,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       false);
                                 }
                                 else if(value['code'] == "OTP"){
-                                  Navigator.pushAndRemoveUntil(
+                                  Navigator.push(
                                     context,
                                       MaterialPageRoute(
                                           builder: (context)
@@ -196,8 +195,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                               register: false,
                                               phone: phoneController.text.trim())
 
-                                      ),
-                                      (route)=> false
+                                      )
                                   );
                                 }
 
@@ -222,14 +220,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': "CREER UN COMPTE", "onTap": (){
-                                        Navigator.pushAndRemoveUntil(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context)
                                                 => const SignupScreen()
 
-                                            ),
-                                                (route)=> false
+                                            )
                                         );
                                       }
                                       },
@@ -271,13 +268,12 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                               const SignupScreen()
-                          ),
-                                (route)=>false
+                          )
                         );
                       },
                       child: const Text(

@@ -457,7 +457,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   if(res['code'] == "OTP"){
                                     FirebaseFirestore.instance.collection('drivers')
                                         .doc(phoneController.text.trim()).set(data);
-                                    Navigator.pushAndRemoveUntil(
+                                    Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) => VerifyNumberScreen(
@@ -465,8 +465,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                               phone: phoneController.text.trim(),
                                               register: true,
                                             )
-                                        ),
-                                            (route)=>false
+                                        )
                                     );
                                   } else if(res['code'] == "NOK"){
                                     notification_dialog_auth(
