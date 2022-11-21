@@ -178,6 +178,20 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                   );
                                 }
 
+                                else if(value['code'] == '500'){
+                                  notification_dialog_auth(
+                                      context,
+                                      "Impossible de se connecter au serveur OTP.",
+                                      Icons.person,
+                                      Colors.yellow,
+                                      {'label': "FERMER", "onTap": (){
+                                        Navigator.pop(context);
+                                      }
+                                      },
+                                      20,
+                                      false);
+                                }
+
                                 else if(value['code'] == 'KO'){
                                   notification_dialog_auth(
                                       context,
@@ -189,7 +203,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context)
-                                                => SignupScreen()
+                                                => const SignupScreen()
 
                                             ),
                                                 (route)=> false
