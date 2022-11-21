@@ -189,6 +189,7 @@ class _BodyPage extends State<BodyPage>{
                 Map<String, dynamic> coursesData = courses.data!.data() as Map<String, dynamic>;
 
                 if(coursesData['ride']){
+                  ride = coursesData['ride'];
                   return Align(
                     alignment: Alignment.center,
                     child: Padding(
