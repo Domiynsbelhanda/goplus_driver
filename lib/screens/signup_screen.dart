@@ -26,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
   late Size size;
   final formkey = GlobalKey<FormState>();
   File? imageFile;
+  String message = "Créer votre compte pour chauffeur.";
 
   TextEditingController nameController = TextEditingController();
   TextEditingController postNomController = TextEditingController();
@@ -204,9 +205,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 20.0),
                 SizedBox(
                   width: size.width * 0.6,
-                  child: const Text(
-                    'Créer votre compte pour chauffeur.',
-                    style: TextStyle(color: Colors.grey),
+                  child: Text(
+                    '$message',
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ),
                 SizedBox(height: size.height * 0.05),
@@ -399,6 +400,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             if(formkey.currentState!.validate()){
                               showLoader("Inscription en cours\nVeuillez patienter...");
                               if(imageFile == null){
+                                disableLoader();
+                                setState(() {
+                                  message = "Veuillez selectionner une photo de profil.";
+                                });
                                 disableLoader();
                                 return;
                               }
