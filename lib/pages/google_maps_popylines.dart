@@ -265,7 +265,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                         'status': 'end',
                       });
                       FirebaseFirestore.instance.collection('drivers').doc('${data['driver']}').update({
-                        'online': true,
+                        'online': false,
                         'ride': false,
                         'uuid': null,
                       });
