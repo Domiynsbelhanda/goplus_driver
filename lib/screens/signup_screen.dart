@@ -447,7 +447,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   "longitude": 0.5,
                                   "latitude": 0.5,
                                   "online": false,
-                                  'image': image
+                                  'image': image,
+                                  'ride': false
                                 };
 
                                 Provider.of<Auth>(context, listen: false)
