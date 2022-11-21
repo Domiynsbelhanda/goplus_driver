@@ -467,7 +467,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             )
                                         )
                                     );
-                                  } else if(res['code'] == "400"){
+                                  } else if(res['code'] == "401"){
                                     notification_dialog_auth(
                                         context,
                                         '${res['message']}',
@@ -502,7 +502,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         20,
                                         false);
                                   }
-                                  else if(res['code'] == "401"){
+                                  else if(res['code'] == "400"){
                                     notification_dialog_auth(
                                         context,
                                         '${res['message']}',
