@@ -82,8 +82,8 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                   onTap: (){
                     showLoader("Renvoie OTP en cours...");
                     var data = {
-                      "key": "check_user",
-                      "action": "driver",
+                      "key": "otp",
+                      "action": "otp",
                       "phone": widget.phone,
                       "password": widget.password
                     };
