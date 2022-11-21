@@ -163,7 +163,7 @@ class _Poly extends State<GoogleMapsPolylines> {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        height: data['status'] == 'confirm' ? MediaQuery.of(context).size.width / 1.5 : MediaQuery.of(context).size.width / 2.1,
+        height: data['status'] == 'confirm' ? MediaQuery.of(context).size.width / 2.1 : MediaQuery.of(context).size.width / 2.1,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: Colors.white,
@@ -278,6 +278,7 @@ class _Poly extends State<GoogleMapsPolylines> {
 
             const SizedBox(height: 8.0),
 
+            data['status'] == "confirm" ? const SizedBox() :
             AppButton(
               color: Colors.black,
               name: data['status'] == 'view' ? 'ANNULER' : 'FERMER',
