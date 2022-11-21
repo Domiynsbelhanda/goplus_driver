@@ -163,7 +163,19 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                       }},
                                       20,
                                       false);
-                                } else if(value['code'] == "OTP"){
+                                } else if(value['code'].toString() == '401'){
+                                  notification_dialog_auth(
+                                      context,
+                                      '${value['message']}',
+                                      Icons.person,
+                                      Colors.yellow,
+                                      {'label': 'FERMER', "onTap": (){
+                                        Navigator.pop(context);
+                                      }},
+                                      20,
+                                      false);
+                                }
+                                else if(value['code'] == "OTP"){
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                       MaterialPageRoute(
