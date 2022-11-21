@@ -27,6 +27,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final formkey = GlobalKey<FormState>();
   File? imageFile;
   String message = "Créer votre compte pour chauffeur.";
+  bool mess = false;
+  ScrollController scrollController = ScrollController();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController postNomController = TextEditingController();
@@ -108,6 +110,10 @@ class _SignupScreenState extends State<SignupScreen> {
       maxWidth: 1800,
       maxHeight: 1800,
     );
+    setState(() {
+      mess = false;
+      String message = "Créer votre compte pour chauffeur.";
+    });
     _cropImage(pickedFile?.path);
   }
 
@@ -184,6 +190,17 @@ class _SignupScreenState extends State<SignupScreen> {
     ];
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: mess ? Container(
+        decoration: const BoxDecoration(
+          color: Colors.white
+        ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+                '$message'
+            ),
+          )
+      ) : const SizedBox(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -207,7 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: size.width * 0.6,
                   child: Text(
                     '$message',
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(color: mess ? Colors.red : Colors.grey),
                   ),
                 ),
                 SizedBox(height: size.height * 0.05),
@@ -400,9 +417,14 @@ class _SignupScreenState extends State<SignupScreen> {
                             if(formkey.currentState!.validate()){
                               showLoader("Inscription en cours\nVeuillez patienter...");
                               if(imageFile == null){
-                                disableLoader();
                                 setState(() {
+                                  scrollController.animateTo( //go to top of scroll
+                                      0,  //scroll offset to go
+                                      duration: const Duration(milliseconds: 500), //duration of scroll
+                                      curve:Curves.fastOutSlowIn //scroll type
+                                  );
                                   message = "Veuillez selectionner une photo de profil.";
+                                  mess = true;
                                 });
                                 disableLoader();
                                 return;
