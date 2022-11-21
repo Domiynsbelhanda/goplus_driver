@@ -155,7 +155,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 if(value['code'].toString() == '400'){
                                   notification_dialog_auth(
                                       context,
-                                      'Votre compte est en attente d\'activation.',
+                                      '${value['message']}',
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
@@ -177,7 +177,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 } else if(value['code'].toString() == '401'){
                                   notification_dialog_auth(
                                       context,
-                                      'Compte en attente de validation par Go Plus',
+                                      '${value['message']}',
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
@@ -204,7 +204,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 else if(value['code'] == '500'){
                                   notification_dialog_auth(
                                       context,
-                                      "Impossible de se connecter au serveur OTP.",
+                                      "${value['message']}",
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
@@ -239,7 +239,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 else if (value['code'] == 'NOK'){
                                   notification_dialog_auth(
                                       context,
-                                      "Adresse mail ou mot de passe incorrect.",
+                                      "${value['message']}",
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
