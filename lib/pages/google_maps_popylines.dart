@@ -259,7 +259,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                       'status': "end",
                       'rideref': value['rideref'],
                       "endhour": "${end.hour}:${end.minute}",
-                      "prix": price
+                      "prix": double.parse((price).toStringAsFixed(2))
                     }).then((value){
                       FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
                         'status': 'end',
