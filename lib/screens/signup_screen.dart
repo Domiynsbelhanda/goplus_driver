@@ -471,7 +471,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     notification_dialog_auth(
                                         context,
                                         '${res['message']}',
-                                        Icons.warning,
+                                        Icons.phone_android,
                                         Colors.yellow,
                                         {'label': 'SUIVANT', "onTap": (){
                                           Navigator.push(
@@ -490,6 +490,18 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                   }
 
+                                  else if(res['code'] == "500"){
+                                    notification_dialog_auth(
+                                        context,
+                                        '${res['message']}',
+                                        Icons.phone_android,
+                                        Colors.yellow,
+                                        {'label': 'SUIVANT', "onTap": (){
+                                          Navigator.pop(context);
+                                        }},
+                                        20,
+                                        false);
+                                  }
                                   else if(res['code'] == "401"){
                                     notification_dialog_auth(
                                         context,
