@@ -57,7 +57,7 @@ class _Poly extends State<GoogleMapsPolylines> {
     ToastContext().init(context);
     readBitconMarkerPinner();
     return Scaffold(
-      body: Container(
+      body: SizedBox(
           child : StreamBuilder(
               stream: FirebaseFirestore.instance.collection("courses").doc(widget.uuid).snapshots(),
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -219,6 +219,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                     FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
                       'status': "start",
                       'rideref': value['rideref'],
+                      'value': value.toString(),
                       'start_time': FieldValue.serverTimestamp()
                     }).then((value){
                       FirebaseFirestore.instance.collection('clients').doc('${data['users']}').update({
@@ -257,7 +258,6 @@ class _Poly extends State<GoogleMapsPolylines> {
                   {
                     FirebaseFirestore.instance.collection('courses').doc(widget.uuid).update({
                       'status': "end",
-                      'rideref': value['rideref'],
                       "endhour": "${end.hour}:${end.minute}",
                       "prix": double.parse((price).toStringAsFixed(2))
                     }).then((value){

@@ -19,6 +19,9 @@ class CheckPage extends StatelessWidget{
             if(!tokens.hasData){
               return PhoneNumberScreen();
             }
+            Provider.of<Auth>(context, listen:false).getSid().then((values){
+              driver_sid = values;
+            });
             return StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance.collection('drivers')
                   .doc(tokens.data.toString()).snapshots(),

@@ -144,9 +144,9 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                             disableLoader();
                         if(value['code'] == 'KO'){
                         } else {
-                          storage.write(key: 'sid', value: value['sid']);
-                          storage.write(key: 'token', value: data['phone']);
                           if(!widget.register){
+                            storage.write(key: 'sid', value: value['sid']);
+                            storage.write(key: 'token', value: data['phone']);
                             Navigator.pushAndRemoveUntil(
                               context,
                                 MaterialPageRoute(
@@ -178,20 +178,6 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                         }
                       });
                     }
-
-                    // var ref = firestore.collection('drivers');
-                    // var doc = await ref.doc(widget.phone).get();
-                    // if(doc.exists){
-                    //   storeToken(token: widget.phone);
-                    // }
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => doc.exists ? HomePage() : SignupScreen(
-                    //       phone: widget.phone,
-                    //     ),
-                    //   ),
-                    // );
                   },
                 ),
                 SizedBox(height: size.height * 0.2),

@@ -266,7 +266,8 @@ class _BodyPage extends State<BodyPage>{
                                                   'status': "view",
                                                   'driver': driver_token,
                                                   'driver_latitude': driver_data!['latitude'],
-                                                  'driver_longitude': driver_data!['longitude']
+                                                  'driver_longitude': driver_data!['longitude'],
+                                                  'sid_driver': driver_sid
                                                 }).then(
                                                         (value){
                                                       Navigator.push(
