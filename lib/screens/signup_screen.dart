@@ -492,35 +492,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                         '${res['message']}',
                                         Icons.warning,
                                         Colors.yellow,
-                                        {'label': 'SUIVANT', "onTap": (){
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) => VerifyNumberScreen(
-                                                    password: passwordController.text.trim(),
-                                                    phone: phoneController.text.trim(),
-                                                    register: true,
-                                                  )
-                                              ),
-                                                  (route)=>false
-                                          );
-                                        }},
-                                        20,
-                                        false);
-                                  }
-                                  else if (res['code'] == "400"){
-                                    notification_dialog_auth(
-                                        context,
-                                        '${res['message']}',
-                                        Icons.warning,
-                                        Colors.yellow,
                                         {'label': 'FERMER', "onTap": (){
                                           Navigator.pop(context);
                                         }},
                                         20,
                                         false);
-                                  }
-                                  else {
+                                  } else {
                                     notification_dialog_auth(
                                         context,
                                         'Une erreur s\'est produite.',
