@@ -155,18 +155,29 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 if(value['code'].toString() == '400'){
                                   notification_dialog_auth(
                                       context,
-                                      '${value['message']}',
+                                      'Votre compte est en attente d\'activation.',
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
-                                        Navigator.pop(context);
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context)
+                                                => VerifyNumberScreen(
+                                                    password: passwordController.text.trim(),
+                                                    register: false,
+                                                    phone: phoneController.text.trim())
+
+                                            ),
+                                                (route)=> false
+                                        );
                                       }},
                                       20,
                                       false);
                                 } else if(value['code'].toString() == '401'){
                                   notification_dialog_auth(
                                       context,
-                                      'Compte en attente d\'activation',
+                                      'Compte en attente de validation par Go Plus',
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': 'FERMER', "onTap": (){
@@ -228,7 +239,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 else if (value['code'] == 'NOK'){
                                   notification_dialog_auth(
                                       context,
-                                      "${value['message']}",
+                                      "Adresse mail ou mot de passe incorrect.",
                                       Icons.person,
                                       Colors.yellow,
                                       {'label': "FERMER", "onTap": (){
