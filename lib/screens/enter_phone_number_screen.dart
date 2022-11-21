@@ -226,21 +226,6 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 }
 
                           });
-                          // var ref = FirebaseFirestore.instance.collection('drivers');
-                          // var doc = await ref.doc(phoneController.text.trim()).get();
-                          // if(doc.exists){
-                          //   storeToken(token: phoneController.text.trim());
-                          // }
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => doc.exists ? HomePage(
-                          //       phone: phoneController.text.trim(),
-                          //     ) : SignupScreen(
-                          //       phone: phoneController.text.trim(),
-                          //     ),
-                          //   ),
-                          // );
                         }
                       },
                     ),
@@ -253,7 +238,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                              SignupScreen()
+                              const SignupScreen()
                           ),
                                 (route)=>false
                         );
