@@ -40,35 +40,11 @@ class Assets {
   static const String PoppinsPoppinsSemiBoldItalic = 'assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf';
   static const String PoppinsPoppinsThin = 'assets/fonts/Poppins/Poppins-Thin.ttf';
   static const String PoppinsPoppinsThinItalic = 'assets/fonts/Poppins/Poppins-ThinItalic.ttf';
-  static const String SvgCalendar = 'assets/Svg/calendar.svg';
-  static const String SvgCash = 'assets/Svg/cash.svg';
-  static const String SvgGoogle = 'assets/Svg/google.svg';
-  static const String SvgHome = 'assets/Svg/home.svg';
-  static const String SvgHonda = 'assets/Svg/honda.svg';
-  static const String SvgIntro1 = 'assets/Svg/intro1.svg';
-  static const String SvgIntro2 = 'assets/Svg/intro2.svg';
-  static const String SvgIntro3 = 'assets/Svg/intro3.svg';
-  static const String SvgLogOut = 'assets/Svg/log_out.svg';
-  static const String SvgMaster = 'assets/Svg/master.svg';
-  static const String SvgMenu = 'assets/Svg/menu.svg';
-  static const String SvgMessage = 'assets/Svg/message.svg';
-  static const String SvgNotification = 'assets/Svg/notification.svg';
-  static const String SvgPadlock = 'assets/Svg/padlock.svg';
-  static const String SvgPayment = 'assets/Svg/payment.svg';
-  static const String SvgPaypal = 'assets/Svg/paypal.svg';
-  static const String SvgRightArrow = 'assets/Svg/right-arrow.svg';
-  static const String SvgScan = 'assets/Svg/scan.svg';
-  static const String SvgSplash = 'assets/Svg/splash.svg';
-  static const String SvgToyota = 'assets/Svg/toyota.svg';
-  static const String SvgVisa = 'assets/Svg/visa.svg';
-  static const String SvgYourRide = 'assets/Svg/your_ride.svg';
   static const String iconLogo = 'assets/icon/Logo.png';
   static const String iconWhiteText = 'assets/icon/white-text.png';
   static const String imagesCarAndroid = 'assets/images/car_android.png';
   static const String imagesDrapeau = 'assets/images/drapeau.png';
   static const String imagesDrapeauADamier = 'assets/images/drapeau-a-damier.png';
   static const String imagesPictogramme = 'assets/images/pictogramme.png';
-  static const String translationsFr = 'assets/translations/fr.json';
-  static const String translationsLg = 'assets/translations/lg.json';
 
 }
