@@ -234,9 +234,17 @@ class _Poly extends State<GoogleMapsPolylines> {
 
                   var price = 0.0;
                   if(data['carType'] == "1"){
-                    price = ((end.difference(start).inMinutes / 30) +1) * 10;
+                    if(end.difference(start).inMinutes < 60){
+                      price = 10;
+                    } else {
+                      price = (end.difference(start).inMinutes / 60) * 10;
+                    }
                   } else if(data['carType'] == "2") {
-                    price = ((end.difference(start).inMinutes / 30) +1) * 15;
+                    if(end.difference(start).inMinutes < 60){
+                      price = 15;
+                    } else {
+                      price = (end.difference(start).inMinutes / 60) * 15;
+                    }
                   } else if (data['carType'] == "3"){
                     price = ((end.difference(start).inMinutes / 30) +1) * 14;
                   }
@@ -250,7 +258,7 @@ class _Poly extends State<GoogleMapsPolylines> {
                     "rideref": data['rideref'],
                     "type": "1",
                     "service" : "4",
-                    "price": price
+                    "price": double.parse((price).toStringAsFixed(2))
                   };
 
                   Provider.of<Auth>(context, listen: false)
