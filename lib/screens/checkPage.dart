@@ -41,7 +41,6 @@ class CheckPage extends StatelessWidget{
                               if(!snapshot.hasData){
                                 return const Center(child: Text('En cours de chargement ...'));
                               }
-                              return Text('${tokens.data}');
                               Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                               driver_token = tokens.data.toString();
                               driver_data = data;
