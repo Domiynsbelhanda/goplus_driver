@@ -23,7 +23,7 @@ class CheckPage extends StatelessWidget{
                     driver_sid = sidSnap.data.toString();
                     return FutureBuilder(
                       future: Provider.of<Auth>(context, listen: false).request(data: {
-                        'key': 'check_user',
+                        'key': 'sid',
                         'action': 'sid',
                         'sid': sidSnap.data.toString(),
                         'level': '4'
@@ -31,7 +31,8 @@ class CheckPage extends StatelessWidget{
                       builder: (context, checkSidSnap) {
                         if(checkSidSnap.hasData){
                           Map datas = checkSidSnap.data as Map;
-                          if(datas['status'] == 'NOK'){
+                          return Text('${datas}');
+                          if(datas['code'] == 'NOK'){
                             return PhoneNumberScreen();
                           }
                           return StreamBuilder<DocumentSnapshot>(
