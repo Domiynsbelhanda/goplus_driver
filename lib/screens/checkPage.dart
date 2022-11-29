@@ -31,8 +31,7 @@ class CheckPage extends StatelessWidget{
                       builder: (context, checkSidSnap) {
                         if(checkSidSnap.hasData){
                           Map datas = checkSidSnap.data as Map;
-                          return Text('${datas}');
-                          if(datas['code'] == 'NOK'){
+                          if(!(datas['code'] == 'OK')){
                             return PhoneNumberScreen();
                           }
                           return StreamBuilder<DocumentSnapshot>(
