@@ -288,7 +288,6 @@ class _BodyPage extends State<BodyPage>{
                                     )
                                 );
                               }
-
                               return const Text('');
                             }
                         ),
