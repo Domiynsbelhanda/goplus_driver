@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:goplus_driver/main.dart';
 import 'package:goplus_driver/services/auth.dart';
 import 'package:goplus_driver/widget/app_button.dart';
 import 'package:kf_drawer/kf_drawer.dart';
@@ -179,11 +178,11 @@ class _BodyPage extends State<BodyPage>{
               stream: FirebaseFirestore.instance.collection('drivers').doc(driver_token).snapshots(),
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> courses) {
                 if (courses.hasError) {
-                  return Text('Something went wrong');
+                  return const Text('Something went wrong');
                 }
 
                 if (courses.connectionState == ConnectionState.waiting) {
-                  return Text("Loading");
+                  return const Text("Loading");
                 }
 
                 Map<String, dynamic> coursesData = courses.data!.data() as Map<String, dynamic>;
