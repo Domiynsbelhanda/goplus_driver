@@ -6,6 +6,8 @@ import 'package:toast/toast.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/global_variables.dart';
+import '../widget/app_button.dart';
+import 'google_maps_popylines.dart';
 
 class HistoryPage extends KFDrawerContent {
   HistoryPage({
@@ -132,7 +134,7 @@ class _HistoryPage extends State<HistoryPage>{
                                         margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(8.0),
-                                          color: Colors.black,
+                                          color: Colors.grey,
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.grey.withOpacity(0.5),
@@ -172,7 +174,7 @@ class _HistoryPage extends State<HistoryPage>{
                                                   ),
 
                                                   const Text(
-                                                    'Status : Terminée',
+                                                    'Status : Course terminée',
                                                     style: TextStyle(
                                                         color: Colors.white
                                                     ),
@@ -186,7 +188,7 @@ class _HistoryPage extends State<HistoryPage>{
 
                                               const Icon(
                                                 Icons.verified_outlined,
-                                                color: Colors.green,
+                                                color: Colors.white,
                                                 size: 48.0,
                                               )
                                             ],
@@ -225,22 +227,36 @@ class _HistoryPage extends State<HistoryPage>{
                                                   ),
 
                                                   Text(
-                                                    'Status : ${data['status']}',
-                                                  )
+                                                    'Status : ${data['status'] == 'confirm' ? 'Course confirmée' : 'Course demarée.'}',
+                                                  ),
+
+                                                  const SizedBox(
+                                                    height: 8.0,
+                                                  ),
+
+                                                  SizedBox(
+                                                    width: size.width / 1.4,
+                                                    child: AppButton(
+                                                      color: data['status'] == 'confirm' ?
+                                                      AppColors.primaryColor : Colors.grey,
+                                                      name: data['status'] == 'confirm' ? 'DEMARRER' : 'CONTINUER',
+                                                      onTap: ()=>Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext context)
+                                                              => GoogleMapsPolylines(
+                                                                  uuid: data['uuid']
+                                                              )
+                                                          )
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                               // ListTile(
                                               //   title: Text(data['users']),
                                               //   subtitle: Text(data['status']),
                                               // ),
-
-                                              Icon(
-                                                data['status'] == 'start' ?
-                                                  Icons.not_started_sharp
-                                                  : Icons.circle_outlined,
-                                                color: data['status'] == 'start' ? Colors.black : Colors.yellowAccent,
-                                                size: 48.0,
-                                              )
                                             ],
                                           ),
                                         ),
