@@ -39,7 +39,14 @@ class CheckPage extends StatelessWidget{
                                 .doc(tokens.data.toString()).snapshots(),
                             builder: (context, snapshot){
                               if(!snapshot.hasData){
-                                return const Center(child: Text('En cours de chargement ...'));
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 16.0,),
+                                    Center(child: Text('En cours de chargement ...')),
+                                  ],
+                                );
                               }
                               Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                               driver_token = tokens.data.toString();
@@ -48,16 +55,43 @@ class CheckPage extends StatelessWidget{
                             },
                           );
                         }
-                        return PhoneNumberScreen();
+
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16.0,),
+                            Center(child: Text('En cours de chargement ...')),
+                          ],
+                        );
                       }
                     );
                   }
 
-                  return PhoneNumberScreen();
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16.0,),
+                      Center(child: Text('En cours de chargement ...')),
+                    ],
+                  );
                 },
               );
             }
-            return PhoneNumberScreen();
+
+            if(!tokens.hasData){
+              return PhoneNumberScreen();
+            }
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(),
+                SizedBox(height: 16.0,),
+                Center(child: Text('En cours de chargement ...')),
+              ],
+            );
           }
         );
   }
