@@ -181,10 +181,6 @@ class _HistoryPage extends State<HistoryPage>{
                                                   )
                                                 ],
                                               ),
-                                              // ListTile(
-                                              //   title: Text(data['users']),
-                                              //   subtitle: Text(data['status']),
-                                              // ),
 
                                               const Icon(
                                                 Icons.verified_outlined,
