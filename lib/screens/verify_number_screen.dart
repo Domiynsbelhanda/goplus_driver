@@ -143,7 +143,32 @@ class _VerifyNumberState extends State<VerifyNumberScreen> {
                           .then((value){
                             disableLoader();
                         if(value['code'] == 'KO'){
-                        } else {
+                          notification_dialog_auth(
+                              context,
+                              "Numéro Invalide",
+                              Icons.person,
+                              Colors.yellow,
+                              {'label': "FERMER", "onTap": (){
+                                Navigator.pop(context);
+                              }
+                              },
+                              20,
+                              false);
+                        }
+                        else if(value['code'] == 'NOK'){
+                          notification_dialog_auth(
+                              context,
+                              "OTP Invalide",
+                              Icons.person,
+                              Colors.yellow,
+                              {'label': "FERMER", "onTap": (){
+                                Navigator.pop(context);
+                              }
+                              },
+                              20,
+                              false);
+                        }
+                        else {
                           if(!widget.register){
                             storage.write(key: 'sid', value: value['sid']);
                             storage.write(key: 'token', value: data['phone']);

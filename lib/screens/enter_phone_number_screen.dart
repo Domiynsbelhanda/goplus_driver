@@ -7,6 +7,7 @@ import '../utils/app_colors.dart';
 import '../utils/global_variables.dart';
 import '../widget/app_button.dart';
 import '../widget/app_widgets/app_bar.dart';
+import 'checkPage.dart';
 import 'verify_number_screen.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
@@ -152,7 +153,19 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           Provider.of<Auth>(context, listen: false)
                               .request(data: data).then((value){
                                 disableLoader();
-                                if(value['code'].toString() == '400'){
+                                if(value['code'].toString() == 'OK'){
+                                  storage.write(key: 'sid', value: value['sid']);
+                                  storage.write(key: 'token', value: data['phone']);
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context)
+                                      => CheckPage()
+                                      ),
+                                      (route)=>false
+                                    );
+                                }
+                                else if(value['code'].toString() == '400'){
                                   notification_dialog_auth(
                                       context,
                                       '${value['message']}',
