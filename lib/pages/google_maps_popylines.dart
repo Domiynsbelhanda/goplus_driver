@@ -384,11 +384,12 @@ class _Poly extends State<GoogleMapsPolylines> {
             AppButton(
               color: AppColors.primaryColor,
               name: 'FERMER ',
-              onTap: ()=>Navigator.push(
+              onTap: ()=>Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => CheckPage()
                 ),
+                  (route)=>false
               ),
             ),
           ],

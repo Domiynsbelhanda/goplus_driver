@@ -206,6 +206,20 @@ class _BodyPage extends State<BodyPage>{
                               if(courseSnapshot.hasData){
                                 var coursesdata = courseSnapshot.data! as DocumentSnapshot;
                                 Map<String, dynamic> courses = coursesdata.data() as Map<String, dynamic>;
+                                if(courses['status'] == 'confirm'
+                                    || courses['status'] == 'accept' ||
+                                    courses['status'] == 'start'
+                                ){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            GoogleMapsPolylines(
+                                                uuid: driver_data!['uuid']
+                                            )
+                                    ),
+                                  );
+                                }
                                 return Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Column(
